@@ -84,7 +84,7 @@ const ProductList = () => {
           )}
 
           <div className="mb-3">
-            <label className="border text-white px-4 block w-full text-center rounded-lg cursor-pointer font-bold py-11">
+            <label className="border text-white px-4 block w-full text-center rounded-lg cursor-pointer font-medium py-11">
               {image ? image.name : "Upload Image"}
 
               <input
@@ -178,7 +178,7 @@ const ProductList = () => {
 
             <button
               onClick={handleSubmit}
-              className="py-4 px-10 mt-5 rounded-lg text-lg font-bold bg-pink-600"
+              className="py-4 px-10 mt-5 rounded-lg text-lg font-medium bg-pink-600"
             >
               Submit
             </button>

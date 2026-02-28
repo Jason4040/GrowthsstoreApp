@@ -16,9 +16,9 @@ const Header = () => {
 
   return (
     <>
-      <div className="flex justify-around">
-        <div className="xl:block lg:hidden md:hidden:sm:hidden">
-          <div className="grid grid-cols-2">
+      <div className="flex flex-col xl:flex-row justify-center items-center gap-8 w-full max-w-7xl mx-auto px-4 md:px-8">
+        <div className="hidden xl:block w-1/3">
+          <div className="grid grid-cols-2 gap-4">
             {data.map((product) => (
               <div key={product._id}>
                 <SmallProduct product={product} />
@@ -26,7 +26,9 @@ const Header = () => {
             ))}
           </div>
         </div>
-        <ProductCarousel />
+        <div className="w-full xl:w-2/3">
+          <ProductCarousel />
+        </div>
       </div>
     </>
   );

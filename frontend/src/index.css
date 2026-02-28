@@ -3,8 +3,24 @@
 @tailwind utilities;
 
 body {
-  background: #0f0f10;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/OR68VV0.jpg') no-repeat center center fixed;
+  background-color: #0f0f10;
+  background-size: cover;
   color: #fff;
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-variation-settings: "wdth" 100;
+}
+
+.bg-black,
+.bg-\[\#111\],
+.bg-\[\#101010\],
+.bg-\[\#1A1A1A\] {
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/OR68VV0.jpg') !important;
+  background-attachment: fixed !important;
+  background-size: cover !important;
+  background-position: center !important;
+  backdrop-filter: none !important;
 }
 
 input,

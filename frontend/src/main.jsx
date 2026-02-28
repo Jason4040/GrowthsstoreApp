@@ -14,6 +14,7 @@ import Register from "./pages/Auth/Register";
 
 import AdminRoute from "./pages/Admin/AdminRoute";
 import Profile from "./pages/User/Profile";
+import UserOrder from "./pages/User/UserOrder";
 import UserList from "./pages/Admin/UserList";
 
 import CategoryList from "./pages/Admin/CategoryList";
@@ -50,6 +51,7 @@ const router = createBrowserRouter(
       {/* Registered users */}
       <Route path="" element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />
+        <Route path="/user-orders" element={<UserOrder />} />
         <Route path="/shipping" element={<Shipping />} />
         <Route path="/placeorder" element={<PlaceOrder />} />
         <Route path="/order/:id" element={<Order />} />

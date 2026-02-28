@@ -11,6 +11,7 @@ import {
   FaStar,
   FaStore,
 } from "react-icons/fa";
+import HeartIcon from "../Products/HeartIcon";
 
 const ProductCarousel = () => {
   const { data: products, isLoading, error } = useGetTopProductsQuery();
@@ -35,72 +36,57 @@ const ProductCarousel = () => {
       ) : (
         <Slider
           {...settings}
-          className="xl:w-[50rem]  lg:w-[50rem] md:w-[56rem] sm:w-[40rem] sm:block"
+          className="w-full lg:w-[45rem] xl:w-[50rem] 2xl:w-[60rem]"
         >
-          {products.map(
-            ({
-              image,
-              _id,
-              name,
-              price,
-              description,
-              brand,
-              createdAt,
-              numReviews,
-              rating,
-              quantity,
-              countInStock,
-            }) => (
-              <div key={_id}>
-                <img
-                  src={image}
-                  alt={name}
-                  className="w-full rounded-lg object-cover h-[30rem]"
-                />
+          {products.map((product) => (
+            <div key={product._id} className="relative">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full rounded-none object-cover h-[20rem] md:h-[30rem] 2xl:h-[35rem] shadow-none border border-gray-800"
+              />
+              <div className="absolute top-4 right-4 z-10">
+                <HeartIcon product={product} />
+              </div>
 
-                <div className="mt-4 flex justify-between">
-                  <div className="one">
-                    <h2>{name}</h2>
-                    <p> $ {price}</p> <br /> <br />
-                    <p className="w-[25rem]">
-                      {description.substring(0, 170)} ...
-                    </p>
+              <div className="mt-8 flex flex-col lg:flex-row justify-between gap-8 px-4">
+                <div className="flex-1">
+                  <h2 className="text-2xl 2xl:text-3xl font-semibold text-white">{product.name}</h2>
+                  <p className="text-pink-500 font-semibold text-xl mt-2">$ {product.price}</p>
+                  <p className="mt-4 text-gray-400 leading-relaxed max-w-2xl">
+                    {product.description.substring(0, 160)}...
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-x-8 gap-y-4 lg:w-[20rem] 2xl:w-[25rem] bg-gray-900/50 p-6 rounded-none border border-gray-800 backdrop-blur-sm">
+                  <div className="space-y-3">
+                    <div className="flex items-center text-sm font-medium text-gray-300">
+                      <FaStore className="mr-2 text-pink-500" /> {product.brand}
+                    </div>
+                    <div className="flex items-center text-sm font-medium text-gray-300">
+                      <FaClock className="mr-2 text-pink-500" />{" "}
+                      {moment(product.createdAt).fromNow()}
+                    </div>
+                    <div className="flex items-center text-sm font-medium text-gray-300">
+                      <FaStar className="mr-2 text-pink-500" /> {product.numReviews} Reviews
+                    </div>
                   </div>
 
-                  <div className="flex justify-between w-[20rem]">
-                    <div className="one">
-                      <h1 className="flex items-center mb-6">
-                        <FaStore className="mr-2 text-white" /> Brand: {brand}
-                      </h1>
-                      <h1 className="flex items-center mb-6">
-                        <FaClock className="mr-2 text-white" /> Added:{" "}
-                        {moment(createdAt).fromNow()}
-                      </h1>
-                      <h1 className="flex items-center mb-6">
-                        <FaStar className="mr-2 text-white" /> Reviews:
-                        {numReviews}
-                      </h1>
+                  <div className="space-y-3">
+                    <div className="flex items-center text-sm font-medium text-gray-300">
+                      <FaStar className="mr-2 text-pink-500" /> {Math.round(product.rating)} Ratings
                     </div>
-
-                    <div className="two">
-                      <h1 className="flex items-center mb-6">
-                        <FaStar className="mr-2 text-white" /> Ratings:{" "}
-                        {Math.round(rating)}
-                      </h1>
-                      <h1 className="flex items-center mb-6">
-                        <FaShoppingCart className="mr-2 text-white" /> Quantity:{" "}
-                        {quantity}
-                      </h1>
-                      <h1 className="flex items-center mb-6">
-                        <FaBox className="mr-2 text-white" /> In Stock:{" "}
-                        {countInStock}
-                      </h1>
+                    <div className="flex items-center text-sm font-medium text-gray-300">
+                      <FaShoppingCart className="mr-2 text-pink-500" /> {product.quantity} Qty
+                    </div>
+                    <div className="flex items-center text-sm font-medium text-gray-300">
+                      <FaBox className="mr-2 text-pink-500" /> {product.countInStock} Stock
                     </div>
                   </div>
                 </div>
               </div>
-            )
-          )}
+            </div>
+          ))}
         </Slider>
       )}
     </div>

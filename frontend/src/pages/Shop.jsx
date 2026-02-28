@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { FaRegFrownOpen } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetFilteredProductsQuery } from "../redux/api/productApiSlice";
 import { useFetchCategoriesQuery } from "../redux/api/categoryApiSlice";
@@ -19,6 +20,7 @@ const Shop = () => {
 
   const categoriesQuery = useFetchCategoriesQuery();
   const [priceFilter, setPriceFilter] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
 
   const filteredProductsQuery = useGetFilteredProductsQuery({
     checked,
@@ -82,94 +84,125 @@ const Shop = () => {
 
   return (
     <>
-      <div className="container mx-auto">
-        <div className="flex md:flex-row">
-          <div className="bg-[#151515] p-3 mt-2 mb-2">
-            <h2 className="h4 text-center py-2 bg-black rounded-full mb-2">
-              Filter by Categories
+      <div className="max-w-[1400px] mx-auto px-4 mt-8 pb-[10rem] md:pb-8">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
+
+          {/* Mobile Filter Toggle */}
+          <div className="w-full lg:hidden mb-[-1rem]">
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="w-full bg-[#101010] hover:bg-[#151515] border border-gray-800 text-white font-medium py-4 px-6 flex justify-between items-center transition-colors"
+            >
+              <span className="text-gray-300 tracking-wide uppercase text-sm">Filters & Sorting</span>
+              <span className="text-pink-500">{showFilters ? "✕" : "▼"}</span>
+            </button>
+          </div>
+
+          {/* Sidebar - Filters */}
+          <div className={`${showFilters ? 'block' : 'hidden'} lg:block w-full lg:w-80 bg-[#101010] p-6 rounded-none border border-gray-800 shadow-none lg:sticky lg:top-8`}>
+            <h2 className="hidden lg:block text-xl font-semibold text-center py-4 bg-pink-600/10 text-pink-500 rounded-none mb-6 border border-pink-500/20">
+              Filters
             </h2>
 
-            <div className="p-5 w-[15rem]">
-              {categories?.map((c) => (
-                <div key={c._id} className="mb-2">
-                  <div className="flex ietms-center mr-4">
+            {/* Categories */}
+            <div className="mb-8">
+              <h3 className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-4 px-2">
+                Categories
+              </h3>
+              <div className="space-y-3 px-2">
+                {categories?.map((c) => (
+                  <label key={c._id} className="flex items-center group cursor-pointer">
                     <input
                       type="checkbox"
-                      id="red-checkbox"
+                      id={c._id}
                       onChange={(e) => handleCheck(e.target.checked, c._id)}
-                      className="w-4 h-4 text-pink-600 bg-gray-100 border-gray-300 rounded focus:ring-pink-500 dark:focus:ring-pink-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      className="w-5 h-5 rounded-none border-gray-700 bg-gray-800 text-pink-600 focus:ring-pink-500 focus:ring-offset-gray-900 transition-all cursor-pointer"
                     />
-
-                    <label
-                      htmlFor="pink-checkbox"
-                      className="ml-2 text-sm font-medium text-white dark:text-gray-300"
-                    >
+                    <span className="ml-3 text-gray-300 group-hover:text-white transition-colors">
                       {c.name}
-                    </label>
-                  </div>
-                </div>
-              ))}
+                    </span>
+                  </label>
+                ))}
+              </div>
             </div>
 
-            <h2 className="h4 text-center py-2 bg-black rounded-full mb-2">
-              Filter by Brands
-            </h2>
-
-            <div className="p-5">
-              {uniqueBrands?.map((brand) => (
-                <>
-                  <div className="flex items-enter mr-4 mb-5">
+            {/* Brands */}
+            <div className="mb-8">
+              <h3 className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-4 px-2">
+                Brands
+              </h3>
+              <div className="space-y-3 px-2">
+                {uniqueBrands?.map((brand) => (
+                  <label key={brand} className="flex items-center group cursor-pointer">
                     <input
                       type="radio"
                       id={brand}
                       name="brand"
                       onChange={() => handleBrandClick(brand)}
-                      className="w-4 h-4 text-pink-400 bg-gray-100 border-gray-300 focus:ring-pink-500 dark:focus:ring-pink-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      className="w-5 h-5 border-gray-700 bg-gray-800 text-pink-600 focus:ring-pink-500 focus:ring-offset-gray-900 transition-all cursor-pointer rounded-none"
                     />
-
-                    <label
-                      htmlFor="pink-radio"
-                      className="ml-2 text-sm font-medium text-white dark:text-gray-300"
-                    >
+                    <span className="ml-3 text-gray-300 group-hover:text-white transition-colors text-sm">
                       {brand}
-                    </label>
-                  </div>
-                </>
-              ))}
+                    </span>
+                  </label>
+                ))}
+              </div>
             </div>
 
-            <h2 className="h4 text-center py-2 bg-black rounded-full mb-2">
-              Filer by Price
-            </h2>
-
-            <div className="p-5 w-[15rem]">
-              <input
-                type="text"
-                placeholder="Enter Price"
-                value={priceFilter}
-                onChange={handlePriceChange}
-                className="w-full px-3 py-2 placeholder-gray-400 border rounded-lg focus:outline-none focus:ring focus:border-pink-300"
-              />
+            {/* Price */}
+            <div className="mb-8">
+              <h3 className="text-sm font-medium text-gray-400 uppercase tracking-widest mb-4 px-2">
+                Max Price
+              </h3>
+              <div className="px-2">
+                <input
+                  type="number"
+                  placeholder="Enter Price"
+                  value={priceFilter}
+                  onChange={handlePriceChange}
+                  className="w-full bg-[#1A1A1A] border border-gray-700 text-white p-3 rounded-none focus:ring-2 focus:ring-pink-500 outline-none transition-all placeholder-gray-600"
+                />
+              </div>
             </div>
 
-            <div className="p-5 pt-0">
+            <div className="px-2">
               <button
-                className="w-full border my-4"
+                className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-3 rounded-none transition-all shadow-none active:scale-95"
                 onClick={() => window.location.reload()}
               >
-                Reset
+                Reset All Filters
               </button>
             </div>
           </div>
 
-          <div className="p-3">
-            <h2 className="h4 text-center mb-2">{products?.length} Products</h2>
-            <div className="flex flex-wrap">
-              {products.length === 0 ? (
-                <Loader />
+          {/* Main Content - Products */}
+          <div className="flex-1">
+            <div className="flex items-center justify-between mb-8 px-2">
+              <h2 className="text-2xl font-medium text-white tracking-tight">
+                {products?.length} <span className="text-gray-500 font-medium">Items Found</span>
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 justify-items-center">
+              {filteredProductsQuery.isLoading ? (
+                <div className="col-span-full py-20 flex justify-center w-full">
+                  <Loader />
+                </div>
+              ) : products.length === 0 ? (
+                <div className="col-span-full w-full flex flex-col items-center justify-center py-24 bg-[#101010] border border-gray-800 rounded-none shadow-none">
+                  <FaRegFrownOpen size={80} className="text-gray-700 mb-6" />
+                  <h2 className="text-2xl font-medium text-white mb-2 uppercase tracking-widest">No Matches Found</h2>
+                  <p className="text-gray-500 mb-8 italic text-center px-4">Try adjusting your filters or search criteria.</p>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-10 rounded-none transition-all shadow-none active:scale-95"
+                  >
+                    Clear All Filters
+                  </button>
+                </div>
               ) : (
                 products?.map((p) => (
-                  <div className="p-3" key={p._id}>
+                  <div className="w-full h-full" key={p._id}>
                     <ProductCard p={p} />
                   </div>
                 ))

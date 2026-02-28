@@ -17,27 +17,27 @@ const ProductCard = ({ p }) => {
   };
 
   return (
-    <div className="max-w-sm relative bg-[#1A1A1A] rounded-lg shaodw dark:bg-gray-800 dark:border-gray-700">
-      <section className="relative">
+    <div className="w-full relative bg-[#1A1A1A] rounded-none overflow-hidden border border-gray-800 hover:border-pink-500 transition-all group">
+      <section className="relative overflow-hidden">
         <Link to={`/product/${p._id}`}>
-          <span className="absolute bottom-3 right-3 bg-pink-100 text-pink-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-pink-900 dark:text-pink-300">
-            {p?.brand}
-          </span>
           <img
-            className="cursor-pointer w-full"
+            className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-300 rounded-none"
             src={p.image}
             alt={p.name}
-            style={{ height: "170px", objectFit: "cover" }}
           />
+          <span className="absolute bottom-3 right-3 bg-pink-600 text-white text-xs font-medium px-3 py-1 rounded-none shadow-lg">
+            {p?.brand}
+          </span>
         </Link>
-        <HeartIcon product={p} />
+        <div className="absolute top-2 right-2">
+          <HeartIcon product={p} />
+        </div>
       </section>
 
-      <div className="p-5">
-        <div className="flex justify-between">
-          <h5 className="mb-2 text-xl text-whiet dark:text-white">{p?.name}</h5>
-
-          <p className="text-black font-semibold text-pink-500">
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-4 gap-2">
+          <h5 className="text-xl font-medium text-white truncate">{p?.name}</h5>
+          <p className="text-pink-500 font-medium text-lg whitespace-nowrap">
             {p?.price?.toLocaleString("en-US", {
               style: "currency",
               currency: "USD",
@@ -45,38 +45,31 @@ const ProductCard = ({ p }) => {
           </p>
         </div>
 
-        <p className="mb-3 font-normal text-[#CFCFCF]">
-          {p?.description?.substring(0, 60)} ...
+        <p className="text-gray-400 text-sm mb-6 leading-relaxed">
+          {p?.description?.substring(0, 80)}...
         </p>
 
-        <section className="flex justify-between items-center">
+        <section className="flex justify-between items-center gap-4">
           <Link
             to={`/product/${p._id}`}
-            className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-pink-700 rounded-lg hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800"
+            className="flex-1 text-center bg-pink-700 hover:bg-pink-800 text-white text-sm font-medium py-2.5 rounded-none transition-colors flex items-center justify-center gap-2"
           >
-            Read More
+            Details
             <svg
-              className="w-3.5 h-3.5 ml-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4"
               fill="none"
-              viewBox="0 0 14 10"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M1 5h12m0 0L9 1m4 4L9 9"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
 
           <button
-            className="p-2 rounded-full"
+            className="p-2.5 bg-gray-800 hover:bg-gray-700 rounded-none text-white transition-colors"
             onClick={() => addToCartHandler(p, 1)}
           >
-            <AiOutlineShoppingCart size={25} />
+            <AiOutlineShoppingCart size={20} />
           </button>
         </section>
       </div>

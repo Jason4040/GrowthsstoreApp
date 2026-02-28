@@ -1,16 +1,17 @@
 {
-  "name": "MERN e-commerce",
+  "name": "irabaruta-shop",
   "version": "1.0.0",
-  "description": "MERN Stack E-Commerce Project",
+  "description": "Irabaruta Shop",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "backend": "nodemon backend/index.js",
-    "frontend": "npm run dev --prefix frontend",
-    "dev": "concurrently \"npm run frontend\" \"npm run backend"
+    "backend": "nodemon index.js",
+    "frontend": "npm run dev --prefix ../frontend",
+    "dev": "concurrently \"npm run frontend\" \"npm run backend\"",
+    "seed": "node seeder.js"
   },
   "keywords": [],
-  "author": "HuXn WebDev",
+  "author": "Irabaruta",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -40,75 +40,83 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <section className="pl-[10rem] flex flex-wrap">
-        <div className="mr-[4rem] mt-[5rem]">
-          <h1 className="text-2xl font-semibold mb-4">Sign In</h1>
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/95 backdrop-blur-md p-4">
+      <div className="w-full max-w-md bg-[#111] border border-gray-800 p-8 md:p-10 relative shadow-2xl animate-fade-in-up">
+        {/* Close Button back to previous/home */}
+        <Link
+          to="/"
+          className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </Link>
 
-          <form onSubmit={submitHandler} className="container w-[40rem]">
-            <div className="my-[2rem]">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-white"
-              >
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="mt-1 p-2 border rounded w-full"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-
-            <div className="mb-4">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-white"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                className="mt-1 p-2 border rounded w-full"
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-
-            <button
-              disabled={isLoading}
-              type="submit"
-              className="bg-pink-500 text-white px-4 py-2 rounded cursor-pointer my-[1rem]"
-            >
-              {isLoading ? "Signing In..." : "Sign In"}
-            </button>
-
-            {isLoading && <Loader />}
-          </form>
-
-          <div className="mt-4">
-            <p className="text-white">
-              New Customer?{" "}
-              <Link
-                to={redirect ? `/register?redirect=${redirect}` : "/register"}
-                className="text-pink-500 hover:underline"
-              >
-                Register
-              </Link>
-            </p>
-          </div>
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-semibold text-white mb-2 tracking-tight">Welcome Back</h1>
+          <p className="text-gray-400 text-sm">Sign in to your account to continue.</p>
         </div>
-        <img
-          src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1964&q=80"
-          alt=""
-          className="h-[65rem] w-[59%] xl:block md:hidden sm:hidden rounded-lg"
-        />
-      </section>
+
+        <form onSubmit={submitHandler} className="space-y-5">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide"
+            >
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="email"
+              className="w-full bg-black border border-gray-800 text-white p-3.5 focus:border-pink-500 outline-none transition-colors"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wide"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              className="w-full bg-black border border-gray-800 text-white p-3.5 focus:border-pink-500 outline-none transition-colors"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button
+            disabled={isLoading}
+            type="submit"
+            className="w-full bg-pink-600 hover:bg-pink-700 text-white font-medium py-3.5 mt-4 transition-all active:scale-[0.98] disabled:bg-gray-800 disabled:text-gray-500"
+          >
+            {isLoading ? "Signing in..." : "Login"}
+          </button>
+
+          {isLoading && <Loader />}
+        </form>
+
+        <div className="mt-8 text-center pt-6 border-t border-gray-800">
+          <p className="text-gray-400 text-sm">
+            Don't have an account?{" "}
+            <Link
+              to={redirect ? `/register?redirect=${redirect}` : "/register"}
+              className="text-pink-500 hover:text-pink-400 font-medium ml-1 transition-colors"
+            >
+              Create Account
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

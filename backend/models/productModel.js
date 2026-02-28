@@ -18,7 +18,11 @@ const reviewSchema = mongoose.Schema(
 const productSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
-    image: { type: String, required: true },
+    image: {
+      type: String,
+      required: true,
+      default: "https://img.icons8.com/external-bartama-glyph-64-bartama-graphic/1200/external-Cart-e-commerce-glyph-bartama-glyph-64-bartama-graphic.jpg"
+    },
     brand: { type: String, required: true },
     quantity: { type: Number, required: true },
     category: { type: ObjectId, ref: "Category", required: true },
