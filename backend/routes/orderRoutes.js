@@ -11,6 +11,11 @@ import {
   findOrderById,
   markOrderAsPaid,
   markOrderAsDelivered,
+  createManualOrder,
+  uploadPaymentProof,
+  approvePaymentProof,
+  rejectPaymentProof,
+  appealPaymentProof,
 } from "../controllers/orderController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
@@ -20,12 +25,18 @@ router
   .post(authenticate, createOrder)
   .get(authenticate, authorizeAdmin, getAllOrders);
 
+router.route("/manual").post(authenticate, authorizeAdmin, createManualOrder);
+
 router.route("/mine").get(authenticate, getUserOrders);
 router.route("/total-orders").get(countTotalOrders);
 router.route("/total-sales").get(calculateTotalSales);
 router.route("/total-sales-by-date").get(calcualteTotalSalesByDate);
 router.route("/:id").get(authenticate, findOrderById);
 router.route("/:id/pay").put(authenticate, markOrderAsPaid);
+router.route("/:id/pay-proof").put(authenticate, uploadPaymentProof);
+router.route("/:id/pay-approve").put(authenticate, authorizeAdmin, approvePaymentProof);
+router.route("/:id/pay-reject").put(authenticate, authorizeAdmin, rejectPaymentProof);
+router.route("/:id/pay-appeal").put(authenticate, appealPaymentProof);
 router
   .route("/:id/deliver")
   .put(authenticate, authorizeAdmin, markOrderAsDelivered);

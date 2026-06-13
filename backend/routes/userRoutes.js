@@ -9,6 +9,7 @@ import {
   deleteUserById,
   getUserById,
   updateUserById,
+  verifyOTP,
 } from "../controllers/userController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
@@ -22,6 +23,7 @@ router
 
 router.post("/auth", loginUser);
 router.post("/logout", logoutCurrentUser);
+router.post("/verify-otp", verifyOTP);
 
 router
   .route("/profile")

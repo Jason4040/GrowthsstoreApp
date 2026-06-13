@@ -1,11 +1,19 @@
 import { apiSlice } from "./apiSlice";
-import { ORDERS_URL, PAYPAL_URL } from "../constants";
+import { ORDERS_URL, PAYPAL_URL, UPLOAD_URL } from "../constants";
 
 export const orderApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createOrder: builder.mutation({
       query: (order) => ({
         url: ORDERS_URL,
+        method: "POST",
+        body: order,
+      }),
+    }),
+
+    createManualOrder: builder.mutation({
+      query: (order) => ({
+        url: `${ORDERS_URL}/manual`,
         method: "POST",
         body: order,
       }),
@@ -22,6 +30,44 @@ export const orderApiSlice = apiSlice.injectEndpoints({
         url: `${ORDERS_URL}/${orderId}/pay`,
         method: "PUT",
         body: details,
+      }),
+    }),
+
+    uploadPaymentProof: builder.mutation({
+      query: ({ orderId, paymentProof }) => ({
+        url: `${ORDERS_URL}/${orderId}/pay-proof`,
+        method: "PUT",
+        body: { paymentProof },
+      }),
+    }),
+
+    approvePaymentProof: builder.mutation({
+      query: (orderId) => ({
+        url: `${ORDERS_URL}/${orderId}/pay-approve`,
+        method: "PUT",
+      }),
+    }),
+
+    rejectPaymentProof: builder.mutation({
+      query: (orderId) => ({
+        url: `${ORDERS_URL}/${orderId}/pay-reject`,
+        method: "PUT",
+      }),
+    }),
+
+    appealPaymentProof: builder.mutation({
+      query: ({ orderId, appealText }) => ({
+        url: `${ORDERS_URL}/${orderId}/pay-appeal`,
+        method: "PUT",
+        body: { appealText },
+      }),
+    }),
+
+    uploadPaymentProofFile: builder.mutation({
+      query: (formData) => ({
+        url: `${UPLOAD_URL}/proof`,
+        method: "POST",
+        body: formData,
       }),
     }),
 
@@ -69,10 +115,15 @@ export const {
   useGetTotalOrdersQuery,
   useGetTotalSalesQuery,
   useGetTotalSalesByDateQuery,
-  // ------------------
   useCreateOrderMutation,
+  useCreateManualOrderMutation,
   useGetOrderDetailsQuery,
   usePayOrderMutation,
+  useUploadPaymentProofMutation,
+  useApprovePaymentProofMutation,
+  useRejectPaymentProofMutation,
+  useAppealPaymentProofMutation,
+  useUploadPaymentProofFileMutation,
   useGetPaypalClientIdQuery,
   useGetMyOrdersQuery,
   useDeliverOrderMutation,

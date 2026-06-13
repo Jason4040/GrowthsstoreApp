@@ -14,7 +14,7 @@ const AdminMenu = () => {
       <button
         className={`${
           isMenuOpen ? "top-2 right-2" : "top-5 right-7"
-        } bg-[#151515] p-2 fixed rounded-lg`}
+        } bg-gray-100 dark:bg-[#151515] p-2 fixed rounded-lg`}
         onClick={toggleMenu}
       >
         {isMenuOpen ? (
@@ -29,7 +29,7 @@ const AdminMenu = () => {
       </button>
 
       {isMenuOpen && (
-        <section className="bg-[#151515] p-4 fixed right-7 top-5">
+        <section className="bg-gray-100 dark:bg-[#151515] p-4 fixed right-7 top-5">
           <ul className="list-none mt-2">
             <li>
               <NavLink
@@ -95,6 +95,17 @@ const AdminMenu = () => {
                 })}
               >
                 Manage Orders
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                className="list-item py-2 px-3 block mb-5 hover:bg-[#2E2D2D] rounded-sm"
+                to="/admin/manual-order"
+                style={({ isActive }) => ({
+                  color: isActive ? "greenyellow" : "white",
+                })}
+              >
+                Record Offline Sale
               </NavLink>
             </li>
           </ul>

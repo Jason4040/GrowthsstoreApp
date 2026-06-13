@@ -37,13 +37,13 @@ const HeartIcon = ({ product }) => {
 
   return (
     <div
-      className="cursor-pointer p-2 transition-all hover:scale-110 active:scale-95 bg-black/20 rounded-none backdrop-blur-sm border border-transparent hover:border-pink-500/30"
+      className="cursor-pointer p-2 transition-all hover:scale-110 active:scale-95 bg-white dark:bg-black/20 rounded-none backdrop-blur-sm border border-transparent hover:border-orange-500/30"
       onClick={toggleFavorites}
     >
       {isFavorite ? (
-        <FaHeart size={26} className="text-pink-500 transition-colors drop-shadow-lg" />
+        <FaHeart size={26} className="text-orange-500 transition-colors drop-shadow-lg" />
       ) : (
-        <FaRegHeart size={26} className="text-pink-500 hover:text-pink-400 transition-colors drop-shadow-lg" />
+        <FaRegHeart size={26} className="text-orange-500 hover:text-orange-400 transition-colors drop-shadow-lg" />
       )}
     </div>
   );

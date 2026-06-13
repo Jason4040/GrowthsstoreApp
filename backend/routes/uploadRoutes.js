@@ -1,23 +1,32 @@
 import path from "path";
 import express from "express";
 import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-  filename: (req, file, cb) => {
-    const extname = path.extname(file.originalname);
-    cb(null, `${file.fieldname}-${Date.now()}${extname}`);
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "MERN-E-Commerce-Store",
+    allowed_formats: ["jpg", "png", "jpeg", "webp", "mp4", "webm"],
+    resource_type: "auto",
   },
 });
 
 const fileFilter = (req, file, cb) => {
-  const filetypes = /jpe?g|png|webp/;
-  const mimetypes = /image\/jpe?g|image\/png|image\/webp/;
+  const filetypes = /jpe?g|png|webp|mp4|webm/;
+  const mimetypes = /image\/jpe?g|image\/png|image\/webp|video\/mp4|video\/webm/;
 
   const extname = path.extname(file.originalname).toLowerCase();
   const mimetype = file.mimetype;
@@ -25,7 +34,7 @@ const fileFilter = (req, file, cb) => {
   if (filetypes.test(extname) && mimetypes.test(mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Images only"), false);
+    cb(new Error("Images and videos only"), false);
   }
 };
 
@@ -38,11 +47,37 @@ router.post("/", (req, res) => {
       res.status(400).send({ message: err.message });
     } else if (req.file) {
       res.status(200).send({
-        message: "Image uploaded successfully",
-        image: `/${req.file.path}`,
+        message: "File uploaded successfully",
+        image: req.file.path,
       });
     } else {
-      res.status(400).send({ message: "No image file provided" });
+      res.status(400).send({ message: "No file provided" });
+    }
+  });
+});
+
+const proofStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "MERN-E-Commerce-Store-Proofs",
+    resource_type: "auto",
+  },
+});
+
+const uploadProof = multer({ storage: proofStorage });
+const uploadSingleProof = uploadProof.single("image");
+
+router.post("/proof", (req, res) => {
+  uploadSingleProof(req, res, (err) => {
+    if (err) {
+      res.status(400).send({ message: err.message });
+    } else if (req.file) {
+      res.status(200).send({
+        message: "Proof file uploaded successfully",
+        image: req.file.path,
+      });
+    } else {
+      res.status(400).send({ message: "No file provided" });
     }
   });
 });

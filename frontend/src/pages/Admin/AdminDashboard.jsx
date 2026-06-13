@@ -89,57 +89,68 @@ const AdminDashboard = () => {
   }, [salesDetail]);
 
   return (
-    <>
-      <AdminMenu />
+    <div className="p-4 md:p-8 max-w-7xl mx-auto">
+      {/* <AdminMenu /> */}
 
-      <section className="xl:ml-[4rem] md:ml-[0rem]">
-        <div className="w-[80%] flex justify-around flex-wrap">
-          <div className="rounded-lg bg-black p-5 w-[20rem] mt-5">
-            <div className="font-medium rounded-full w-[3rem] bg-pink-500 text-center p-3">
-              $
+      <section className="w-full">
+        <h1 className="text-3xl font-semibold mb-8 text-gray-900 dark:text-white">Dashboard Overview</h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <div className="rounded-2xl bg-gray-100 dark:bg-[#151515] p-6 border border-gray-200 dark:border-gray-800 shadow-xl relative overflow-hidden group hover:border-orange-500/50 transition-colors">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+            <div className="flex items-center gap-4 mb-4 relative z-10">
+              <div className="w-12 h-12 rounded-xl bg-orange-600 flex items-center justify-center font-bold text-xl text-white shadow-lg">
+                $
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 font-medium tracking-wide uppercase text-sm">Total Sales</p>
             </div>
-
-            <p className="mt-5">Sales</p>
-            <h1 className="text-xl font-medium">
-              $ {isLoading ? <Loader /> : sales.totalSales.toFixed(2)}
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white relative z-10">
+              $ {isLoading ? <Loader /> : sales?.totalSales.toFixed(2)}
             </h1>
           </div>
-          <div className="rounded-lg bg-black p-5 w-[20rem] mt-5">
-            <div className="font-medium rounded-full w-[3rem] bg-pink-500 text-center p-3">
-              $
-            </div>
 
-            <p className="mt-5">Customers</p>
-            <h1 className="text-xl font-medium">
-              $ {isLoading ? <Loader /> : customers?.length}
+          <div className="rounded-2xl bg-gray-100 dark:bg-[#151515] p-6 border border-gray-200 dark:border-gray-800 shadow-xl relative overflow-hidden group hover:border-blue-500/50 transition-colors">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+            <div className="flex items-center gap-4 mb-4 relative z-10">
+              <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-xl text-white shadow-lg">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 font-medium tracking-wide uppercase text-sm">Customers</p>
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white relative z-10">
+              {loading ? <Loader /> : customers?.length}
             </h1>
           </div>
-          <div className="rounded-lg bg-black p-5 w-[20rem] mt-5">
-            <div className="font-medium rounded-full w-[3rem] bg-pink-500 text-center p-3">
-              $
-            </div>
 
-            <p className="mt-5">All Orders</p>
-            <h1 className="text-xl font-medium">
-              $ {isLoading ? <Loader /> : orders?.totalOrders}
+          <div className="rounded-2xl bg-gray-100 dark:bg-[#151515] p-6 border border-gray-200 dark:border-gray-800 shadow-xl relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+            <div className="flex items-center gap-4 mb-4 relative z-10">
+              <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center font-bold text-xl text-white shadow-lg">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 font-medium tracking-wide uppercase text-sm">All Orders</p>
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white relative z-10">
+              {loadingTwo ? <Loader /> : orders?.totalOrders}
             </h1>
           </div>
         </div>
 
-        <div className="ml-[10rem] mt-[4rem]">
+        <div className="bg-gray-100 dark:bg-[#151515] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl mb-10 w-full overflow-hidden">
           <Chart
             options={state.options}
             series={state.series}
             type="bar"
-            width="70%"
+            width="100%"
+            height={400}
           />
         </div>
 
-        <div className="mt-[4rem]">
+        <div className="mt-10">
           <OrderList />
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

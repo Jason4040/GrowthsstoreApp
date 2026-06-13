@@ -1,21 +1,26 @@
+import { FaTimes } from "react-icons/fa";
+
 const Modal = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
   return (
-    <>
-      {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="fixed inset-0 bg-black opacity-50"></div>
-          <div className="absolute top-[40%] right-[50%] bg-white p-4 rounded-lg z-10 text-right">
-            <button
-              className="text-black font-semibold hover:text-gray-700 focus:outline-none mr-2"
-              onClick={onClose}
-            >
-              X
-            </button>
-            {children}
-          </div>
+    <div className="fixed inset-0 flex items-center justify-center z-50 animate-fadeIn">
+      <div 
+        className="fixed inset-0 bg-white dark:bg-black/60 backdrop-blur-sm transition-opacity"
+        onClick={onClose}
+      ></div>
+      <div className="relative bg-gray-100 dark:bg-[#151515] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl z-10 min-w-[300px] max-w-lg w-full mx-4 transform transition-all">
+        <button
+          className="absolute top-4 right-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white transition-colors focus:outline-none"
+          onClick={onClose}
+        >
+          <FaTimes />
+        </button>
+        <div className="mt-2">
+          {children}
         </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 };
 

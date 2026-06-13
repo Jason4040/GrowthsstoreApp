@@ -60,6 +60,12 @@ const orderSchema = mongoose.Schema(
       default: 0.0,
     },
 
+    currency: {
+      type: String,
+      required: true,
+      default: "USD",
+    },
+
     isPaid: {
       type: Boolean,
       required: true,
@@ -78,6 +84,20 @@ const orderSchema = mongoose.Schema(
 
     deliveredAt: {
       type: Date,
+    },
+
+    paymentProof: {
+      type: String,
+    },
+
+    paymentProofStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected", "appealed", "none"],
+      default: "none",
+    },
+
+    paymentAppealText: {
+      type: String,
     },
   },
   {

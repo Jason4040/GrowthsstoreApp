@@ -91,46 +91,53 @@ const CategoryList = () => {
   };
 
   return (
-    <div className="ml-[10rem] flex flex-col md:flex-row">
-      <AdminMenu />
-      <div className="md:w-3/4 p-3">
-        <div className="h-12">Manage Categories</div>
-        <CategoryForm
-          value={name}
-          setValue={setName}
-          handleSubmit={handleCreateCategory}
-        />
-        <br />
-        <hr />
+    <div className="p-4 md:p-8 max-w-7xl mx-auto">
+      <div className="flex flex-col md:flex-row gap-8">
+        {/* <AdminMenu /> */}
+        <div className="w-full bg-gray-100 dark:bg-[#151515] p-6 md:p-10 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl">
+          <h1 className="text-3xl font-semibold mb-8 text-gray-900 dark:text-white">Manage Categories</h1>
+          
+          <div className="bg-gray-50 dark:bg-[#101010] p-6 rounded-xl border border-gray-200 dark:border-gray-800 mb-8">
+            <h2 className="text-xl font-medium text-gray-700 dark:text-gray-300 mb-4">Create New Category</h2>
+            <CategoryForm
+              value={name}
+              setValue={setName}
+              handleSubmit={handleCreateCategory}
+            />
+          </div>
 
-        <div className="flex flex-wrap">
-          {categories?.map((category) => (
-            <div key={category._id}>
-              <button
-                className="bg-white border border-pink-500 text-pink-500 py-2 px-4 rounded-lg m-3 hover:bg-pink-500 hover:text-white focus:outline-none foucs:ring-2 focus:ring-pink-500 focus:ring-opacity-50"
-                onClick={() => {
-                  {
+          <div className="border-t border-gray-200 dark:border-gray-800 pt-8">
+            <h2 className="text-xl font-medium text-gray-700 dark:text-gray-300 mb-6">Existing Categories</h2>
+            <div className="flex flex-wrap gap-4">
+              {categories?.map((category) => (
+                <button
+                  key={category._id}
+                  className="bg-white dark:bg-black/40 border border-gray-300 dark:border-gray-700 text-white py-2.5 px-6 rounded-xl hover:bg-orange-600 hover:border-orange-500 hover:shadow-lg hover:shadow-orange-500/20 transition-all active:scale-95"
+                  onClick={() => {
                     setModalVisible(true);
                     setSelectedCategory(category);
                     setUpdatingName(category.name);
-                  }
-                }}
-              >
-                {category.name}
-              </button>
+                  }}
+                >
+                  {category.name}
+                </button>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
 
-        <Modal isOpen={modalVisible} onClose={() => setModalVisible(false)}>
-          <CategoryForm
-            value={updatingName}
-            setValue={(value) => setUpdatingName(value)}
-            handleSubmit={handleUpdateCategory}
-            buttonText="Update"
-            handleDelete={handleDeleteCategory}
-          />
-        </Modal>
+          <Modal isOpen={modalVisible} onClose={() => setModalVisible(false)}>
+            <div className="p-2">
+              <h2 className="text-xl font-semibold mb-6 text-gray-900 dark:text-white">Update Category</h2>
+              <CategoryForm
+                value={updatingName}
+                setValue={(value) => setUpdatingName(value)}
+                handleSubmit={handleUpdateCategory}
+                buttonText="Update"
+                handleDelete={handleDeleteCategory}
+              />
+            </div>
+          </Modal>
+        </div>
       </div>
     </div>
   );

@@ -67,7 +67,7 @@ const Product = () => {
     <>
       <div>
         <Link
-          className="text-white font-semibold hover:underline ml-[10rem]"
+          className="text-gray-900 dark:text-white font-semibold hover:underline ml-[10rem]"
           to="/"
         >
           Go Back
@@ -102,29 +102,29 @@ const Product = () => {
               <div className="flex items-center justify-between w-[20rem]">
                 <div className="one">
                   <h1 className="flex items-center mb-6">
-                    <FaStore className="mr-2 text-white" /> Brand:{" "}
+                    <FaStore className="mr-2 text-gray-900 dark:text-white" /> Brand:{" "}
                     {product.brand}
                   </h1>
                   <h1 className="flex items-center mb-6">
-                    <FaClock className="mr-2 text-white" /> Added:{" "}
+                    <FaClock className="mr-2 text-gray-900 dark:text-white" /> Added:{" "}
                     {moment(product.createdAt).fromNow()}
                   </h1>
                   <h1 className="flex items-center mb-6">
-                    <FaStar className="mr-2 text-white" /> Reviews:
+                    <FaStar className="mr-2 text-gray-900 dark:text-white" /> Reviews:
                     {product.numReviews}
                   </h1>
                 </div>
 
                 <div className="two">
                   <h1 className="flex items-center mb-6">
-                    <FaStar className="mr-2 text-white" /> Ratings: {rating}
+                    <FaStar className="mr-2 text-gray-900 dark:text-white" /> Ratings: {rating}
                   </h1>
                   <h1 className="flex items-center mb-6">
-                    <FaShoppingCart className="mr-2 text-white" /> Quantity:{" "}
+                    <FaShoppingCart className="mr-2 text-gray-900 dark:text-white" /> Quantity:{" "}
                     {product.quantity}
                   </h1>
                   <h1 className="flex items-center mb-6">
-                    <FaBox className="mr-2 text-white" /> In Stock:{" "}
+                    <FaBox className="mr-2 text-gray-900 dark:text-white" /> In Stock:{" "}
                     {product.countInStock}
                   </h1>
                 </div>
@@ -157,7 +157,7 @@ const Product = () => {
                 <button
                   onClick={addToCartHandler}
                   disabled={product.countInStock === 0}
-                  className="bg-pink-600 text-white py-2 px-4 rounded-lg mt-4 md:mt-0"
+                  className="bg-orange-600 text-white py-2 px-4 rounded-lg mt-4 md:mt-0"
                 >
                   Add To Cart
                 </button>

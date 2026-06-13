@@ -1,10 +1,10 @@
-import { useGetTopProductsQuery } from "../redux/api/productApiSlice";
+import { useGetNewProductsQuery } from "../redux/api/productApiSlice";
 import Loader from "./Loader";
 import SmallProduct from "../pages/Products/SmallProduct";
 import ProductCarousel from "../pages/Products/ProductCarousel";
 
 const Header = () => {
-  const { data, isLoading, error } = useGetTopProductsQuery();
+  const { data, isLoading, error } = useGetNewProductsQuery();
 
   if (isLoading) {
     return <Loader />;
@@ -16,7 +16,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="flex flex-col xl:flex-row justify-center items-center gap-8 w-full max-w-7xl mx-auto px-4 md:px-8">
+      <div className="flex flex-col xl:flex-row justify-center items-center gap-8 w-full max-w-[1400px] mx-auto px-4 md:px-8">
         <div className="hidden xl:block w-1/3">
           <div className="grid grid-cols-2 gap-4">
             {data.map((product) => (
