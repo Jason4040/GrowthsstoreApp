@@ -3,6 +3,14 @@ import createToken from "../utils/createToken.js";
 import bcrypt from "bcryptjs";
 import { getCookieOptions } from "../utils/cookieConfig.js";
 
+// HARDCODED credentials - do not use env variables
+const GOOGLE_CLIENT_ID = "488963192171-mst5uq6uikvvmk5deu4cq3ea8k2mmep7.apps.googleusercontent.com";
+// !! IMPORTANT: This is the Client SECRET from Google Cloud Console → APIs & Services → Credentials
+// It is different from the Client ID above. It looks like: GOCSPX-xxxxxxxxxxxxxxxxxxxxxxxxx
+// Go to: https://console.cloud.google.com/apis/credentials
+// Click your OAuth 2.0 Client → copy the "Client Secret" value and paste it below
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "GOCSPX-REPLACE_THIS_WITH_YOUR_REAL_SECRET";
+
 // @desc    Redirect to Google OAuth consent screen
 // @route   GET /auth/google
 // @access  Public
@@ -10,7 +18,7 @@ export const googleAuth = (req, res) => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
   const options = {
     redirect_uri: getGoogleCallbackUrl(req),
-    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_id: GOOGLE_CLIENT_ID,
     access_type: "offline",
     response_type: "code",
     prompt: "consent",
@@ -31,9 +39,12 @@ export const googleCallback = async (req, res) => {
   const { code } = req.query;
 
   if (!code) {
-    console.error("Authorization code is missing from Google redirect");
+    console.error("[GoogleAuth] Authorization code is missing from Google redirect");
     return res.redirect(`${getFrontendUrl(req)}/login?error=no_code`);
   }
+
+  const callbackUrl = getGoogleCallbackUrl(req);
+  console.log("[GoogleAuth] Callback triggered. redirect_uri used:", callbackUrl);
 
   try {
     // Exchange authorization code for access token
@@ -42,9 +53,9 @@ export const googleCallback = async (req, res) => {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
         code,
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: getGoogleCallbackUrl(req),
+        client_id: GOOGLE_CLIENT_ID,
+        client_secret: GOOGLE_CLIENT_SECRET,
+        redirect_uri: callbackUrl,
         grant_type: "authorization_code",
       }),
     });
@@ -52,9 +63,11 @@ export const googleCallback = async (req, res) => {
     const tokens = await tokenResponse.json();
 
     if (tokens.error) {
-      console.error("Google Token Exchange error:", tokens);
-      return res.redirect(`${getFrontendUrl(req)}/login?error=token_exchange_failed`);
+      console.error("[GoogleAuth] Token exchange error:", JSON.stringify(tokens));
+      return res.redirect(`${getFrontendUrl(req)}/login?error=token_exchange_failed&detail=${tokens.error}`);
     }
+
+    console.log("[GoogleAuth] Token exchange successful. Fetching user profile...");
 
     // Get user info from Google
     const userResponse = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
@@ -64,9 +77,11 @@ export const googleCallback = async (req, res) => {
     const googleUser = await userResponse.json();
 
     if (!googleUser.email) {
-      console.error("Google user profile is missing email address");
+      console.error("[GoogleAuth] Google user profile missing email:", JSON.stringify(googleUser));
       return res.redirect(`${getFrontendUrl(req)}/login?error=no_email`);
     }
+
+    console.log("[GoogleAuth] Got Google user:", googleUser.email);
 
     // Find user in database
     let user = await User.findOne({ email: googleUser.email });
@@ -89,6 +104,7 @@ export const googleCallback = async (req, res) => {
       if (updated) {
         await user.save();
       }
+      console.log("[GoogleAuth] Existing user found and updated:", user.email);
     } else {
       // Create a new user with Google details
       const randomPassword = Math.random().toString(36).slice(-10) + Math.random().toString(36).slice(-10);
@@ -105,15 +121,19 @@ export const googleCallback = async (req, res) => {
       });
 
       await user.save();
+      console.log("[GoogleAuth] New user created:", user.email);
     }
 
     // Generate JWT and set in Cookie
     createToken(res, user._id);
 
+    const frontendUrl = getFrontendUrl(req);
+    console.log("[GoogleAuth] Redirecting to:", frontendUrl);
+
     // Redirect back to frontend
-    res.redirect(`${getFrontendUrl(req)}`);
+    res.redirect(frontendUrl);
   } catch (error) {
-    console.error("Google callback general error:", error);
+    console.error("[GoogleAuth] General error:", error.message, error.stack);
     res.redirect(`${getFrontendUrl(req)}/login?error=server_error`);
   }
 };
@@ -148,16 +168,14 @@ export const logout = (req, res) => {
 
 // Helpers
 const getFrontendUrl = (req) => {
-  const isProd = (req && req.headers.host && req.headers.host.includes("growthsstore.com")) || 
-                 process.env.NODE_ENV === "production";
-  return isProd
-    ? "https://growthsstore.com"
-    : "http://localhost:5173";
+  const host = req && req.headers.host ? req.headers.host : "";
+  const isProd = host.includes("growthsstore.com") || process.env.NODE_ENV === "production";
+  return isProd ? "https://growthsstore.com" : "http://localhost:5173";
 };
 
 const getGoogleCallbackUrl = (req) => {
-  const isProd = (req && req.headers.host && req.headers.host.includes("growthsstore.com")) || 
-                 process.env.NODE_ENV === "production";
+  const host = req && req.headers.host ? req.headers.host : "";
+  const isProd = host.includes("growthsstore.com") || process.env.NODE_ENV === "production";
   return isProd
     ? "https://app.growthsstore.com/auth/google/callback"
     : "http://localhost:5000/auth/google/callback";
