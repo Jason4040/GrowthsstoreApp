@@ -149,10 +149,6 @@ export const logout = (req, res) => {
     sameSite: isProduction ? "none" : "lax",
   };
 
-  if (isProduction) {
-    cookieOptions.domain = ".growthsstore.com";
-  }
-
   res.cookie("jwt", "", cookieOptions);
   res.status(200).json({ message: "Logged out successfully" });
 };
