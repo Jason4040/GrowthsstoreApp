@@ -10,6 +10,9 @@ import {
   getUserById,
   updateUserById,
   verifyOTP,
+  resendOTP,
+  forgotPassword,
+  resetPassword,
 } from "../controllers/userController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
@@ -24,6 +27,9 @@ router
 router.post("/auth", loginUser);
 router.post("/logout", logoutCurrentUser);
 router.post("/verify-otp", verifyOTP);
+router.post("/resend-otp", resendOTP);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 
 router
   .route("/profile")

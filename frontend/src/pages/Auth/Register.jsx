@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/Loader";
-import { useRegisterMutation, useVerifyOTPMutation } from "../../redux/api/usersApiSlice";
+import { useRegisterMutation, useVerifyOTPMutation, useResendOTPMutation } from "../../redux/api/usersApiSlice";
 import { setCredentials } from "../../redux/features/auth/authSlice";
 import { toast } from "react-toastify";
 
@@ -19,6 +19,7 @@ const Register = () => {
 
   const [register, { isLoading }] = useRegisterMutation();
   const [verifyOTP, { isLoading: isVerifying }] = useVerifyOTPMutation();
+  const [resendOTP, { isLoading: isResending }] = useResendOTPMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -89,6 +90,15 @@ const Register = () => {
     }
   };
 
+  const resendOtpHandler = async () => {
+    try {
+      const res = await resendOTP({ email }).unwrap();
+      toast.success(res.message || "A new code has been sent.");
+    } catch (err) {
+      toast.error(err?.data?.message || err.error || "Failed to resend code.");
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-white dark:bg-black/95 backdrop-blur-md p-4 overflow-y-auto">
       <div className="w-full max-w-md bg-[#111] border border-gray-200 dark:border-gray-800 p-8 md:p-10 relative shadow-2xl animate-fade-in-up my-auto">
@@ -137,7 +147,15 @@ const Register = () => {
                 {isVerifying ? "Verifying..." : "Confirm Verification"}
               </button>
 
-              <div className="text-center mt-4">
+              <div className="text-center mt-4 space-y-2">
+                <button
+                  type="button"
+                  onClick={resendOtpHandler}
+                  disabled={isResending}
+                  className="block w-full text-xs text-orange-500 hover:text-orange-400 transition-colors font-medium disabled:text-gray-600"
+                >
+                  {isResending ? "Resending..." : "Didn't receive the code? Resend OTP"}
+                </button>
                 <button
                   type="button"
                   onClick={() => setOtpSent(false)}

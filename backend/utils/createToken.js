@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import { getCookieOptions } from "./cookieConfig.js";
+import { JWT_SECRET } from "./jwtConfig.js";
 
 const generateToken = (res, userId) => {
-  const JWT_SECRET = process.env.JWT_SECRET || "abac12afsdkjladf_growthsstore_secret_key_2024";
   const token = jwt.sign({ userId }, JWT_SECRET, {
     expiresIn: "30d",
   });

@@ -6,6 +6,7 @@ export const getCookieOptions = (req, isLogout = false) => {
     httpOnly: true,
     secure: isProduction,
     sameSite: "lax",
+    path: "/",
   };
 
   if (!isLogout) {
