@@ -161,7 +161,7 @@ export const logout = (req, res) => {
 const getFrontendUrl = () => {
   return process.env.NODE_ENV === "production"
     ? "https://growthsstore.com"
-    : "http://localhost:5173";
+    : "https://growthsstore.com";
 };
 
 const getGoogleCallbackUrl = () => {

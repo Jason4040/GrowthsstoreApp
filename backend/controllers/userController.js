@@ -153,7 +153,7 @@ const verifyOTP = asyncHandler(async (req, res) => {
           <p>Thank you for creating and verifying your account with us! We are thrilled to welcome you to our community. Explore our latest products, exclusive offers, and elevate your personal style starting today.</p>
         </div>
         <div style="text-align: center; margin-bottom: 24px;">
-          <a href="http://localhost:5173" style="display: inline-block; background-color: #dd6b20; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">Start Shopping</a>
+          <a href="https://growthsstore.com" style="display: inline-block; background-color: #dd6b20; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">Start Shopping</a>
         </div>
         <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; font-size: 12px; color: #a0aec0; text-align: center;">
           <p>© ${new Date().getFullYear()} Growth Shop. All rights reserved.</p>

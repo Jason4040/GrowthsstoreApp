@@ -29,7 +29,7 @@ app.set("trust proxy", 1);
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
+      "https://growthsstore.com",
       "http://127.0.0.1:5173",
       "https://growthsstore.com",
       "https://www.growthsstore.com",

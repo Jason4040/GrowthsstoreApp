@@ -62,7 +62,7 @@ const askQuestion = async (req, res) => {
             <p>Please log in to the admin panel to provide an answer.</p>
           </div>
           <div style="text-align: center; margin-bottom: 24px;">
-            <a href="http://localhost:5173/admin/faqmanager" style="display: inline-block; background-color: #e53e3e; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">Answer Question</a>
+            <a href="https://growthsstore.com/admin/faqmanager" style="display: inline-block; background-color: #e53e3e; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">Answer Question</a>
           </div>
         </div>
       `
@@ -115,7 +115,7 @@ const answerQuestion = async (req, res) => {
               <p>This Q&A is now publicly visible on our FAQ page.</p>
             </div>
             <div style="text-align: center; margin-bottom: 24px;">
-              <a href="http://localhost:5173/faq" style="display: inline-block; background-color: #38a169; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">View FAQ Page</a>
+              <a href="https://growthsstore.com/faq" style="display: inline-block; background-color: #38a169; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">View FAQ Page</a>
             </div>
             <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; font-size: 12px; color: #a0aec0; text-align: center;">
               <p>© ${new Date().getFullYear()} Growth Shop. All rights reserved.</p>

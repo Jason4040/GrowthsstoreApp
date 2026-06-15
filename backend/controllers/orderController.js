@@ -293,7 +293,7 @@ const uploadPaymentProof = async (req, res) => {
               <p>Please log in to the admin panel to evaluate the payment proof.</p>
             </div>
             <div style="text-align: center; margin-bottom: 24px;">
-              <a href="http://localhost:5173/admin/paymentproofs" style="display: inline-block; background-color: #e53e3e; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">Evaluate Proof</a>
+              <a href="https://growthsstore.com/admin/paymentproofs" style="display: inline-block; background-color: #e53e3e; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">Evaluate Proof</a>
             </div>
           </div>
         `
@@ -335,7 +335,7 @@ const approvePaymentProof = async (req, res) => {
               <p>You can also chat directly with the admin for further updates and next steps.</p>
             </div>
             <div style="text-align: center; margin-bottom: 24px;">
-              <a href="http://localhost:5173/messages" style="display: inline-block; background-color: #38a169; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">Go to Chat</a>
+              <a href="https://growthsstore.com/messages" style="display: inline-block; background-color: #38a169; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">Go to Chat</a>
             </div>
             <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; font-size: 12px; color: #a0aec0; text-align: center;">
               <p>© ${new Date().getFullYear()} Growth Shop. All rights reserved.</p>
@@ -379,7 +379,7 @@ const rejectPaymentProof = async (req, res) => {
               <p>If you have already paid, you can appeal this rejection directly from your order page by explaining the issue and resubmitting details.</p>
             </div>
             <div style="text-align: center; margin-bottom: 24px;">
-              <a href="http://localhost:5173/order/${order._id}" style="display: inline-block; background-color: #e53e3e; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">View Order & Appeal</a>
+              <a href="https://growthsstore.com/order/${order._id}" style="display: inline-block; background-color: #e53e3e; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">View Order & Appeal</a>
             </div>
             <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; font-size: 12px; color: #a0aec0; text-align: center;">
               <p>© ${new Date().getFullYear()} Growth Shop. All rights reserved.</p>
@@ -427,7 +427,7 @@ const appealPaymentProof = async (req, res) => {
               <p>Please check the payment proof details in the admin portal.</p>
             </div>
             <div style="text-align: center; margin-bottom: 24px;">
-              <a href="http://localhost:5173/admin/paymentproofs" style="display: inline-block; background-color: #dd6b20; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">Evaluate Appeal</a>
+              <a href="https://growthsstore.com/admin/paymentproofs" style="display: inline-block; background-color: #dd6b20; color: #ffffff; text-decoration: none; padding: 12px 24px; font-weight: bold; border-radius: 6px;">Evaluate Appeal</a>
             </div>
           </div>
         `
