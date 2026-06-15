@@ -163,6 +163,6 @@ const getFrontendUrl = () => {
 
 const getGoogleCallbackUrl = () => {
   return process.env.NODE_ENV === "production"
-    ? "https://app.growthsstore.com/api/auth/google/callback"
-    : "http://localhost:5000/api/auth/google/callback";
+    ? "https://app.growthsstore.com/auth/google/callback"
+    : "http://localhost:5000/auth/google/callback";
 };

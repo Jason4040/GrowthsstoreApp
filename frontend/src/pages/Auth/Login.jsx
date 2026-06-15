@@ -42,7 +42,10 @@ const Login = () => {
   }, [search, navigate, sp]);
 
   const googleLoginHandler = () => {
-    window.location.href = "/api/auth/google";
+    const backendUrl = import.meta.env.MODE === "production"
+      ? "https://app.growthsstore.com/auth/google"
+      : "http://localhost:5000/auth/google";
+    window.location.href = backendUrl;
   };
 
   const submitHandler = async (e) => {
