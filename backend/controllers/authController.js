@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 import createToken from "../utils/createToken.js";
 import bcrypt from "bcryptjs";
+import { getCookieOptions } from "../utils/cookieConfig.js";
 
 // @desc    Redirect to Google OAuth consent screen
 // @route   GET /auth/google
@@ -64,7 +65,7 @@ export const googleCallback = async (req, res) => {
 
     if (!googleUser.email) {
       console.error("Google user profile is missing email address");
-      return res.redirect(`${getFrontendUrl()}/login?error=no_email`);
+      return res.redirect(`${getFrontendUrl(req)}/login?error=no_email`);
     }
 
     // Find user in database
@@ -139,15 +140,7 @@ export const getMe = async (req, res) => {
 // @route   POST /auth/logout
 // @access  Public
 export const logout = (req, res) => {
-  const isProduction = process.env.NODE_ENV === "production" || 
-                       (req && req.headers.host && req.headers.host.includes("growthsstore.com"));
-
-  const cookieOptions = {
-    httpOnly: true,
-    expires: new Date(0),
-    secure: isProduction,
-    sameSite: isProduction ? "none" : "lax",
-  };
+  const cookieOptions = getCookieOptions(req, true);
 
   res.cookie("jwt", "", cookieOptions);
   res.status(200).json({ message: "Logged out successfully" });

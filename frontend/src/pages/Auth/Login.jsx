@@ -44,7 +44,7 @@ const Login = () => {
   const googleLoginHandler = () => {
     const backendUrl = import.meta.env.MODE === "production"
       ? "https://app.growthsstore.com/auth/google"
-      : "https://app.growthsstore.com/auth/google";
+      : "http://localhost:5000/auth/google";
     window.location.href = backendUrl;
   };
 

@@ -3,6 +3,7 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
 import sendEmail from "../utils/sendEmail.js";
+import { getCookieOptions } from "../utils/cookieConfig.js";
 
 const createUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
@@ -173,15 +174,7 @@ const verifyOTP = asyncHandler(async (req, res) => {
 });
 
 const logoutCurrentUser = asyncHandler(async (req, res) => {
-  const isProduction = process.env.NODE_ENV === "production" || 
-                       (req && req.headers.host && req.headers.host.includes("growthsstore.com"));
-
-  const cookieOptions = {
-    httpOnly: true,
-    expires: new Date(0),
-    secure: isProduction,
-    sameSite: isProduction ? "none" : "lax",
-  };
+  const cookieOptions = getCookieOptions(req, true);
 
   res.cookie("jwt", "", cookieOptions);
   res.status(200).json({ message: "Logged out successfully" });
