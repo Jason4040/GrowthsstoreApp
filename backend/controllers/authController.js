@@ -10,7 +10,7 @@ export const googleAuth = (req, res) => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
   const options = {
     redirect_uri: getGoogleCallbackUrl(req),
-    client_id: process.env.GOOGLE_CLIENT_ID,
+    client_id: "488963192171-mst5uq6uikvvmk5deu4cq3ea8k2mmep7.apps.googleusercontent.com",
     access_type: "offline",
     response_type: "code",
     prompt: "consent",
@@ -42,8 +42,8 @@ export const googleCallback = async (req, res) => {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
         code,
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        client_id: "488963192171-mst5uq6uikvvmk5deu4cq3ea8k2mmep7.apps.googleusercontent.com",
+        client_secret: "488963192171-mst5uq6uikvvmk5deu4cq3ea8k2mmep7.apps.googleusercontent.com",
         redirect_uri: getGoogleCallbackUrl(req),
         grant_type: "authorization_code",
       }),
