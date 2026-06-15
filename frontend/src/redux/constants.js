@@ -1,4 +1,6 @@
-export const BASE_URL = "";
+export const BASE_URL = import.meta.env.MODE === "production"
+  ? "https://app.growthsstore.com"
+  : "";
 export const USERS_URL = "/api/users";
 export const CATEGORY_URL = "/api/category";
 export const PRODUCT_URL = "/api/products";
