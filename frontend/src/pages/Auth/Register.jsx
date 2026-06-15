@@ -32,6 +32,27 @@ const Register = () => {
     }
   }, [navigate, redirect, userInfo]);
 
+  useEffect(() => {
+    const errorParam = sp.get("error");
+    if (errorParam) {
+      const errorMessages = {
+        no_code: "Google authorization code missing.",
+        token_exchange_failed: "Failed to exchange Google token.",
+        no_email: "Could not retrieve email from Google account.",
+        server_error: "A server error occurred during Google registration.",
+      };
+      toast.error(errorMessages[errorParam] || "Google sign-in failed.");
+      navigate("/register", { replace: true });
+    }
+  }, [search, navigate, sp]);
+
+  const googleLoginHandler = () => {
+    const backendUrl = import.meta.env.MODE === "production"
+      ? "https://app.growthsstore.com/auth/google"
+      : "http://localhost:5000/auth/google";
+    window.location.href = backendUrl;
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -210,20 +231,6 @@ const Register = () => {
               <button
                 disabled={isLoading}
                 type="submit"
-                className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-3.5 mt-6 transition-all active:scale-[0.98] disabled:bg-gray-800 disabled:text-gray-500"
-              >
-                {isLoading ? "Creating Account..." : "Register"}
-              </button>
-
-              {isLoading && <Loader />}
-            </form>
-
-            <div className="mt-8 text-center pt-6 border-t border-gray-200 dark:border-gray-800">
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
-                Already have an account?{" "}
-                <Link
-                  to={redirect ? `/login?redirect=${redirect}` : "/login"}
-                  className="text-orange-500 hover:text-orange-400 font-medium ml-1 transition-colors"
                 >
                   Login
                 </Link>

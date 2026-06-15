@@ -1,10 +1,27 @@
+import { useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Navigation from "./pages/Auth/Navigation";
 import SocialSidebar from "./components/SocialSidebar";
 import { ToastContainer } from "react-toastify";
+import { useGetMeQuery } from "./redux/api/usersApiSlice";
+import { setCredentials } from "./redux/features/auth/authSlice";
 import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
+
+  // Auto-login: If user has a cookie but userInfo is not set in redux (e.g. on load / after Google redirect)
+  const { data: meData } = useGetMeQuery(undefined, {
+    skip: !!userInfo,
+  });
+
+  useEffect(() => {
+    if (meData && !userInfo) {
+      dispatch(setCredentials({ ...meData }));
+    }
+  }, [meData, userInfo, dispatch]);
   return (
     <>
       <ToastContainer

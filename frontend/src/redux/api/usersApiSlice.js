@@ -64,6 +64,11 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+    getMe: builder.query({
+      query: () => ({
+        url: "/auth/me",
+      }),
+    }),
   }),
 });
 
@@ -77,4 +82,5 @@ export const {
   useDeleteUserMutation,
   useUpdateUserMutation,
   useGetUserDetailsQuery,
+  useGetMeQuery,
 } = userApiSlice;
