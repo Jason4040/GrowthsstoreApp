@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
 import sendEmail from "../utils/sendEmail.js";
 import { getCookieOptions } from "../utils/cookieConfig.js";
+import crypto from "crypto";
 import { otpEmailHtml } from "../utils/emailTemplates.js";
 
 const generateOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
