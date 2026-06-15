@@ -139,14 +139,17 @@ export const getMe = async (req, res) => {
 // @route   POST /auth/logout
 // @access  Public
 export const logout = (req, res) => {
+  const isProduction = process.env.NODE_ENV === "production" || 
+                       (req && req.headers.host && req.headers.host.includes("growthsstore.com"));
+
   const cookieOptions = {
     httpOnly: true,
     expires: new Date(0),
-    secure: process.env.NODE_ENV !== "development",
-    sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
   };
 
-  if (process.env.NODE_ENV === "production") {
+  if (isProduction) {
     cookieOptions.domain = ".growthsstore.com";
   }
 
@@ -164,5 +167,5 @@ const getFrontendUrl = () => {
 const getGoogleCallbackUrl = () => {
   return process.env.NODE_ENV === "production"
     ? "https://app.growthsstore.com/auth/google/callback"
-    : "http://localhost:5000/auth/google/callback";
+    : "https://app.growthsstore.com/auth/google/callback";
 };

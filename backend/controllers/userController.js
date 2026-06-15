@@ -173,11 +173,21 @@ const verifyOTP = asyncHandler(async (req, res) => {
 });
 
 const logoutCurrentUser = asyncHandler(async (req, res) => {
-  res.cookie("jwt", "", {
-    httyOnly: true,
-    expires: new Date(0),
-  });
+  const isProduction = process.env.NODE_ENV === "production" || 
+                       (req && req.headers.host && req.headers.host.includes("growthsstore.com"));
 
+  const cookieOptions = {
+    httpOnly: true,
+    expires: new Date(0),
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+  };
+
+  if (isProduction) {
+    cookieOptions.domain = ".growthsstore.com";
+  }
+
+  res.cookie("jwt", "", cookieOptions);
   res.status(200).json({ message: "Logged out successfully" });
 });
 

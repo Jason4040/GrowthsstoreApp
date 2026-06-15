@@ -5,14 +5,18 @@ const generateToken = (res, userId) => {
     expiresIn: "30d",
   });
 
+  const req = res.req;
+  const isProduction = process.env.NODE_ENV === "production" || 
+                       (req && req.headers.host && req.headers.host.includes("growthsstore.com"));
+
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV !== "development",
-    sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   };
 
-  if (process.env.NODE_ENV === "production") {
+  if (isProduction) {
     cookieOptions.domain = ".growthsstore.com";
   }
 
