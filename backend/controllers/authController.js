@@ -8,7 +8,7 @@ import bcrypt from "bcryptjs";
 export const googleAuth = (req, res) => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
   const options = {
-    redirect_uri: process.env.GOOGLE_CALLBACK_URL,
+    redirect_uri: getGoogleCallbackUrl(),
     client_id: process.env.GOOGLE_CLIENT_ID,
     access_type: "offline",
     response_type: "code",
@@ -43,7 +43,7 @@ export const googleCallback = async (req, res) => {
         code,
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: process.env.GOOGLE_CALLBACK_URL,
+        redirect_uri: getGoogleCallbackUrl(),
         grant_type: "authorization_code",
       }),
     });
@@ -157,6 +157,12 @@ export const logout = (req, res) => {
 // Helpers
 const getFrontendUrl = () => {
   return process.env.NODE_ENV === "production"
-    ? process.env.PROD_FRONTEND_URL
-    : process.env.FRONTEND_URL;
+    ? "https://growthsstore.com"
+    : "http://localhost:5173";
+};
+
+const getGoogleCallbackUrl = () => {
+  return process.env.NODE_ENV === "production"
+    ? "https://app.growthsstore.com/api/auth/google/callback"
+    : "http://localhost:5000/api/auth/google/callback";
 };
