@@ -37,6 +37,14 @@ const userSchema = mongoose.Schema(
     otpExpires: {
       type: Date,
     },
+
+    googleId: {
+      type: String,
+    },
+
+    picture: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

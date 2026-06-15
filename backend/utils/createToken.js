@@ -5,13 +5,19 @@ const generateToken = (res, userId) => {
     expiresIn: "30d",
   });
 
-  // Set JWT as an HTTP-Only Cookie
-  res.cookie("jwt", token, {
+  const cookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV !== "development",
-    sameSite: "strict",
+    sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
     maxAge: 30 * 24 * 60 * 60 * 1000,
-  });
+  };
+
+  if (process.env.NODE_ENV === "production") {
+    cookieOptions.domain = ".growthsstore.com";
+  }
+
+  // Set JWT as an HTTP-Only Cookie
+  res.cookie("jwt", token, cookieOptions);
 
   return token;
 };
