@@ -8,7 +8,7 @@ import bcrypt from "bcryptjs";
 export const googleAuth = (req, res) => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
   const options = {
-    redirect_uri: getGoogleCallbackUrl(),
+    redirect_uri: getGoogleCallbackUrl(req),
     client_id: process.env.GOOGLE_CLIENT_ID,
     access_type: "offline",
     response_type: "code",
@@ -31,7 +31,7 @@ export const googleCallback = async (req, res) => {
 
   if (!code) {
     console.error("Authorization code is missing from Google redirect");
-    return res.redirect(`${getFrontendUrl()}/login?error=no_code`);
+    return res.redirect(`${getFrontendUrl(req)}/login?error=no_code`);
   }
 
   try {
@@ -43,7 +43,7 @@ export const googleCallback = async (req, res) => {
         code,
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: getGoogleCallbackUrl(),
+        redirect_uri: getGoogleCallbackUrl(req),
         grant_type: "authorization_code",
       }),
     });
@@ -52,7 +52,7 @@ export const googleCallback = async (req, res) => {
 
     if (tokens.error) {
       console.error("Google Token Exchange error:", tokens);
-      return res.redirect(`${getFrontendUrl()}/login?error=token_exchange_failed`);
+      return res.redirect(`${getFrontendUrl(req)}/login?error=token_exchange_failed`);
     }
 
     // Get user info from Google
@@ -110,10 +110,10 @@ export const googleCallback = async (req, res) => {
     createToken(res, user._id);
 
     // Redirect back to frontend
-    res.redirect(`${getFrontendUrl()}`);
+    res.redirect(`${getFrontendUrl(req)}`);
   } catch (error) {
     console.error("Google callback general error:", error);
-    res.redirect(`${getFrontendUrl()}/login?error=server_error`);
+    res.redirect(`${getFrontendUrl(req)}/login?error=server_error`);
   }
 };
 
@@ -158,14 +158,18 @@ export const logout = (req, res) => {
 };
 
 // Helpers
-const getFrontendUrl = () => {
-  return process.env.NODE_ENV === "production"
+const getFrontendUrl = (req) => {
+  const isProd = (req && req.headers.host && req.headers.host.includes("growthsstore.com")) || 
+                 process.env.NODE_ENV === "production";
+  return isProd
     ? "https://growthsstore.com"
-    : "https://growthsstore.com";
+    : "http://localhost:5173";
 };
 
-const getGoogleCallbackUrl = () => {
-  return process.env.NODE_ENV === "production"
+const getGoogleCallbackUrl = (req) => {
+  const isProd = (req && req.headers.host && req.headers.host.includes("growthsstore.com")) || 
+                 process.env.NODE_ENV === "production";
+  return isProd
     ? "https://app.growthsstore.com/auth/google/callback"
-    : "https://app.growthsstore.com/auth/google/callback";
+    : "http://localhost:5000/auth/google/callback";
 };
