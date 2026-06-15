@@ -38,6 +38,14 @@ const userSchema = mongoose.Schema(
       type: Date,
     },
 
+    resetOtp: {
+      type: String,
+    },
+
+    resetOtpExpires: {
+      type: Date,
+    },
+
     googleId: {
       type: String,
     },

@@ -83,14 +83,19 @@ export const googleCallback = async (req, res) => {
 
     console.log("[GoogleAuth] Got Google user:", googleUser.email);
 
-    // Find user in database
-    let user = await User.findOne({ email: googleUser.email });
+    // Find user in database by email or Google ID
+    let user = await User.findOne({
+      $or: [{ email: googleUser.email }, { googleId: googleUser.sub }],
+    });
 
     if (user) {
-      // If user exists, link Google ID and update profile picture if missing
       let updated = false;
       if (!user.googleId) {
         user.googleId = googleUser.sub;
+        updated = true;
+      }
+      if (user.email !== googleUser.email) {
+        user.email = googleUser.email;
         updated = true;
       }
       if (!user.picture) {
@@ -128,10 +133,9 @@ export const googleCallback = async (req, res) => {
     createToken(res, user._id);
 
     const frontendUrl = getFrontendUrl(req);
-    console.log("[GoogleAuth] Redirecting to:", frontendUrl);
+    console.log("[GoogleAuth] Redirecting to:", `${frontendUrl}/?google_auth=success`);
 
-    // Redirect back to frontend
-    res.redirect(frontendUrl);
+    res.redirect(`${frontendUrl}/?google_auth=success`);
   } catch (error) {
     console.error("[GoogleAuth] General error:", error.message, error.stack);
     res.redirect(`${getFrontendUrl(req)}/login?error=server_error`);

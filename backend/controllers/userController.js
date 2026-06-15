@@ -4,6 +4,9 @@ import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
 import sendEmail from "../utils/sendEmail.js";
 import { getCookieOptions } from "../utils/cookieConfig.js";
+import { otpEmailHtml } from "../utils/emailTemplates.js";
+
+const generateOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 const createUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
@@ -26,7 +29,7 @@ const createUser = asyncHandler(async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  const otp = generateOtp();
   const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
 
   const newUser = new User({
@@ -40,39 +43,33 @@ const createUser = asyncHandler(async (req, res) => {
 
   try {
     await newUser.save();
-
-    sendEmail({
-      to: newUser.email,
-      subject: "Verify Your Account - Growth Shop OTP",
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px; background-color: #ffffff; color: #1a202c;">
-          <div style="text-align: center; margin-bottom: 24px;">
-            <h2 style="color: #dd6b20; font-size: 28px; margin: 0;">Account Verification</h2>
-            <p style="font-size: 14px; color: #718096; margin-top: 4px;">Growth Shop OTP Verification</p>
-          </div>
-          <div style="font-size: 16px; line-height: 1.6; margin-bottom: 24px; color: #4a5568; text-align: center;">
-            <p>Hello <strong>${newUser.username}</strong>,</p>
-            <p>Thank you for starting registration with us. Please verify your email address using the 6-digit verification code below:</p>
-            <div style="font-size: 32px; font-weight: bold; color: #dd6b20; background-color: #f7fafc; border: 1px dashed #e2e8f0; padding: 16px; margin: 24px 0; border-radius: 8px; letter-spacing: 4px;">
-              ${otp}
-            </div>
-            <p style="font-size: 12px; color: #718096;">This code is valid for 10 minutes. If you did not make this request, please ignore this email.</p>
-          </div>
-          <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; font-size: 12px; color: #a0aec0; text-align: center;">
-            <p>© ${new Date().getFullYear()} Growth Shop. All rights reserved.</p>
-          </div>
-        </div>
-      `
-    }).catch(err => console.error("OTP email sending failed:", err));
-
-    res.status(201).json({
-      message: "Verification OTP code sent to your email.",
-      email: newUser.email,
-    });
   } catch (error) {
     res.status(400);
     throw new Error("Invalid user data");
   }
+
+  try {
+    await sendEmail({
+      to: newUser.email,
+      subject: "Verify Your Account - Growth Shop OTP",
+      html: otpEmailHtml(
+        newUser.username,
+        otp,
+        "Account Verification",
+        "Growth Shop OTP Verification"
+      ),
+    });
+  } catch (error) {
+    await User.deleteOne({ _id: newUser._id });
+    console.error("OTP email sending failed:", error);
+    res.status(500);
+    throw new Error("Failed to send verification email. Please try again.");
+  }
+
+  res.status(201).json({
+    message: "Verification OTP code sent to your email.",
+    email: newUser.email,
+  });
 });
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -161,7 +158,7 @@ const verifyOTP = asyncHandler(async (req, res) => {
         </div>
       </div>
     `
-  }).catch(err => console.error("Welcome email sending failed:", err));
+  }).catch((err) => console.error("Welcome email sending failed:", err));
 
   createToken(res, user._id);
 
@@ -170,6 +167,126 @@ const verifyOTP = asyncHandler(async (req, res) => {
     username: user.username,
     email: user.email,
     isAdmin: user.isAdmin,
+  });
+});
+
+const resendOTP = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    res.status(400);
+    throw new Error("Please provide your email address.");
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(404);
+    throw new Error("No registration found for this email.");
+  }
+
+  if (user.isVerified) {
+    res.status(400);
+    throw new Error("This account is already verified. Please login.");
+  }
+
+  const otp = generateOtp();
+  user.otp = otp;
+  user.otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+  await user.save();
+
+  await sendEmail({
+    to: user.email,
+    subject: "Verify Your Account - Growth Shop OTP",
+    html: otpEmailHtml(
+      user.username,
+      otp,
+      "Account Verification",
+      "Growth Shop OTP Verification"
+    ),
+  });
+
+  res.status(200).json({
+    message: "A new verification code has been sent to your email.",
+    email: user.email,
+  });
+});
+
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    res.status(400);
+    throw new Error("Please provide your email address.");
+  }
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    res.status(200).json({
+      message: "If an account exists with this email, a reset code has been sent.",
+    });
+    return;
+  }
+
+  if (!user.isVerified) {
+    res.status(400);
+    throw new Error("Please verify your email first before resetting your password.");
+  }
+
+  const resetOtp = generateOtp();
+  user.resetOtp = resetOtp;
+  user.resetOtpExpires = new Date(Date.now() + 10 * 60 * 1000);
+  await user.save();
+
+  await sendEmail({
+    to: user.email,
+    subject: "Reset Your Password - Growth Shop",
+    html: otpEmailHtml(
+      user.username,
+      resetOtp,
+      "Password Reset",
+      "Growth Shop Password Reset"
+    ),
+  });
+
+  res.status(200).json({
+    message: "If an account exists with this email, a reset code has been sent.",
+    email: user.email,
+  });
+});
+
+const resetPassword = asyncHandler(async (req, res) => {
+  const { email, otp, password } = req.body;
+
+  if (!email || !otp || !password) {
+    res.status(400);
+    throw new Error("Please provide email, reset code, and new password.");
+  }
+
+  if (password.length < 6) {
+    res.status(400);
+    throw new Error("Password must be at least 6 characters.");
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found.");
+  }
+
+  if (!user.resetOtp || user.resetOtp !== otp || user.resetOtpExpires < Date.now()) {
+    res.status(400);
+    throw new Error("Invalid or expired reset code.");
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(password, salt);
+  user.resetOtp = undefined;
+  user.resetOtpExpires = undefined;
+  await user.save();
+
+  res.status(200).json({
+    message: "Password reset successful. You can now login with your new password.",
   });
 });
 
@@ -288,4 +405,7 @@ export {
   getUserById,
   updateUserById,
   verifyOTP,
+  resendOTP,
+  forgotPassword,
+  resetPassword,
 };
