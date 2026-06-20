@@ -182,5 +182,5 @@ const getGoogleCallbackUrl = (req) => {
   const isProd = host.includes("growthsstore.com") || process.env.NODE_ENV === "production";
   return isProd
     ? "https://app.growthsstore.com/auth/google/callback"
-    : "https://app.growthsstore.com/auth/google/callback";
+    : "http://localhost:5000/auth/google/callback";
 };
