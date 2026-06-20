@@ -1,5 +1,5 @@
 export const BASE_URL = import.meta.env.MODE === "production"
-  ? "https://app.growthsstore.com"
+  ? "http://localhost:5000"
   : "";
 export const USERS_URL = "/api/users";
 export const CATEGORY_URL = "/api/category";
