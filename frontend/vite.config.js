@@ -6,9 +6,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api/": "http://localhost:5000",
-      "/auth/": "http://localhost:5000",
-      "/uploads/": "http://localhost:5000",
+      "/api/": "https://app.growthsstore.com",
+      "/auth/": "https://app.growthsstore.com",
+      "/uploads/": "https://app.growthsstore.com",
     },
   },
 });
