@@ -14,24 +14,29 @@ const App = () => {
   const location = useLocation();
   const { userInfo } = useSelector((state) => state.auth);
 
+  const params = new URLSearchParams(location.search);
+  const isGoogleAuthSuccess = params.get("google_auth") === "success";
+
   const { data: meData, refetch } = useGetMeQuery(undefined, {
-    skip: !!userInfo,
+    skip: !!userInfo && !isGoogleAuthSuccess,
   });
 
   useEffect(() => {
-    if (meData && !userInfo) {
-      dispatch(setCredentials({ ...meData }));
+    if (meData) {
+      const isDifferent = !userInfo || userInfo._id !== meData._id || userInfo.email !== meData.email;
+      if (isDifferent) {
+        dispatch(setCredentials({ ...meData }));
+      }
     }
   }, [meData, userInfo, dispatch]);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    if (params.get("google_auth") === "success") {
+    if (isGoogleAuthSuccess) {
       refetch();
       toast.success("Signed in with Google successfully!");
       navigate("/", { replace: true });
     }
-  }, [location.search, refetch, navigate]);
+  }, [isGoogleAuthSuccess, refetch, navigate]);
 
   return (
     <>
