@@ -79,17 +79,17 @@ const loginUser = asyncHandler(async (req, res) => {
   const existingUser = await User.findOne({ email });
 
   if (existingUser) {
-    if (existingUser.isVerified === false) {
-      res.status(401);
-      throw new Error("Please verify your email address first. An OTP code was sent.");
-    }
-
     const isPasswordValid = await bcrypt.compare(
       password,
       existingUser.password
     );
 
     if (isPasswordValid) {
+      if (existingUser.isVerified === false) {
+        existingUser.isVerified = true;
+        await existingUser.save();
+      }
+
       createToken(res, existingUser._id);
 
       res.status(201).json({

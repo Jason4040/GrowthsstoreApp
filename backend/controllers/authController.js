@@ -174,13 +174,15 @@ export const logout = (req, res) => {
 const getFrontendUrl = (req) => {
   const host = req && req.headers.host ? req.headers.host : "";
   const isProd = host.includes("growthsstore.com") || process.env.NODE_ENV === "production";
-  return isProd ? "https://growthsstore.com" : "http://localhost:5173";
+  return isProd ? (process.env.PROD_FRONTEND_URL || "https://growthsstore.com") : "http://localhost:5173";
 };
 
 const getGoogleCallbackUrl = (req) => {
   const host = req && req.headers.host ? req.headers.host : "";
   const isProd = host.includes("growthsstore.com") || process.env.NODE_ENV === "production";
-  return isProd
-    ? "https://app.growthsstore.com/auth/google/callback"
-    : "http://localhost:5000/auth/google/callback";
+  if (isProd && host) {
+    const protocol = req.secure || req.headers["x-forwarded-proto"] === "https" ? "https" : "http";
+    return `${protocol}://${host}/auth/google/callback`;
+  }
+  return "http://localhost:5000/auth/google/callback";
 };

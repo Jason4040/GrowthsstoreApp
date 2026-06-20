@@ -5,7 +5,7 @@ export const getCookieOptions = (req, isLogout = false) => {
   const options = {
     httpOnly: true,
     secure: isProduction,
-    sameSite: "lax",
+    sameSite: isProduction ? "none" : "lax",
     path: "/",
   };
 
@@ -17,6 +17,8 @@ export const getCookieOptions = (req, isLogout = false) => {
 
   if (host.includes("growthsstore.com")) {
     options.domain = ".growthsstore.com";
+    // sameSite must remain "none" for cross-origin cookie delivery
+    // (frontend on growthsstore.com, backend on gowthstoresbackend.vercel.app)
   }
 
   return options;
