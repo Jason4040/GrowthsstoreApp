@@ -184,5 +184,9 @@ const getGoogleCallbackUrl = (req) => {
     const protocol = req.secure || req.headers["x-forwarded-proto"] === "https" ? "https" : "http";
     return `${protocol}://${host}/auth/google/callback`;
   }
+  if (host) {
+    const protocol = req.secure || req.headers["x-forwarded-proto"] === "https" ? "https" : "http";
+    return `${protocol}://${host}/auth/google/callback`;
+  }
   return "https://app.growthsstore.com/auth/google/callback";
 };
