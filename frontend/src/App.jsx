@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Navigation from "./pages/Auth/Navigation";
+import TopAnnouncement from "./components/TopAnnouncement";
 import SocialSidebar from "./components/SocialSidebar";
 import { ToastContainer, toast } from "react-toastify";
 import { useGetMeQuery } from "./redux/api/usersApiSlice";
@@ -62,6 +63,7 @@ const App = () => {
           </button>
         )}
       />
+      <TopAnnouncement />
       <Navigation />
       <SocialSidebar />
       <main className="py-3 md:ml-[96px]">

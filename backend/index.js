@@ -16,6 +16,7 @@ import orderRoutes from "./routes/orderRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import faqRoutes from "./routes/faqRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import announcementRoutes from "./routes/announcementRoutes.js";
 
 dotenv.config();
 const port = process.env.PORT || 5000;
@@ -29,7 +30,7 @@ app.set("trust proxy", 1);
 const allowedOrigins = [
   "https://growthsstore.com",
   "https://www.growthsstore.com",
-  "http://localhost:5000",
+  "https://app.growthsstore.com",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
 ];
@@ -63,6 +64,7 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/faq", faqRoutes);
+app.use("/api/announcements", announcementRoutes);
 
 app.get("/api/config/paypal", (req, res) => {
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID });

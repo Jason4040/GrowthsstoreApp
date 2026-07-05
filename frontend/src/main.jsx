@@ -41,6 +41,7 @@ import ManualOrder from "./pages/Admin/ManualOrder.jsx";
 import Messages from "./pages/Messages.jsx";
 import FAQ from "./pages/FAQ.jsx";
 import FAQAdmin from "./pages/Admin/FAQAdmin.jsx";
+import AnnouncementAdmin from "./pages/Admin/AnnouncementAdmin.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -53,6 +54,7 @@ const router = createBrowserRouter(
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/shop" element={<Shop />} />
+      <Route path="/search/:keyword" element={<Home />} />
       <Route path="/faq" element={<FAQ />} />
 
       {/* Registered users */}
@@ -77,6 +79,7 @@ const router = createBrowserRouter(
         <Route path="manual-order" element={<ManualOrder />} />
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="faqmanager" element={<FAQAdmin />} />
+        <Route path="announcement" element={<AnnouncementAdmin />} />
       </Route>
     </Route>
   )

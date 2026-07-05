@@ -56,17 +56,34 @@ const Register = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    if (!username || !email || !password || !confirmPassword) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters.");
+      return;
+    }
+
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
-    } else {
-      try {
-        const res = await register({ username, email, password }).unwrap();
-        toast.success(res.message || "OTP code sent to email.");
-        setOtpSent(true);
-      } catch (err) {
-        console.log(err);
-        toast.error(err?.data?.message || err.error || "Registration failed");
-      }
+      return;
+    }
+
+    try {
+      const res = await register({ username, email, password }).unwrap();
+      toast.success(res.message || "OTP code sent to email.");
+      setOtpSent(true);
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.data?.message || err.error || "Registration failed");
     }
   };
 

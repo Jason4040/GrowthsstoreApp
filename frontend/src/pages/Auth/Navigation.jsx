@@ -243,6 +243,15 @@ const Navigation = () => {
                 </div>
                 <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-400">FAQ Manager</span>
               </Link>
+              <Link
+                to="/admin/announcement"
+                className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+              >
+                <div className="w-[96px] flex justify-center shrink-0">
+                  <AiOutlineMessage size={28} className="transform group-hover/link:scale-110 transition-transform" />
+                </div>
+                <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-400">Announcement</span>
+              </Link>
             </div>
           )}
         </div>

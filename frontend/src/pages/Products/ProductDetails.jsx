@@ -16,6 +16,7 @@ import {
   FaStore,
   FaTag,
   FaWhatsapp,
+  FaMapMarkerAlt,
 } from "react-icons/fa";
 import moment from "moment";
 import HeartIcon from "./HeartIcon";
@@ -221,6 +222,12 @@ const ProductDetails = () => {
                         <FaTag className="mr-3 text-orange-500" />
                         <span className="font-semibold mr-2">Category:</span> {product?.category?.name || "N/A"}
                       </div>
+                      {product?.condition && (
+                        <div className="flex items-center text-gray-700 dark:text-gray-300">
+                          <FaTag className="mr-3 text-purple-500" />
+                          <span className="font-semibold mr-2">Condition:</span> {product.condition}
+                        </div>
+                      )}
                       <div className="flex items-center text-gray-700 dark:text-gray-300">
                         <FaClock className="mr-3 text-orange-500" />
                         <span className="font-semibold mr-2">Added:</span> {moment(product.createAt).fromNow()}
@@ -252,6 +259,13 @@ const ProductDetails = () => {
                           <FaClock className="mr-3 text-orange-500" />
                           <span className="font-semibold mr-2">Available:</span> 
                           {new Date(product.availabilityStartDate).toLocaleDateString()} - {new Date(product.availabilityEndDate).toLocaleDateString()}
+                        </div>
+                      )}
+                      {product.availableIn && (
+                        <div className="flex items-center text-gray-700 dark:text-gray-300">
+                          <FaMapMarkerAlt className="mr-3 text-orange-500" />
+                          <span className="font-semibold mr-2">Region:</span> 
+                          {product.availableIn === "Both" ? "Uganda & Rwanda" : `${product.availableIn} Only`}
                         </div>
                       )}
                     </div>

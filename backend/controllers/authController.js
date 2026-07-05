@@ -174,7 +174,7 @@ export const logout = (req, res) => {
 const getFrontendUrl = (req) => {
   const host = req && req.headers.host ? req.headers.host : "";
   const isProd = host.includes("growthsstore.com") || process.env.NODE_ENV === "production";
-  return isProd ? (process.env.PROD_FRONTEND_URL || "https://growthsstore.com") : "http://localhost:5173";
+  return isProd ? (process.env.PROD_FRONTEND_URL || "https://growthsstore.com") : "https://growthsstore.com";
 };
 
 const getGoogleCallbackUrl = (req) => {
@@ -188,5 +188,5 @@ const getGoogleCallbackUrl = (req) => {
     const protocol = req.secure || req.headers["x-forwarded-proto"] === "https" ? "https" : "http";
     return `${protocol}://${host}/auth/google/callback`;
   }
-  return "http://localhost:5000/auth/google/callback";
+  return "https://app.growthsstore.com/auth/google/callback";
 };

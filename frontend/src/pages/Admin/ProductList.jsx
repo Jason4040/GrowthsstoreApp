@@ -30,6 +30,9 @@ const ProductList = () => {
   const [discountRWF, setDiscountRWF] = useState(0);
   const [stockStatus, setStockStatus] = useState("in_stock");
   const [negotiable, setNegotiable] = useState(false);
+  const [availableIn, setAvailableIn] = useState("Both");
+  const [isPinned, setIsPinned] = useState(false);
+  const [condition, setCondition] = useState("Brand New");
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
   const [category, setCategory] = useState("");
@@ -81,6 +84,9 @@ const ProductList = () => {
       productData.append("brand", brand);
       productData.append("countInStock", stock);
       productData.append("negotiable", negotiable);
+      productData.append("availableIn", availableIn);
+      productData.append("isPinned", isPinned);
+      productData.append("condition", condition);
       productData.append("images", JSON.stringify(images));
       if (finalVideoValue) productData.append("video", finalVideoValue);
 
@@ -475,6 +481,50 @@ const ProductList = () => {
                   <option value="false">Fixed Price</option>
                   <option value="true">Negotiable</option>
                 </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Available In</label>
+                <select
+                  className="w-full p-4 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all appearance-none"
+                  value={availableIn}
+                  onChange={(e) => setAvailableIn(e.target.value)}
+                >
+                  <option value="Both">Both (Uganda & Rwanda)</option>
+                  <option value="Uganda">Uganda Only</option>
+                  <option value="Rwanda">Rwanda Only</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Condition</label>
+                <select
+                  className="w-full p-4 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all appearance-none"
+                  value={condition}
+                  onChange={(e) => setCondition(e.target.value)}
+                >
+                  <option value="Brand New">Brand New</option>
+                  <option value="Used">Used</option>
+                  <option value="Refurbished">Refurbished</option>
+                </select>
+              </div>
+              <div className="flex items-center">
+                <label className="flex items-center cursor-pointer mt-8">
+                  <div className="relative">
+                    <input 
+                      type="checkbox" 
+                      className="sr-only" 
+                      checked={isPinned} 
+                      onChange={(e) => setIsPinned(e.target.checked)} 
+                    />
+                    <div className={`block w-14 h-8 rounded-full transition-colors ${isPinned ? 'bg-orange-500' : 'bg-gray-300 dark:bg-gray-700'}`}></div>
+                    <div className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform ${isPinned ? 'transform translate-x-6' : ''}`}></div>
+                  </div>
+                  <div className="ml-3 text-gray-700 dark:text-gray-300 font-medium">
+                    Pin to Homepage Slider
+                  </div>
+                </label>
               </div>
             </div>
 

@@ -42,6 +42,16 @@ const ProductCard = ({ p }) => {
       <section className="relative aspect-[4/3] overflow-hidden">
         <Link to={`/product/${p._id}`}>
           <div className="absolute bottom-3 right-3 flex flex-col items-end gap-1 z-10">
+            {p?.availableIn && (
+              <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded-none shadow-lg group-hover:scale-105 transition-transform flex items-center gap-1">
+                📍 {p.availableIn === "Both" ? "Uganda & Rwanda" : `${p.availableIn} Only`}
+              </span>
+            )}
+            {p?.condition && (
+              <span className="bg-purple-600 text-white text-xs font-bold px-3 py-1.5 rounded-none shadow-lg group-hover:scale-105 transition-transform">
+                {p.condition}
+              </span>
+            )}
             <span className="bg-orange-600 text-white text-xs font-bold px-3 py-1.5 rounded-none shadow-lg group-hover:scale-105 transition-transform">
               {p?.brand}
             </span>

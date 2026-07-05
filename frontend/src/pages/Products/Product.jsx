@@ -42,6 +42,18 @@ const Product = ({ product }) => {
             />
           )}
         </Link>
+        <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
+          {product?.availableIn && (
+            <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-sm shadow-sm flex items-center gap-1 w-fit">
+              📍 {product.availableIn === "Both" ? "Uganda & Rwanda" : `${product.availableIn} Only`}
+            </span>
+          )}
+          {product?.condition && (
+            <span className="bg-purple-600 text-white text-[10px] font-bold px-2 py-1 rounded-sm shadow-sm w-fit">
+              {product.condition}
+            </span>
+          )}
+        </div>
         <div className="absolute top-2 right-2 z-10">
           <HeartIcon product={product} />
         </div>

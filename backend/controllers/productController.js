@@ -3,7 +3,7 @@ import Product from "../models/productModel.js";
 
 const addProduct = asyncHandler(async (req, res) => {
   try {
-    const { name, description, price, priceUGX, priceRWF, category, quantity, brand, discountQtyThreshold, discountType, discountUSD, discountUGX, discountRWF, stockStatus, availabilityStartDate, availabilityEndDate, negotiable, images: imagesStr, video } = req.fields;
+    const { name, description, price, priceUGX, priceRWF, category, quantity, brand, discountQtyThreshold, discountType, discountUSD, discountUGX, discountRWF, stockStatus, availabilityStartDate, availabilityEndDate, negotiable, availableIn, isPinned, condition, images: imagesStr, video } = req.fields;
     
     let images = [];
     if (imagesStr) {
@@ -39,6 +39,9 @@ const addProduct = asyncHandler(async (req, res) => {
       availabilityStartDate: availabilityStartDate || null,
       availabilityEndDate: availabilityEndDate || null,
       negotiable: negotiable === 'true' || negotiable === true,
+      availableIn: availableIn || 'Both',
+      isPinned: isPinned === 'true' || isPinned === true,
+      condition: condition || 'Brand New',
       images,
       video: video || null,
     });
@@ -52,7 +55,7 @@ const addProduct = asyncHandler(async (req, res) => {
 
 const updateProductDetails = asyncHandler(async (req, res) => {
   try {
-    const { name, description, price, priceUGX, priceRWF, category, quantity, brand, discountQtyThreshold, discountType, discountUSD, discountUGX, discountRWF, stockStatus, availabilityStartDate, availabilityEndDate, negotiable, images: imagesStr, video } = req.fields;
+    const { name, description, price, priceUGX, priceRWF, category, quantity, brand, discountQtyThreshold, discountType, discountUSD, discountUGX, discountRWF, stockStatus, availabilityStartDate, availabilityEndDate, negotiable, availableIn, isPinned, condition, images: imagesStr, video } = req.fields;
 
     let images = undefined;
     if (imagesStr !== undefined) {
@@ -94,6 +97,9 @@ const updateProductDetails = asyncHandler(async (req, res) => {
         availabilityStartDate: availabilityStartDate || null,
         availabilityEndDate: availabilityEndDate || null,
         negotiable: negotiable === 'true' || negotiable === true,
+        ...(availableIn !== undefined && { availableIn }),
+        ...(isPinned !== undefined && { isPinned: isPinned === 'true' || isPinned === true }),
+        ...(condition !== undefined && { condition }),
         ...(images !== undefined && { images }),
         ...(video !== undefined && { video: video || null }),
       },
@@ -237,7 +243,7 @@ const fetchTopProducts = asyncHandler(async (req, res) => {
 
 const fetchNewProducts = asyncHandler(async (req, res) => {
   try {
-    const products = await Product.find().populate("category").sort({ _id: -1 }).limit(5);
+    const products = await Product.find().populate("category").sort({ isPinned: -1, _id: -1 }).limit(5);
     res.json(products);
   } catch (error) {
     console.error(error);

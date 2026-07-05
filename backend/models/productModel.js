@@ -47,6 +47,9 @@ const productSchema = mongoose.Schema(
     discountUGX: { type: Number, default: 0 },
     discountRWF: { type: Number, default: 0 },
     negotiable: { type: Boolean, default: false },
+    availableIn: { type: String, enum: ['Uganda', 'Rwanda', 'Both'], default: 'Both' },
+    isPinned: { type: Boolean, default: false },
+    condition: { type: String, enum: ['Brand New', 'Used', 'Refurbished'], default: 'Brand New' },
   },
   { timestamps: true }
 );

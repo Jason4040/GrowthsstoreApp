@@ -118,3 +118,14 @@ select option {
   background: #db2777 !important;
   height: 2px !important;
 }
+
+/* ===== Marquee Animation ===== */
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+}

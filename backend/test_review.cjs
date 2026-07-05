@@ -29,7 +29,7 @@ mongoose.connect('mongodb+srv://Growth:01402@mydb.qhgx1yd.mongodb.net/store?appN
     const token = jwt.sign({ userId: testUser._id }, 'abac12afsdkjladf', { expiresIn: '30d' });
     
     // Make request via fetch
-    const res = await fetch(`http://localhost:5000/api/products/${product._id}/reviews`, {
+    const res = await fetch(`https://app.growthsstore.com/api/products/${product._id}/reviews`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
