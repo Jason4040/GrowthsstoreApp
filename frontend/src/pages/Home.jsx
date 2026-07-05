@@ -6,20 +6,43 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Header from "../components/Header";
 import Product from "./Products/Product";
+import { useCurrency } from "../hooks/useCurrency";
 
 const Home = () => {
   const { keyword } = useParams();
   const [scrolled, setScrolled] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [debouncedKeyword, setDebouncedKeyword] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
+  const { formatPrice } = useCurrency();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedKeyword(searchKeyword);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchKeyword]);
+
+  const { data: searchResults, isFetching: isSearching } = useGetProductsQuery(
+    { keyword: debouncedKeyword },
+    { skip: !debouncedKeyword.trim() }
+  );
 
   const submitHandler = (e) => {
     e.preventDefault();
     if (searchKeyword.trim()) {
       navigate(`/search/${searchKeyword}`);
+      setShowSuggestions(false);
     } else {
       navigate("/");
     }
+  };
+
+  const handleSuggestionClick = (productId) => {
+    navigate(`/product/${productId}`);
+    setShowSuggestions(false);
+    setSearchKeyword("");
   };
 
   useEffect(() => {
@@ -70,22 +93,65 @@ const Home = () => {
 
             {/* Search Bar - Centered */}
             <div className="absolute bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2 w-full max-w-xl px-4 z-20">
-              <form onSubmit={submitHandler} className="w-full flex relative shadow-2xl">
-                <input
-                  type="text"
-                  placeholder="Search for products..."
-                  value={searchKeyword}
-                  onChange={(e) => setSearchKeyword(e.target.value)}
-                  className="w-full py-4 md:py-5 pl-8 pr-16 rounded-full bg-black/40 backdrop-blur-md border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:bg-black/60 focus:border-orange-500 transition-all text-lg shadow-lg"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-orange-600 hover:bg-orange-500 text-white p-3 md:p-4 rounded-full transition-all shadow-md"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </button>
+              <form onSubmit={submitHandler} className="w-full flex flex-col relative shadow-2xl">
+                <div className="relative w-full">
+                  <input
+                    type="text"
+                    placeholder="Search for products..."
+                    value={searchKeyword}
+                    onChange={(e) => {
+                      setSearchKeyword(e.target.value);
+                      setShowSuggestions(true);
+                    }}
+                    onFocus={() => setShowSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                    className="w-full py-4 md:py-5 pl-8 pr-16 rounded-full bg-black/40 backdrop-blur-md border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:bg-black/60 focus:border-orange-500 transition-all text-lg shadow-lg"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-orange-600 hover:bg-orange-500 text-white p-3 md:p-4 rounded-full transition-all shadow-md"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Suggestions Dropdown */}
+                {showSuggestions && debouncedKeyword.trim() && (
+                  <div className="absolute top-full left-0 w-full mt-2 bg-white dark:bg-[#1A1A1A] rounded-2xl shadow-2xl overflow-hidden z-50 border border-gray-200 dark:border-gray-800 max-h-80 overflow-y-auto">
+                    {isSearching ? (
+                      <div className="p-4 text-center text-gray-500">Loading suggestions...</div>
+                    ) : searchResults?.products?.length > 0 ? (
+                      <ul>
+                        {searchResults.products.slice(0, 5).map((product) => (
+                          <li
+                            key={product._id}
+                            onClick={() => handleSuggestionClick(product._id)}
+                            className="flex items-center gap-4 p-3 hover:bg-gray-50 dark:hover:bg-[#2A2A2A] cursor-pointer transition-colors border-b border-gray-100 dark:border-gray-800 last:border-0"
+                          >
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className="w-12 h-12 object-cover rounded-md border border-gray-200 dark:border-gray-700"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                                {product.name}
+                              </h4>
+                              <p className="text-xs text-gray-500 truncate">{product.category?.name}</p>
+                            </div>
+                            <div className="text-orange-500 font-bold text-sm whitespace-nowrap">
+                              {formatPrice(product)}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="p-4 text-center text-gray-500">No products found</div>
+                    )}
+                  </div>
+                )}
               </form>
             </div>
           </div>
