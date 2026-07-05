@@ -65,26 +65,28 @@ const Home = () => {
                 >
                   Start Shopping
                 </Link>
-
-                {/* Search Bar */}
-                <form onSubmit={submitHandler} className="mt-8 w-full max-w-md flex relative">
-                  <input
-                    type="text"
-                    placeholder="Search for products..."
-                    value={searchKeyword}
-                    onChange={(e) => setSearchKeyword(e.target.value)}
-                    className="w-full py-4 pl-6 pr-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder-gray-300 focus:outline-none focus:bg-white/20 focus:border-white/40 transition-all text-lg shadow-lg"
-                  />
-                  <button
-                    type="submit"
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-orange-600 hover:bg-orange-500 text-white p-3 rounded-full transition-all"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </button>
-                </form>
               </div>
+            </div>
+
+            {/* Search Bar - Centered */}
+            <div className="absolute bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2 w-full max-w-xl px-4 z-20">
+              <form onSubmit={submitHandler} className="w-full flex relative shadow-2xl">
+                <input
+                  type="text"
+                  placeholder="Search for products..."
+                  value={searchKeyword}
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                  className="w-full py-4 md:py-5 pl-8 pr-16 rounded-full bg-black/40 backdrop-blur-md border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:bg-black/60 focus:border-orange-500 transition-all text-lg shadow-lg"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-orange-600 hover:bg-orange-500 text-white p-3 md:p-4 rounded-full transition-all shadow-md"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
+              </form>
             </div>
           </div>
 
