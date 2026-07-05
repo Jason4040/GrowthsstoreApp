@@ -7,17 +7,29 @@ const About = () => {
       
       <div className="prose prose-invert max-w-none text-gray-300">
         <p className="text-lg leading-relaxed mb-6">
-          Welcome to Growthsstore, your number one source for all things premium. We're dedicated to providing you the best of products, with a focus on dependability, customer service, and uniqueness.
+          Welcome to <strong className="text-white">GrowthsStore</strong>.
         </p>
         
         <p className="text-lg leading-relaxed mb-6">
-          We hope you enjoy our products as much as we enjoy offering them to you. If you have any questions or comments, please don't hesitate to contact us.
+          GrowthsStore is a trusted online store dedicated to serving customers across <strong className="text-white">Uganda</strong> and, where possible, other <strong className="text-white">East African</strong> countries. We offer a wide range of quality products, including <strong className="text-white">electronics, art, fashion, and accessories</strong>, carefully selected to meet our customers' needs.
+        </p>
+
+        <p className="text-lg leading-relaxed mb-6">
+          We are committed to providing quality products, excellent customer service, and a smooth shopping experience. Orders are typically delivered within <strong className="text-white">10–15 days</strong>, depending on the product and destination. In the event of unexpected delays, we keep our customers informed throughout the process and stay in touch until every order is successfully completed.
+        </p>
+
+        <p className="text-lg leading-relaxed mb-6">
+          We invite you to visit our social media pages to learn more about us, explore our latest collections, and read reviews from our satisfied customers.
+        </p>
+
+        <p className="text-lg leading-relaxed mb-6">
+          Thank you for choosing GrowthsStore. We look forward to serving you and making your shopping experience enjoyable.
         </p>
         
         <div className="mt-12">
           <Link
             to="/shop"
-            className="inline-block bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 text-lg transition-all border border-orange-500 hover:border-orange-400"
+            className="inline-block bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 text-lg transition-all border border-orange-500 hover:border-orange-400 shadow-lg"
           >
             Explore Our Shop
           </Link>
