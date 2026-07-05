@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { FaRegFrownOpen } from "react-icons/fa";
 import { useGetProductsQuery } from "../redux/api/productApiSlice";
+import { useGetAnnouncementsQuery } from "../redux/api/announcementApiSlice";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Header from "../components/Header";
@@ -28,6 +29,9 @@ const Home = () => {
     { keyword: debouncedKeyword },
     { skip: !debouncedKeyword.trim() }
   );
+
+  const { data: announcements } = useGetAnnouncementsQuery();
+  const hasActiveAnnouncement = Array.isArray(announcements) && announcements.some(ann => ann.isActive);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -66,7 +70,7 @@ const Home = () => {
             <div className="absolute inset-y-0 left-0 w-full md:w-2/3 lg:w-1/2 bg-gradient-to-r from-black/90 via-black/70 to-transparent"></div>
 
             {/* Centered Top Tab Logo */}
-            <div className={`fixed top-0 left-1/2 transform -translate-x-1/2 z-[99] pointer-events-auto bg-white transition-all duration-300 ${scrolled ? 'px-4 py-2 rounded-b-xl shadow-md' : 'px-6 py-4 rounded-b-3xl shadow-2xl'}`}>
+            <div className={`fixed left-1/2 transform -translate-x-1/2 z-[99] pointer-events-auto bg-white transition-all duration-300 ${scrolled ? 'px-4 py-2 rounded-b-xl shadow-md' : 'px-6 py-4 rounded-b-3xl shadow-2xl'} ${hasActiveAnnouncement ? 'top-[40px] md:top-[44px]' : 'top-0'}`}>
               <Link to="/">
                 <img src="/logo.png" alt="Logo" className={`object-contain transition-all duration-300 ${scrolled ? 'h-[25px] md:h-[35px]' : 'h-[45px] md:h-[55px]'}`} />
               </Link>

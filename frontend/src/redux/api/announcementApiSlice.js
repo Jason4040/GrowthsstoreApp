@@ -5,21 +5,41 @@ const ANNOUNCEMENT_URL = `${BASE_URL}/api/announcements`;
 
 export const announcementApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAnnouncement: builder.query({
+    getAnnouncements: builder.query({
       query: () => ({
         url: ANNOUNCEMENT_URL,
       }),
       providesTags: ["Announcement"],
     }),
-    updateAnnouncement: builder.mutation({
+    createAnnouncement: builder.mutation({
       query: (data) => ({
         url: ANNOUNCEMENT_URL,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Announcement"],
+    }),
+    updateAnnouncement: builder.mutation({
+      query: ({ id, ...data }) => ({
+        url: `${ANNOUNCEMENT_URL}/${id}`,
         method: "PUT",
         body: data,
+      }),
+      invalidatesTags: ["Announcement"],
+    }),
+    deleteAnnouncement: builder.mutation({
+      query: (id) => ({
+        url: `${ANNOUNCEMENT_URL}/${id}`,
+        method: "DELETE",
       }),
       invalidatesTags: ["Announcement"],
     }),
   }),
 });
 
-export const { useGetAnnouncementQuery, useUpdateAnnouncementMutation } = announcementApiSlice;
+export const { 
+  useGetAnnouncementsQuery, 
+  useCreateAnnouncementMutation,
+  useUpdateAnnouncementMutation,
+  useDeleteAnnouncementMutation
+} = announcementApiSlice;
