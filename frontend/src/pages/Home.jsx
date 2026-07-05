@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { Frown, ShoppingCart } from "lucide-react";
+import { Frown, ShoppingCart, Search } from "lucide-react";
 import { useGetProductsQuery } from "../redux/api/productApiSlice";
 import { useGetAnnouncementsQuery } from "../redux/api/announcementApiSlice";
 import Loader from "../components/Loader";
@@ -17,6 +17,7 @@ const Home = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [debouncedKeyword, setDebouncedKeyword] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const navigate = useNavigate();
   const { formatPrice, currentCurrency } = useCurrency();
   const { cartItems } = useSelector((state) => state.cart);
@@ -80,18 +81,26 @@ const Home = () => {
               
               {/* Aligned Container for Header Elements */}
               <div className="max-w-[1400px] mx-auto w-full relative">
-                {/* Right Side Controls (Currency & Cart) */}
-                <div className={`absolute top-0 right-4 md:right-8 flex items-center gap-4 md:gap-6 pointer-events-auto z-50 transition-all duration-300 ${scrolled ? 'h-[35px] md:h-[45px]' : 'h-[45px] md:h-[55px]'}`}>
+                {/* Right Side Controls (Currency, Search Icon & Cart) */}
+                <div className={`absolute top-0 right-4 md:right-8 flex items-center gap-3 md:gap-6 pointer-events-auto z-50 transition-all duration-300 ${scrolled ? 'h-[35px] md:h-[45px]' : 'h-[45px] md:h-[55px]'}`}>
                   {/* Currency Selector */}
                   <select
                     value={currentCurrency}
                     onChange={(e) => dispatch(setCurrency(e.target.value))}
-                    className="bg-[#101010] text-gray-300 hover:text-white text-xs md:text-sm font-medium border border-gray-700 hover:border-gray-500 rounded-md p-1 outline-none transition-colors cursor-pointer"
+                    className="bg-[#101010] text-gray-300 hover:text-white text-[10px] md:text-sm font-medium border border-gray-700 hover:border-gray-500 rounded-md p-1 px-1 md:px-2 outline-none transition-colors cursor-pointer w-[50px] md:w-auto"
                   >
-                    <option value="USD">USD ($)</option>
-                    <option value="UGX">UGX (USh)</option>
-                    <option value="RWF">RWF (FRw)</option>
+                    <option value="USD">USD</option>
+                    <option value="UGX">UGX</option>
+                    <option value="RWF">RWF</option>
                   </select>
+
+                  {/* Mobile Search Icon */}
+                  <button
+                    onClick={() => setShowMobileSearch(!showMobileSearch)}
+                    className="md:hidden text-gray-300 hover:text-white transition-colors"
+                  >
+                    <Search size={22} />
+                  </button>
 
                   {/* Cart Icon */}
                   <Link to="/cart" className="relative flex items-center gap-2 text-gray-300 hover:text-white transition-colors group">
@@ -106,11 +115,74 @@ const Home = () => {
               </div>
 
               {/* Centered Top Tab Logo - Always hanging */}
-              <div className={`absolute top-0 left-1/2 transform -translate-x-1/2 pointer-events-auto bg-white transition-all duration-300 ${scrolled ? 'px-5 py-3 rounded-b-2xl shadow-md' : 'px-8 py-5 rounded-b-3xl shadow-2xl'}`}>
+              <div className={`absolute top-0 left-1/2 transform -translate-x-1/2 pointer-events-auto bg-white transition-all duration-300 ${scrolled ? 'px-3 py-2 md:px-5 md:py-3 rounded-b-2xl shadow-md' : 'px-5 py-3 md:px-8 md:py-5 rounded-b-3xl shadow-2xl'}`}>
                 <Link to="/">
-                  <img src="/logo.png" alt="Logo" className={`object-contain transition-all duration-300 ${scrolled ? 'h-[25px] md:h-[35px]' : 'h-[35px] md:h-[45px]'}`} />
+                  <img src="/logo.png" alt="Logo" className={`object-contain transition-all duration-300 ${scrolled ? 'h-[20px] md:h-[35px]' : 'h-[25px] md:h-[45px]'}`} />
                 </Link>
               </div>
+
+              {/* Mobile Search Dropdown */}
+              {showMobileSearch && (
+                <div className="md:hidden absolute top-[45px] left-0 right-0 w-full z-[100] bg-[#0a0a0a] p-4 border-b border-gray-800 shadow-2xl pointer-events-auto transition-all duration-300">
+                  <form onSubmit={submitHandler} className="w-full flex flex-col relative">
+                    <div className="relative w-full">
+                      <input
+                        type="text"
+                        placeholder="Search for products..."
+                        value={searchKeyword}
+                        onChange={(e) => {
+                          setSearchKeyword(e.target.value);
+                          setShowSuggestions(true);
+                        }}
+                        onFocus={() => setShowSuggestions(true)}
+                        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                        className="w-full py-3 pl-4 pr-12 rounded-lg bg-[#1A1A1A] border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-all text-sm shadow-inner"
+                      />
+                      <button
+                        type="submit"
+                        className="absolute right-1 top-1 bottom-1 bg-orange-600 hover:bg-orange-500 text-white px-4 rounded-md transition-all flex items-center justify-center shadow-sm"
+                      >
+                        <Search size={18} />
+                      </button>
+                    </div>
+
+                    {/* Mobile Suggestions */}
+                    {showSuggestions && debouncedKeyword.trim() && (
+                      <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-[#1A1A1A] rounded-lg shadow-2xl overflow-hidden z-[101] border border-gray-700 max-h-60 overflow-y-auto">
+                        {isSearching ? (
+                          <div className="p-4 text-center text-gray-500 text-sm">Loading...</div>
+                        ) : searchResults?.products?.length > 0 ? (
+                          <ul>
+                            {searchResults.products.slice(0, 4).map((product) => (
+                              <li
+                                key={product._id}
+                                onClick={() => handleSuggestionClick(product._id)}
+                                className="flex items-center gap-3 p-3 hover:bg-[#2A2A2A] cursor-pointer transition-colors border-b border-gray-800 last:border-0"
+                              >
+                                <img
+                                  src={product.image}
+                                  alt={product.name}
+                                  className="w-10 h-10 object-cover rounded-md border border-gray-700"
+                                />
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="text-xs font-semibold text-white truncate">
+                                    {product.name}
+                                  </h4>
+                                </div>
+                                <div className="text-orange-500 font-bold text-xs whitespace-nowrap">
+                                  {formatPrice(product)}
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <div className="p-4 text-center text-gray-500 text-sm">No products found</div>
+                        )}
+                      </div>
+                    )}
+                  </form>
+                </div>
+              )}
             </div>
 
             {/* Aligned Container */}
@@ -132,8 +204,8 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Search Bar - Centered */}
-            <div className="absolute bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2 w-full max-w-xl px-4 z-20">
+            {/* Search Bar - Centered (Desktop) */}
+            <div className="hidden md:block absolute bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2 w-full max-w-xl px-4 z-20">
               <form onSubmit={submitHandler} className="w-full flex flex-col relative shadow-2xl">
                 <div className="relative w-full">
                   <input
