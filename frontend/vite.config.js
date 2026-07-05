@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
   // Use VITE_BACKEND_URL if set, otherwise fallback to local backend on port 5000
-  const backendTarget = env.VITE_BACKEND_URL || "https://app.growthsstore.com";
+  const backendTarget = env.VITE_BACKEND_URL || "http://localhost:5000";
 
   return {
     plugins: [react()],
