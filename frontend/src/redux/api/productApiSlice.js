@@ -55,12 +55,20 @@ export const productApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
+    toggleProductPin: builder.mutation({
+      query: (productId) => ({
+        url: `${PRODUCT_URL}/${productId}/pin`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["Product", "Products"],
+    }),
+
     deleteProduct: builder.mutation({
       query: (productId) => ({
         url: `${PRODUCT_URL}/${productId}`,
         method: "DELETE",
       }),
-      providesTags: ["Product"],
+      invalidatesTags: ["Product", "Products"],
     }),
 
     createReview: builder.mutation({
@@ -120,4 +128,5 @@ export const {
   useGetNewProductsQuery,
   useUploadProductImageMutation,
   useGetFilteredProductsQuery,
+  useToggleProductPinMutation,
 } = productApiSlice;

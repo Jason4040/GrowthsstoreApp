@@ -5,13 +5,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import moment from "moment";
 import {
-  FaBox,
-  FaClock,
-  FaShoppingCart,
-  FaStar,
-  FaStore,
-  FaWhatsapp,
-} from "react-icons/fa";
+  Box,
+  Clock,
+  ShoppingCart,
+  Star,
+  Store,
+  MessageCircle,
+} from "lucide-react";
 import HeartIcon from "../Products/HeartIcon";
 import { useCurrency } from "../../hooks/useCurrency";
 import ProductVideo from "../../components/ProductVideo";
@@ -84,7 +84,7 @@ const ProductCarousel = () => {
                       onClick={(e) => handleWhatsAppOrder(e, product)}
                       title="Order via WhatsApp"
                     >
-                      <FaWhatsapp size={16} className="mr-2" />
+                      <MessageCircle size={16} className="mr-2" />
                       Order Now
                     </button>
                   </div>
@@ -96,26 +96,26 @@ const ProductCarousel = () => {
                 <div className="grid grid-cols-2 gap-x-8 gap-y-4 lg:w-[20rem] 2xl:w-[25rem] bg-gray-900/50 p-6 rounded-none border border-gray-200 dark:border-gray-800 backdrop-blur-sm">
                   <div className="space-y-3">
                     <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                      <FaStore className="mr-2 text-orange-500" /> {product.brand}
+                      <Store className="mr-2 text-orange-500" /> {product.brand}
                     </div>
                     <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                      <FaClock className="mr-2 text-orange-500" />{" "}
+                      <Clock className="mr-2 text-orange-500" />{" "}
                       {moment(product.createdAt).fromNow()}
                     </div>
                     <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                      <FaStar className="mr-2 text-orange-500" /> {product.numReviews} Reviews
+                      <Star className="mr-2 text-orange-500" /> {product.numReviews} Reviews
                     </div>
                   </div>
 
                   <div className="space-y-3">
                     <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                      <FaStar className="mr-2 text-orange-500" /> {Math.round(product.rating)} Ratings
+                      <Star className="mr-2 text-orange-500" /> {Math.round(product.rating)} Ratings
                     </div>
                     <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                      <FaShoppingCart className="mr-2 text-orange-500" /> {product.quantity} Qty
+                      <ShoppingCart className="mr-2 text-orange-500" /> {product.quantity} Qty
                     </div>
                     <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                      <FaBox className="mr-2 text-orange-500" /> {product.countInStock} Stock
+                      <Box className="mr-2 text-orange-500" /> {product.countInStock} Stock
                     </div>
                   </div>
                 </div>

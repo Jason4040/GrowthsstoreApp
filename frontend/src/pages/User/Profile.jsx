@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
-  AiOutlineUser,
-  AiOutlineSetting,
-  AiOutlineOrderedList,
-  AiOutlineLogout,
-  AiOutlineClose
-} from "react-icons/ai";
+  User,
+  Settings,
+  ListOrdered,
+  LogOut,
+  X
+} from "lucide-react";
 
 import Loader from "../../components/Loader";
 import { useProfileMutation, useLogoutMutation } from "../../redux/api/usersApiSlice";
@@ -85,25 +85,25 @@ const Profile = () => {
           <div className="flex flex-col space-y-1">
             <Link to="/profile" className="flex items-center justify-between text-gray-200 bg-gray-900 border-l-[3px] border-orange-500 px-4 py-3 transition-colors text-sm font-medium">
               <span className="flex items-center gap-3">
-                <AiOutlineUser className="w-4 h-4 text-orange-500" /> My Profile
+                <User className="w-4 h-4 text-orange-500" /> My Profile
               </span>
               <span className="text-gray-600 font-bold">&gt;</span>
             </Link>
             <Link to="/user-orders" className="flex items-center justify-between text-gray-500 hover:text-gray-700 dark:text-gray-300 border-l-[3px] border-transparent px-4 py-3 hover:bg-gray-900 transition-colors text-sm font-medium group">
               <span className="flex items-center gap-3">
-                <AiOutlineOrderedList className="w-4 h-4 group-hover:text-orange-400" /> My Orders
+                <ListOrdered className="w-4 h-4 group-hover:text-orange-400" /> My Orders
               </span>
               <span className="text-gray-700 group-hover:text-gray-500 font-bold">&gt;</span>
             </Link>
             <div className="flex items-center justify-between text-gray-500 hover:text-gray-700 dark:text-gray-300 border-l-[3px] border-transparent px-4 py-3 hover:bg-gray-900 transition-colors text-sm font-medium cursor-not-allowed group">
               <span className="flex items-center gap-3">
-                <AiOutlineSetting className="w-4 h-4 group-hover:text-orange-400" /> Settings
+                <Settings className="w-4 h-4 group-hover:text-orange-400" /> Settings
               </span>
               <span className="text-gray-700 group-hover:text-gray-500 font-bold">&gt;</span>
             </div>
             <button onClick={logoutHandler} className="flex items-center justify-between text-gray-500 hover:text-red-400 border-l-[3px] border-transparent px-4 py-3 hover:bg-red-950/20 transition-colors w-full text-left text-sm font-medium mt-2 group">
               <span className="flex items-center gap-3">
-                <AiOutlineLogout className="w-4 h-4 group-hover:text-red-400" /> Log Out
+                <LogOut className="w-4 h-4 group-hover:text-red-400" /> Log Out
               </span>
             </button>
           </div>
@@ -113,7 +113,7 @@ const Profile = () => {
         <div className="w-full bg-[#111] border border-gray-200 dark:border-gray-800 p-6 shadow-2xl rounded-none">
           <div className="flex justify-between items-center mb-5">
             <h3 className="text-gray-700 dark:text-gray-300 font-semibold text-sm tracking-wide">Settings</h3>
-            <AiOutlineClose className="text-gray-600 cursor-pointer hover:text-gray-900 dark:text-white" />
+            <X className="text-gray-600 cursor-pointer hover:text-gray-900 dark:text-white" />
           </div>
           <div className="flex justify-between items-center text-xs mb-4">
             <span className="text-gray-500 font-medium">Theme</span>
@@ -141,7 +141,7 @@ const Profile = () => {
             </div>
           </div>
           <Link to="/" className="text-gray-600 hover:text-orange-500 transition-colors p-2 -mr-2 -mt-2">
-            <AiOutlineClose className="w-5 h-5" />
+            <X className="w-5 h-5" />
           </Link>
         </div>
 

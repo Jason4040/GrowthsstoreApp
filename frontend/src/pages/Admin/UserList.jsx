@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaTrash, FaEdit, FaCheck, FaTimes } from "react-icons/fa";
+import { Trash2, Edit, Check, X } from "lucide-react";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import {
@@ -98,7 +98,7 @@ const UserList = () => {
                             onClick={() => updateHandler(user._id)}
                             className="bg-orange-600 hover:bg-orange-700 text-white p-2.5 rounded-lg transition-colors"
                           >
-                            <FaCheck />
+                            <Check size={16} />
                           </button>
                         </div>
                       ) : (
@@ -108,7 +108,7 @@ const UserList = () => {
                             onClick={() => toggleEdit(user._id, user.username, user.email)}
                             className="text-gray-500 hover:text-orange-500 opacity-0 group-hover:opacity-100 transition-all"
                           >
-                            <FaEdit />
+                            <Edit size={16} />
                           </button>
                         </div>
                       )}
@@ -126,7 +126,7 @@ const UserList = () => {
                             onClick={() => updateHandler(user._id)}
                             className="bg-orange-600 hover:bg-orange-700 text-white p-2.5 rounded-lg transition-colors"
                           >
-                            <FaCheck />
+                            <Check size={16} />
                           </button>
                         </div>
                       ) : (
@@ -136,7 +136,7 @@ const UserList = () => {
                             onClick={() => toggleEdit(user._id, user.username, user.email)}
                             className="text-gray-500 hover:text-orange-500 opacity-0 group-hover:opacity-100 transition-all"
                           >
-                            <FaEdit />
+                            <Edit size={16} />
                           </button>
                         </div>
                       )}
@@ -144,11 +144,11 @@ const UserList = () => {
                     <td className="px-6 py-4 text-center">
                       {user.isAdmin ? (
                         <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-500/10 text-green-500">
-                          <FaCheck />
+                          <Check size={16} />
                         </span>
                       ) : (
                         <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-500/10 text-red-500">
-                          <FaTimes />
+                          <X size={16} />
                         </span>
                       )}
                     </td>
@@ -162,7 +162,7 @@ const UserList = () => {
                           className="bg-red-900/30 hover:bg-red-800/50 text-red-500 p-2.5 rounded-lg transition-colors border border-red-900/50 hover:border-red-700 inline-flex items-center justify-center"
                           title="Delete User"
                         >
-                          <FaTrash />
+                          <Trash2 size={16} />
                         </button>
                       )}
                     </td>

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { FaHeart, FaRegHeart, FaVaadin } from "react-icons/fa";
+import { Heart } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   addToFavorites,
@@ -41,9 +41,9 @@ const HeartIcon = ({ product }) => {
       onClick={toggleFavorites}
     >
       {isFavorite ? (
-        <FaHeart size={26} className="text-orange-500 transition-colors drop-shadow-lg" />
+        <Heart size={26} fill="currentColor" className="text-orange-500 transition-colors drop-shadow-lg" />
       ) : (
-        <FaRegHeart size={26} className="text-orange-500 hover:text-orange-400 transition-colors drop-shadow-lg" />
+        <Heart size={26} className="text-orange-500 hover:text-orange-400 transition-colors drop-shadow-lg" />
       )}
     </div>
   );

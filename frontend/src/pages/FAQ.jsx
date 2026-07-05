@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { AiOutlineQuestionCircle, AiOutlineDown, AiOutlineHome, AiOutlineSend } from "react-icons/ai";
+import { HelpCircle, ChevronDown, Home, Send } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   useGetPublicFAQsQuery,
@@ -96,7 +96,7 @@ const FAQ = () => {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-semibold text-white tracking-tight flex items-center gap-2">
-            <AiOutlineQuestionCircle className="text-orange-500" /> Frequently Asked Questions
+            <HelpCircle className="text-orange-500" /> Frequently Asked Questions
           </h1>
           <p className="text-gray-500 text-sm mt-1">
             Find answers to common questions about shipping times, payment methods, verification, and appeals.
@@ -106,7 +106,7 @@ const FAQ = () => {
           to="/"
           className="text-gray-400 hover:text-orange-500 p-2 border border-gray-800 rounded-xl transition-colors shrink-0 flex items-center gap-1.5 text-xs font-semibold"
         >
-          <AiOutlineHome size={16} /> Home
+          <Home size={16} /> Home
         </Link>
       </div>
 
@@ -133,7 +133,7 @@ const FAQ = () => {
                   <span className={`font-semibold text-sm md:text-base ${isOpen ? "text-orange-500" : "text-white"}`}>
                     {faq.question}
                   </span>
-                  <AiOutlineDown
+                  <ChevronDown
                     size={16}
                     className={`text-gray-500 transition-transform duration-300 ${isOpen ? "rotate-180 text-orange-500" : ""}`}
                   />
@@ -178,7 +178,7 @@ const FAQ = () => {
               disabled={submittingQuestion || !questionText.trim()}
               className="px-6 bg-orange-600 hover:bg-orange-700 text-white rounded-xl transition-all active:scale-[0.98] disabled:opacity-50 flex flex-col items-center justify-center gap-1 shrink-0"
             >
-              <AiOutlineSend size={18} />
+              <Send size={18} />
               <span className="text-[10px] font-semibold">Send</span>
             </button>
           </form>

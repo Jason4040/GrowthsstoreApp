@@ -1,11 +1,26 @@
 import { Link } from "react-router-dom";
 import HeartIcon from "./HeartIcon";
 import { useCurrency } from "../../hooks/useCurrency";
-import { FaWhatsapp } from "react-icons/fa";
+import { MessageCircle, ShoppingCart } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/features/cart/cartSlice";
+import { toast } from "react-toastify";
 import ProductVideo from "../../components/ProductVideo";
+import AdminProductControls from "../../components/AdminProductControls";
 
 const SmallProduct = ({ product }) => {
   const { formatPrice, currentCurrency } = useCurrency();
+  const dispatch = useDispatch();
+
+  const addToCartHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(addToCart({ ...product, qty: 1 }));
+    toast.success("Item added successfully", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+    });
+  };
 
   const getWhatsAppNumber = () => {
     if (currentCurrency === "RWF") return "250793392762";
@@ -21,8 +36,9 @@ const SmallProduct = ({ product }) => {
   };
 
   return (
-    <div className="p-3 relative bg-white dark:bg-[#1A1A1A] rounded-none border border-gray-200 dark:border-gray-800 hover:border-orange-500 transition-all rounded-none shadow-none">
+    <div className="p-3 relative bg-white dark:bg-[#1A1A1A] rounded-none border border-gray-200 dark:border-gray-800 hover:border-orange-500 transition-all shadow-none group">
       <div className="relative">
+        <AdminProductControls product={product} />
         {product.video ? (
           <ProductVideo
             videoUrl={product.video}
@@ -62,7 +78,14 @@ const SmallProduct = ({ product }) => {
               onClick={handleWhatsAppOrder}
               title="Order via WhatsApp"
             >
-              <FaWhatsapp size={14} />
+              <MessageCircle size={14} />
+            </button>
+            <button
+              className="p-1.5 bg-gray-800 hover:bg-gray-700 rounded-none text-white transition-colors flex items-center justify-center"
+              onClick={addToCartHandler}
+              title="Add to Cart"
+            >
+              <ShoppingCart size={14} />
             </button>
             <span className="bg-orange-900 border border-orange-500 text-orange-300 text-xs font-semibold px-2 py-1 rounded-none whitespace-nowrap">
               {formatPrice(product)}

@@ -1,4 +1,4 @@
-import { FaTimes } from "react-icons/fa";
+import { X } from "lucide-react";
 
 const ImagePreviewModal = ({ isOpen, onClose, imageUrl }) => {
   if (!isOpen) return null;
@@ -14,7 +14,7 @@ const ImagePreviewModal = ({ isOpen, onClose, imageUrl }) => {
           className="absolute -top-12 right-0 text-gray-600 dark:text-gray-400 hover:text-white transition-colors focus:outline-none bg-white dark:bg-black/50 p-2 rounded-full"
           onClick={onClose}
         >
-          <FaTimes size={24} />
+          <X size={24} />
         </button>
         <img 
           src={imageUrl} 

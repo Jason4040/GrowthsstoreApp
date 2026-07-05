@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navigation from "./pages/Auth/Navigation";
 import TopAnnouncement from "./components/TopAnnouncement";
 import SocialSidebar from "./components/SocialSidebar";
+import Footer from "./components/Footer";
 import { ToastContainer, toast } from "react-toastify";
 import { useGetMeQuery } from "./redux/api/usersApiSlice";
 import { setCredentials } from "./redux/features/auth/authSlice";
@@ -66,8 +67,11 @@ const App = () => {
       <TopAnnouncement />
       <Navigation />
       <SocialSidebar />
-      <main className="py-3 md:ml-[96px]">
-        <Outlet />
+      <main className="py-3 md:ml-[96px] min-h-screen flex flex-col justify-between">
+        <div className="flex-grow">
+          <Outlet />
+        </div>
+        <Footer />
       </main>
     </>
   );

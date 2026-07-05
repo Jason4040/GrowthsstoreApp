@@ -42,6 +42,7 @@ import Messages from "./pages/Messages.jsx";
 import FAQ from "./pages/FAQ.jsx";
 import FAQAdmin from "./pages/Admin/FAQAdmin.jsx";
 import AnnouncementAdmin from "./pages/Admin/AnnouncementAdmin.jsx";
+import About from "./pages/About.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -56,6 +57,7 @@ const router = createBrowserRouter(
       <Route path="/shop" element={<Shop />} />
       <Route path="/search/:keyword" element={<Home />} />
       <Route path="/faq" element={<FAQ />} />
+      <Route path="/about" element={<About />} />
 
       {/* Registered users */}
       <Route path="" element={<PrivateRoute />}>

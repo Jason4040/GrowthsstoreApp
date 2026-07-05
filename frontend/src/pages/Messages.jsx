@@ -1,14 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  AiOutlineSend,
-  AiOutlinePaperClip,
-  AiOutlineFile,
-  AiOutlineLoading,
-  AiOutlineMessage,
-  AiOutlineUser,
-} from "react-icons/ai";
+import { Send, Paperclip, File, Loader2, MessageSquare, User } from "lucide-react";
 import {
   useGetMessagesQuery,
   useSendMessageMutation,
@@ -144,7 +137,7 @@ const Messages = () => {
     <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-8 max-w-[1200px]">
       <div className="mb-6">
         <h1 className="text-3xl font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
-          <AiOutlineMessage className="text-orange-500" /> Messages
+          <MessageSquare className="text-orange-500" /> Messages
         </h1>
         <p className="text-gray-500 text-sm mt-1">
           {userInfo.isAdmin
@@ -199,7 +192,7 @@ const Messages = () => {
         <div className={`flex flex-col h-full bg-white dark:bg-[#101010] ${userInfo.isAdmin ? "md:col-span-3" : "md:col-span-4"} ${!showInbox || !userInfo.isAdmin ? "flex" : "hidden md:flex"}`}>
           {userInfo.isAdmin && !selectedUser ? (
             <div className="flex flex-col items-center justify-center flex-1 text-center p-8 bg-gray-50 dark:bg-black/10">
-              <AiOutlineMessage size={64} className="text-gray-600 dark:text-gray-700 mb-4 animate-bounce" />
+              <MessageSquare size={64} className="text-gray-600 dark:text-gray-700 mb-4 animate-bounce" />
               <h3 className="text-lg font-bold text-gray-800 dark:text-gray-250">No Conversation Selected</h3>
               <p className="text-xs text-gray-500 max-w-sm mt-2">
                 Select a client from the active chat panel to display correspondence and coordinate fulfillment.
@@ -277,7 +270,7 @@ const Messages = () => {
                               ) : (
                                 <div className="flex items-center gap-3 p-3">
                                   <div className="p-2 bg-orange-500/10 rounded-lg text-orange-500">
-                                    <AiOutlineFile size={28} />
+                                    <File size={28} />
                                   </div>
                                   <div className="flex-1 min-w-0">
                                     <div className="text-xs font-semibold truncate text-gray-900 dark:text-white">
@@ -324,7 +317,7 @@ const Messages = () => {
                 {attachedFile && (
                   <div className="flex items-center justify-between p-2 bg-orange-500/10 border border-orange-500/20 text-orange-500 rounded-lg text-xs font-semibold">
                     <span className="flex items-center gap-1.5 truncate">
-                      <AiOutlinePaperClip /> Attached: {attachedFile.name || "File ready"}
+                      <Paperclip /> Attached: {attachedFile.name || "File ready"}
                     </span>
                     <button
                       type="button"
@@ -339,9 +332,9 @@ const Messages = () => {
                 <div className="flex items-center gap-3">
                   <label className="p-3 text-gray-500 hover:text-orange-500 transition-colors bg-gray-50 hover:bg-orange-500/5 dark:bg-[#151515] rounded-xl cursor-pointer shrink-0 border border-gray-200 dark:border-gray-800">
                     {uploading ? (
-                      <AiOutlineLoading className="animate-spin text-orange-500" size={20} />
+                      <Loader2 className="animate-spin text-orange-500" size={20} />
                     ) : (
-                      <AiOutlinePaperClip size={20} />
+                      <Paperclip size={20} />
                     )}
                     <input
                       type="file"
@@ -364,7 +357,7 @@ const Messages = () => {
                     disabled={sending || (!text.trim() && !attachedFile)}
                     className="p-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl disabled:opacity-50 transition-all shrink-0 active:scale-[0.98]"
                   >
-                    <AiOutlineSend size={20} />
+                    <Send size={20} />
                   </button>
                 </div>
               </form>

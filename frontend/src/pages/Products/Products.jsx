@@ -11,12 +11,12 @@ import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import {
-  FaBox,
-  FaClock,
-  FaShoppingCart,
-  FaStar,
-  FaStore,
-} from "react-icons/fa";
+  Box,
+  Clock,
+  ShoppingCart,
+  Star,
+  Store,
+} from "lucide-react";
 import moment from "moment";
 import ProductTabs from "./Tabs";
 import HeartIcon from "./HeartIcon";
@@ -102,29 +102,29 @@ const Product = () => {
               <div className="flex items-center justify-between w-[20rem]">
                 <div className="one">
                   <h1 className="flex items-center mb-6">
-                    <FaStore className="mr-2 text-gray-900 dark:text-white" /> Brand:{" "}
+                    <Store className="mr-2 text-gray-900 dark:text-white" /> Brand:{" "}
                     {product.brand}
                   </h1>
                   <h1 className="flex items-center mb-6">
-                    <FaClock className="mr-2 text-gray-900 dark:text-white" /> Added:{" "}
+                    <Clock className="mr-2 text-gray-900 dark:text-white" /> Added:{" "}
                     {moment(product.createdAt).fromNow()}
                   </h1>
                   <h1 className="flex items-center mb-6">
-                    <FaStar className="mr-2 text-gray-900 dark:text-white" /> Reviews:
+                    <Star className="mr-2 text-gray-900 dark:text-white" /> Reviews:
                     {product.numReviews}
                   </h1>
                 </div>
 
                 <div className="two">
                   <h1 className="flex items-center mb-6">
-                    <FaStar className="mr-2 text-gray-900 dark:text-white" /> Ratings: {rating}
+                    <Star className="mr-2 text-gray-900 dark:text-white" /> Ratings: {rating}
                   </h1>
                   <h1 className="flex items-center mb-6">
-                    <FaShoppingCart className="mr-2 text-gray-900 dark:text-white" /> Quantity:{" "}
+                    <ShoppingCart className="mr-2 text-gray-900 dark:text-white" /> Quantity:{" "}
                     {product.quantity}
                   </h1>
                   <h1 className="flex items-center mb-6">
-                    <FaBox className="mr-2 text-gray-900 dark:text-white" /> In Stock:{" "}
+                    <Box className="mr-2 text-gray-900 dark:text-white" /> In Stock:{" "}
                     {product.countInStock}
                   </h1>
                 </div>

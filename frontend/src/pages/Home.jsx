@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { FaRegFrownOpen } from "react-icons/fa";
+import { Frown, ShoppingCart } from "lucide-react";
 import { useGetProductsQuery } from "../redux/api/productApiSlice";
 import { useGetAnnouncementsQuery } from "../redux/api/announcementApiSlice";
 import Loader from "../components/Loader";
@@ -8,6 +8,8 @@ import Message from "../components/Message";
 import Header from "../components/Header";
 import Product from "./Products/Product";
 import { useCurrency } from "../hooks/useCurrency";
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrency } from "../redux/features/currency/currencySlice";
 
 const Home = () => {
   const { keyword } = useParams();
@@ -16,7 +18,9 @@ const Home = () => {
   const [debouncedKeyword, setDebouncedKeyword] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
-  const { formatPrice } = useCurrency();
+  const { formatPrice, currentCurrency } = useCurrency();
+  const { cartItems } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -67,13 +71,46 @@ const Home = () => {
             className="w-full h-[350px] md:h-[450px] relative bg-cover bg-center mb-8 flex items-center justify-start border-b border-gray-200 dark:border-gray-800 bg-[url('https://www.zilliondesigns.com/blog/wp-content/uploads/Perfect-Ecommerce-Sales-Banner.jpg')] md:bg-[url('/banner.jpg')]"
           >
             {/* Dark overlay only on the left side where text is */}
-            <div className="absolute inset-y-0 left-0 w-full md:w-2/3 lg:w-1/2 bg-gradient-to-r from-black/90 via-black/70 to-transparent"></div>
+            <div className="absolute inset-y-0 left-0 w-full md:w-2/3 lg:w-1/2 bg-gradient-to-r from-black/90 via-black/70 to-transparent z-0"></div>
 
-            {/* Centered Top Tab Logo */}
-            <div className={`fixed left-1/2 transform -translate-x-1/2 z-[99] pointer-events-auto bg-white transition-all duration-300 ${scrolled ? 'px-4 py-2 rounded-b-xl shadow-md' : 'px-6 py-4 rounded-b-3xl shadow-2xl'} ${hasActiveAnnouncement ? 'top-[40px] md:top-[44px]' : 'top-0'}`}>
-              <Link to="/">
-                <img src="/logo.png" alt="Logo" className={`object-contain transition-all duration-300 ${scrolled ? 'h-[25px] md:h-[35px]' : 'h-[45px] md:h-[55px]'}`} />
-              </Link>
+            {/* Top Header Section with Black Bg, Centered Logo, and Cart */}
+            <div className={`fixed left-0 right-0 z-[99] pointer-events-none transition-all duration-300 ${hasActiveAnnouncement && !scrolled ? 'top-[40px] md:top-[44px]' : 'top-0'}`}>
+              {/* The black bg above logo */}
+              <div className={`absolute top-0 left-0 w-full transition-all duration-300 bg-[#0a0a0a] pointer-events-auto border-b border-gray-800 shadow-lg ${scrolled ? 'h-[35px] md:h-[45px]' : 'h-[45px] md:h-[55px]'}`}></div>
+              
+              {/* Aligned Container for Header Elements */}
+              <div className="max-w-[1400px] mx-auto w-full relative">
+                {/* Right Side Controls (Currency & Cart) */}
+                <div className={`absolute top-0 right-4 md:right-8 flex items-center gap-4 md:gap-6 pointer-events-auto z-50 transition-all duration-300 ${scrolled ? 'h-[35px] md:h-[45px]' : 'h-[45px] md:h-[55px]'}`}>
+                  {/* Currency Selector */}
+                  <select
+                    value={currentCurrency}
+                    onChange={(e) => dispatch(setCurrency(e.target.value))}
+                    className="bg-[#101010] text-gray-300 hover:text-white text-xs md:text-sm font-medium border border-gray-700 hover:border-gray-500 rounded-md p-1 outline-none transition-colors cursor-pointer"
+                  >
+                    <option value="USD">USD ($)</option>
+                    <option value="UGX">UGX (USh)</option>
+                    <option value="RWF">RWF (FRw)</option>
+                  </select>
+
+                  {/* Cart Icon */}
+                  <Link to="/cart" className="relative flex items-center gap-2 text-gray-300 hover:text-white transition-colors group">
+                    <ShoppingCart size={scrolled ? 24 : 28} className="group-hover:text-orange-500 transition-all" />
+                    {cartItems.length > 0 && (
+                      <span className={`absolute bg-orange-600 text-white font-bold rounded-full shadow-lg border border-orange-800 animate-pulse ${scrolled ? '-top-1.5 -right-1.5 text-[9px] px-1 py-0.5' : '-top-1.5 -right-2 text-[11px] px-1.5 py-0.5'}`}>
+                        {cartItems.reduce((a, c) => a + c.qty, 0)}
+                      </span>
+                    )}
+                  </Link>
+                </div>
+              </div>
+
+              {/* Centered Top Tab Logo - Always hanging */}
+              <div className={`absolute top-0 left-1/2 transform -translate-x-1/2 pointer-events-auto bg-white transition-all duration-300 ${scrolled ? 'px-5 py-3 rounded-b-2xl shadow-md' : 'px-8 py-5 rounded-b-3xl shadow-2xl'}`}>
+                <Link to="/">
+                  <img src="/logo.png" alt="Logo" className={`object-contain transition-all duration-300 ${scrolled ? 'h-[25px] md:h-[35px]' : 'h-[35px] md:h-[45px]'}`} />
+                </Link>
+              </div>
             </div>
 
             {/* Aligned Container */}
@@ -187,7 +224,7 @@ const Home = () => {
 
             {data.products.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none w-full shadow-none mt-8">
-                <FaRegFrownOpen size={80} className="text-gray-700 mb-6" />
+                <Frown size={80} className="text-gray-700 mb-6" />
                 <h2 className="text-2xl font-medium text-gray-900 dark:text-white mb-2 uppercase tracking-widest">No Products Found</h2>
                 <p className="text-gray-500 mb-8 italic">Check back later for new arrivals.</p>
                 <button

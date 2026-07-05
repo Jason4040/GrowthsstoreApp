@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaRegFrownOpen } from "react-icons/fa";
+import { Frown } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetFilteredProductsQuery } from "../redux/api/productApiSlice";
 import { useFetchCategoriesQuery } from "../redux/api/categoryApiSlice";
@@ -190,7 +190,7 @@ const Shop = () => {
                 </div>
               ) : products.length === 0 ? (
                 <div className="col-span-full w-full flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none shadow-none">
-                  <FaRegFrownOpen size={80} className="text-gray-700 mb-6" />
+                  <Frown size={80} className="text-gray-700 mb-6" />
                   <h2 className="text-2xl font-medium text-gray-900 dark:text-white mb-2 uppercase tracking-widest">No Matches Found</h2>
                   <p className="text-gray-500 mb-8 italic text-center px-4">Try adjusting your filters or search criteria.</p>
                   <button

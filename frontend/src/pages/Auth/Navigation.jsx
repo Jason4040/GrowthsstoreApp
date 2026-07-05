@@ -1,20 +1,21 @@
 import { useState, useEffect } from "react";
 import {
-  AiOutlineHome,
-  AiOutlineShopping,
-  AiOutlineLogin,
-  AiOutlineUserAdd,
-  AiOutlineShoppingCart,
-  AiOutlineDatabase,
-  AiOutlineOrderedList,
-  AiOutlineUsergroupAdd,
-  AiOutlineFileText,
-  AiOutlineMessage,
-  AiOutlineQuestionCircle,
-} from "react-icons/ai";
-import { FaHeart } from "react-icons/fa";
-import { MdDashboard } from "react-icons/md";
-import { BiCategory } from "react-icons/bi";
+  Home,
+  ShoppingBag,
+  LogIn,
+  UserPlus,
+  ShoppingCart,
+  Database,
+  ListOrdered,
+  Users,
+  FileText,
+  MessageSquare,
+  HelpCircle,
+  DollarSign,
+  Heart,
+  LayoutDashboard,
+  Layers
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./Navigation.css";
@@ -37,6 +38,7 @@ const Navigation = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
+  const [showAdminMenu, setShowAdminMenu] = useState(false);
 
   useEffect(() => {
     let timeout;
@@ -94,16 +96,21 @@ const Navigation = () => {
             </Link>
           </div>
 
-          <div className="px-4 mb-2">
-            <select
-              value={currentCurrency}
-              onChange={(e) => dispatch(setCurrency(e.target.value))}
-              className="w-full bg-[#1A1A1A] text-white text-sm font-medium border border-gray-800 rounded-lg p-2 focus:ring-2 focus:ring-orange-500 outline-none nav-item-name transition-opacity"
-            >
-              <option value="USD">USD ($)</option>
-              <option value="UGX">UGX (USh)</option>
-              <option value="RWF">RWF (FRw)</option>
-            </select>
+          <div className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative">
+            <div className="w-[96px] flex justify-center shrink-0">
+              <DollarSign size={30} className="transform group-hover/link:scale-110 transition-transform" />
+            </div>
+            <div className="nav-item-name pr-4 w-full">
+              <select
+                value={currentCurrency}
+                onChange={(e) => dispatch(setCurrency(e.target.value))}
+                className="w-full bg-[#1A1A1A] text-white text-sm font-medium border border-gray-800 rounded-lg p-1.5 focus:ring-2 focus:ring-orange-500 outline-none transition-opacity"
+              >
+                <option value="USD">USD ($)</option>
+                <option value="UGX">UGX (USh)</option>
+                <option value="RWF">RWF (FRw)</option>
+              </select>
+            </div>
           </div>
 
           <Link
@@ -111,7 +118,7 @@ const Navigation = () => {
             className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
-              <AiOutlineHome size={30} className="transform group-hover/link:scale-110 transition-transform" />
+              <Home size={30} className="transform group-hover/link:scale-110 transition-transform" />
             </div>
             <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">Home</span>
           </Link>
@@ -121,7 +128,7 @@ const Navigation = () => {
             className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
-              <AiOutlineShopping size={30} className="transform group-hover/link:scale-110 transition-transform" />
+              <ShoppingBag size={30} className="transform group-hover/link:scale-110 transition-transform" />
             </div>
             <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">Shop</span>
           </Link>
@@ -132,7 +139,7 @@ const Navigation = () => {
           >
             <div className="w-[96px] flex justify-center shrink-0">
               <div className="relative">
-                <AiOutlineShoppingCart size={30} className="transform group-hover/link:scale-110 transition-transform" />
+                <ShoppingCart size={30} className="transform group-hover/link:scale-110 transition-transform" />
                 {cartItems.length > 0 && (
                   <span className="absolute top-[-8px] right-[-10px] px-1.5 py-0.5 text-[10px] font-semibold text-white bg-orange-600 rounded-none z-10 animate-pulse border border-red-800">
                     {cartItems.reduce((a, c) => a + c.qty, 0)}
@@ -149,7 +156,7 @@ const Navigation = () => {
           >
             <div className="w-[96px] flex justify-center shrink-0">
               <div className="relative">
-                <FaHeart size={26} className="transform group-hover/link:scale-110 transition-transform group-hover/link:text-orange-500" />
+                <Heart size={26} className="transform group-hover/link:scale-110 transition-transform group-hover/link:text-orange-500" />
                 <FavoritesCount />
               </div>
             </div>
@@ -161,7 +168,7 @@ const Navigation = () => {
             className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
-              <AiOutlineQuestionCircle size={30} className="transform group-hover/link:scale-110 transition-transform" />
+              <HelpCircle size={30} className="transform group-hover/link:scale-110 transition-transform" />
             </div>
             <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">FAQ</span>
           </Link>
@@ -172,7 +179,7 @@ const Navigation = () => {
               className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
             >
               <div className="w-[96px] flex justify-center shrink-0">
-                <AiOutlineMessage size={30} className="transform group-hover/link:scale-110 transition-transform" />
+                <MessageSquare size={30} className="transform group-hover/link:scale-110 transition-transform" />
               </div>
               <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">Messages</span>
             </Link>
@@ -180,78 +187,102 @@ const Navigation = () => {
 
           {userInfo && userInfo.isAdmin && (
             <div className="flex flex-col space-y-1.5 border-t border-gray-800 pt-3 mt-3">
-              <Link
-                to="/admin/dashboard"
-                className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+              <button
+                onClick={() => setShowAdminMenu(!showAdminMenu)}
+                className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative w-full focus:outline-none"
               >
                 <div className="w-[96px] flex justify-center shrink-0">
-                  <MdDashboard size={28} className="transform group-hover/link:scale-110 transition-transform" />
+                  <LayoutDashboard size={28} className={`transform group-hover/link:scale-110 transition-transform ${showAdminMenu ? 'text-orange-500' : ''}`} />
                 </div>
-                <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-400">Admin Dashboard</span>
-              </Link>
-              <Link
-                to="/admin/allproductslist"
-                className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
-              >
-                <div className="w-[96px] flex justify-center shrink-0">
-                  <AiOutlineDatabase size={28} className="transform group-hover/link:scale-110 transition-transform" />
+                <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-400">
+                  Admin Menu
+                </span>
+                <svg
+                  className={`nav-item-name h-4 w-4 ml-auto mr-4 transition-transform text-gray-500 group-hover/link:text-white ${showAdminMenu ? "rotate-180" : ""}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {showAdminMenu && (
+                <div className="flex flex-col space-y-1.5 bg-[#1A1A1A]/80 py-2 border-y border-gray-800/50">
+                  <Link
+                    to="/admin/dashboard"
+                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                  >
+                    <div className="w-[96px] flex justify-center shrink-0">
+                      <LayoutDashboard size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                    </div>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Dashboard</span>
+                  </Link>
+                  <Link
+                    to="/admin/allproductslist"
+                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                  >
+                    <div className="w-[96px] flex justify-center shrink-0">
+                      <Database size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                    </div>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Products</span>
+                  </Link>
+                  <Link
+                    to="/admin/categorylist"
+                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                  >
+                    <div className="w-[96px] flex justify-center shrink-0">
+                      <Layers size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                    </div>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Categories</span>
+                  </Link>
+                  <Link
+                    to="/admin/orderlist"
+                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                  >
+                    <div className="w-[96px] flex justify-center shrink-0">
+                      <ListOrdered size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                    </div>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Orders</span>
+                  </Link>
+                  <Link
+                    to="/admin/paymentproofs"
+                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                  >
+                    <div className="w-[96px] flex justify-center shrink-0">
+                      <FileText size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                    </div>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Payment Proofs</span>
+                  </Link>
+                  <Link
+                    to="/admin/userlist"
+                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                  >
+                    <div className="w-[96px] flex justify-center shrink-0">
+                      <Users size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                    </div>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Users</span>
+                  </Link>
+                  <Link
+                    to="/admin/faqmanager"
+                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                  >
+                    <div className="w-[96px] flex justify-center shrink-0">
+                      <HelpCircle size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                    </div>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">FAQ Manager</span>
+                  </Link>
+                  <Link
+                    to="/admin/announcement"
+                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                  >
+                    <div className="w-[96px] flex justify-center shrink-0">
+                      <MessageSquare size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                    </div>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Announcement</span>
+                  </Link>
                 </div>
-                <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-400">Products</span>
-              </Link>
-              <Link
-                to="/admin/categorylist"
-                className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
-              >
-                <div className="w-[96px] flex justify-center shrink-0">
-                  <BiCategory size={28} className="transform group-hover/link:scale-110 transition-transform" />
-                </div>
-                <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-400">Categories</span>
-              </Link>
-              <Link
-                to="/admin/orderlist"
-                className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
-              >
-                <div className="w-[96px] flex justify-center shrink-0">
-                  <AiOutlineOrderedList size={28} className="transform group-hover/link:scale-110 transition-transform" />
-                </div>
-                <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-400">Orders</span>
-              </Link>
-              <Link
-                to="/admin/paymentproofs"
-                className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
-              >
-                <div className="w-[96px] flex justify-center shrink-0">
-                  <AiOutlineFileText size={28} className="transform group-hover/link:scale-110 transition-transform" />
-                </div>
-                <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-400">Payment Proofs</span>
-              </Link>
-              <Link
-                to="/admin/userlist"
-                className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
-              >
-                <div className="w-[96px] flex justify-center shrink-0">
-                  <AiOutlineUsergroupAdd size={28} className="transform group-hover/link:scale-110 transition-transform" />
-                </div>
-                <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-400">Users</span>
-              </Link>
-              <Link
-                to="/admin/faqmanager"
-                className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
-              >
-                <div className="w-[96px] flex justify-center shrink-0">
-                  <AiOutlineQuestionCircle size={28} className="transform group-hover/link:scale-110 transition-transform" />
-                </div>
-                <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-400">FAQ Manager</span>
-              </Link>
-              <Link
-                to="/admin/announcement"
-                className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
-              >
-                <div className="w-[96px] flex justify-center shrink-0">
-                  <AiOutlineMessage size={28} className="transform group-hover/link:scale-110 transition-transform" />
-                </div>
-                <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-400">Announcement</span>
-              </Link>
+              )}
             </div>
           )}
         </div>
@@ -322,7 +353,7 @@ const Navigation = () => {
                   className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
                 >
                   <div className="w-[96px] flex justify-center shrink-0">
-                    <AiOutlineLogin size={30} className="transform group-hover/link:scale-110 transition-transform" />
+                    <LogIn size={30} className="transform group-hover/link:scale-110 transition-transform" />
                   </div>
                   <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">Login</span>
                 </Link>
@@ -333,7 +364,7 @@ const Navigation = () => {
                   className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
                 >
                   <div className="w-[96px] flex justify-center shrink-0">
-                    <AiOutlineUserAdd size={30} className="transform group-hover/link:scale-110 transition-transform" />
+                    <UserPlus size={30} className="transform group-hover/link:scale-110 transition-transform" />
                   </div>
                   <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">
                     Register
@@ -348,15 +379,15 @@ const Navigation = () => {
       {/* Mobile Bottom Navigation */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg text-white py-3 px-6 flex justify-between items-center z-[9999] border-t border-gray-800 rounded-none shadow-2xl">
         <Link to="/" className="flex flex-col items-center gap-1 group">
-          <AiOutlineHome size={22} className="group-hover:text-orange-500 transition-colors" />
+          <Home size={22} className="group-hover:text-orange-500 transition-colors" />
           <span className="text-[10px] font-medium">Home</span>
         </Link>
         <Link to="/shop" className="flex flex-col items-center gap-1 group">
-          <AiOutlineShopping size={22} className="group-hover:text-orange-500 transition-colors" />
+          <ShoppingBag size={22} className="group-hover:text-orange-500 transition-colors" />
           <span className="text-[10px] font-medium">Shop</span>
         </Link>
         <Link to="/cart" className="flex flex-col items-center gap-1 relative group">
-          <AiOutlineShoppingCart size={22} className="group-hover:text-orange-500 transition-colors" />
+          <ShoppingCart size={22} className="group-hover:text-orange-500 transition-colors" />
           <span className="text-[10px] font-medium">Cart</span>
           {cartItems.length > 0 && (
             <span className="absolute -top-1 -right-2 px-1.5 py-0.5 text-[9px] font-medium text-white bg-orange-600 rounded-none animate-pulse">
@@ -365,17 +396,17 @@ const Navigation = () => {
           )}
         </Link>
         <Link to="/favorite" className="flex flex-col items-center gap-1 relative group">
-          <FaHeart size={18} className="group-hover:text-orange-500 transition-colors" />
+          <Heart size={18} className="group-hover:text-orange-500 transition-colors" />
           <span className="text-[10px] font-medium">Saved</span>
           <FavoritesCount />
         </Link>
         <Link to="/faq" className="flex flex-col items-center gap-1 group">
-          <AiOutlineQuestionCircle size={22} className="group-hover:text-orange-500 transition-colors" />
+          <HelpCircle size={22} className="group-hover:text-orange-500 transition-colors" />
           <span className="text-[10px] font-medium">FAQ</span>
         </Link>
         {showMessagesLink && (
           <Link to="/messages" className="flex flex-col items-center gap-1 group">
-            <AiOutlineMessage size={22} className="group-hover:text-orange-500 transition-colors" />
+            <MessageSquare size={22} className="group-hover:text-orange-500 transition-colors" />
             <span className="text-[10px] font-medium">Messages</span>
           </Link>
         )}
@@ -388,7 +419,7 @@ const Navigation = () => {
           </Link>
         ) : (
           <Link to="/login" className="flex flex-col items-center gap-1 group">
-            <AiOutlineLogin size={22} className="group-hover:text-orange-500 transition-colors" />
+            <LogIn size={22} className="group-hover:text-orange-500 transition-colors" />
             <span className="text-[10px] font-medium">Login</span>
           </Link>
         )}

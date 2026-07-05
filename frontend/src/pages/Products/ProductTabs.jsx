@@ -5,7 +5,7 @@ import moment from "moment";
 import { useGetTopProductsQuery, useUploadProductImageMutation, useDeleteReviewMutation, useHideReviewMutation } from "../../redux/api/productApiSlice";
 import SmallProduct from "./SmallProduct";
 import Loader from "../../components/Loader";
-import { FaUpload, FaTimes, FaCamera, FaTrash, FaEye, FaEyeSlash, FaEdit } from "react-icons/fa";
+import { Upload, X, Camera, Trash2, Eye, EyeOff, Edit } from "lucide-react";
 import { toast } from "react-toastify";
 import ConfirmModal from "../../components/ConfirmModal";
 import ImagePreviewModal from "../../components/ImagePreviewModal";
@@ -169,7 +169,7 @@ const ProductTabs = ({
                             onClick={() => setReviewImage("")}
                             className="bg-red-500 hover:bg-red-600 text-white p-3 rounded-full transform transition-transform hover:scale-110 shadow-lg"
                           >
-                            <FaTimes />
+                            <X />
                           </button>
                         </div>
                       </div>
@@ -186,7 +186,7 @@ const ProductTabs = ({
                             </div>
                           ) : (
                             <>
-                              <FaCamera className="w-8 h-8 text-gray-500 mb-3 group-hover:text-orange-500 transition-colors" />
+                              <Camera className="w-8 h-8 text-gray-500 mb-3 group-hover:text-orange-500 transition-colors" />
                               <p className="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-700 dark:text-gray-300">
                                 <span className="font-semibold text-orange-500">Click to upload</span> or drag and drop
                               </p>
@@ -262,7 +262,7 @@ const ProductTabs = ({
                           className="p-2 bg-orange-900/30 hover:bg-orange-800/50 text-orange-500 rounded-lg transition-colors border border-orange-900/50 hover:border-orange-700"
                           title="Edit Review"
                         >
-                          <FaEdit />
+                          <Edit />
                         </button>
                       )}
                       {userInfo?.isAdmin && (
@@ -272,7 +272,7 @@ const ProductTabs = ({
                             className="p-2 bg-gray-800 hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg transition-colors border border-gray-300 dark:border-gray-700 hover:border-gray-600"
                             title={review.isHidden ? "Unhide Review" : "Hide Review"}
                           >
-                            {review.isHidden ? <FaEye /> : <FaEyeSlash />}
+                            {review.isHidden ? <Eye /> : <EyeOff />}
                           </button>
                           <button
                             onClick={() => {
@@ -282,7 +282,7 @@ const ProductTabs = ({
                             className="p-2 bg-red-900/30 hover:bg-red-800/50 text-red-500 rounded-lg transition-colors border border-red-900/50 hover:border-red-700"
                             title="Delete Review"
                           >
-                            <FaTrash />
+                            <Trash2 />
                           </button>
                         </>
                       )}

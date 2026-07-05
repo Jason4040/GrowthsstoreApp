@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { FaTimes } from "react-icons/fa";
+import { X } from "lucide-react";
 
 const AdminMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,7 +18,7 @@ const AdminMenu = () => {
         onClick={toggleMenu}
       >
         {isMenuOpen ? (
-          <FaTimes color="white" />
+          <X color="white" />
         ) : (
           <>
             <div className="w-6 h-0.5 bg-gray-200 my-1"></div>

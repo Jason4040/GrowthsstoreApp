@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaRegFrownOpen } from "react-icons/fa";
+import { Frown } from "lucide-react";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import { useGetMyOrdersQuery } from "../../redux/api/orderApiSlice";
@@ -26,7 +26,7 @@ const UserOrder = () => {
         <Message variant="danger">{error?.data?.error || error.error}</Message>
       ) : orders?.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none">
-          <FaRegFrownOpen size={80} className="text-gray-700 mb-6" />
+          <Frown size={80} className="text-gray-700 mb-6" />
           <h2 className="text-2xl font-medium text-gray-900 dark:text-white mb-2">No Orders Found</h2>
           <p className="text-gray-500 mb-8">You haven't placed any orders yet.</p>
           <Link

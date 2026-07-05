@@ -4,7 +4,7 @@ import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import Modal from "../../components/Modal";
 import { toast } from "react-toastify";
-import { AiOutlineQuestionCircle } from "react-icons/ai";
+import { HelpCircle } from "lucide-react";
 
 const FAQAdmin = () => {
   const { data: questions = [], isLoading, error, refetch } = useGetAdminFAQsQuery();
@@ -49,7 +49,7 @@ const FAQAdmin = () => {
     <div className="p-4 md:p-8 max-w-7xl mx-auto pb-24 md:pb-8">
       <div className="mb-8">
         <h1 className="text-3xl font-semibold text-white tracking-tight flex items-center gap-2">
-          <AiOutlineQuestionCircle className="text-orange-500" /> FAQ Manager
+          <HelpCircle className="text-orange-500" /> FAQ Manager
         </h1>
         <p className="text-gray-500 text-sm mt-1">
           Review user questions, submit answers, and publish FAQ items directly to the public page.
@@ -131,7 +131,7 @@ const FAQAdmin = () => {
       {selectedQuestion && (
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           <h2 className="text-xl font-bold mb-4 text-white border-b border-gray-800 pb-2 flex items-center gap-2">
-            <AiOutlineQuestionCircle className="text-orange-500" /> Answer FAQ Question
+            <HelpCircle className="text-orange-500" /> Answer FAQ Question
           </h2>
 
           <div className="space-y-4 text-sm text-gray-300">

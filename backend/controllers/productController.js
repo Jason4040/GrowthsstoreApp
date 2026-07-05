@@ -331,6 +331,24 @@ const toggleHideReview = asyncHandler(async (req, res) => {
   }
 });
 
+const toggleProductPin = asyncHandler(async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (product) {
+      product.isPinned = !product.isPinned;
+      await product.save();
+      res.status(200).json({ message: "Product pin status updated", isPinned: product.isPinned });
+    } else {
+      res.status(404);
+      throw new Error("Product not found");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(400).json(error.message);
+  }
+});
+
 export {
   addProduct,
   updateProductDetails,
@@ -344,4 +362,5 @@ export {
   filterProducts,
   deleteReview,
   toggleHideReview,
+  toggleProductPin,
 };

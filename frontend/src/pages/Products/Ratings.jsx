@@ -1,4 +1,4 @@
-import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { Star, StarHalf } from "lucide-react";
 
 const Ratings = ({ value, text, color }) => {
   const fullStars = Math.floor(value);
@@ -8,12 +8,12 @@ const Ratings = ({ value, text, color }) => {
   return (
     <div className="flex items-center">
       {[...Array(fullStars)].map((_, index) => (
-        <FaStar key={index} className={`text-${color} ml-1`} />
+        <Star key={index} fill="currentColor" className={`text-${color} ml-1`} />
       ))}
 
-      {halfStars === 1 && <FaStarHalfAlt className={`text-${color} ml-1`} />}
+      {halfStars === 1 && <StarHalf fill="currentColor" className={`text-${color} ml-1`} />}
       {[...Array(emptyStar)].map((_, index) => (
-        <FaRegStar key={index} className={`text-${color} ml-1`} />
+        <Star key={index} className={`text-${color} ml-1`} />
       ))}
 
       <span className={`rating-text ml-{2rem} text-${color}`}>

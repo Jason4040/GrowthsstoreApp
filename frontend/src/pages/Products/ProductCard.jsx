@@ -1,12 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
-import { AiOutlineShoppingCart } from "react-icons/ai";
+import { ShoppingCart, MessageCircle } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import { toast } from "react-toastify";
 import HeartIcon from "./HeartIcon";
-import { FaWhatsapp } from "react-icons/fa";
+
 import { useCurrency } from "../../hooks/useCurrency";
 import ProductVideo from "../../components/ProductVideo";
+import AdminProductControls from "../../components/AdminProductControls";
 
 const ProductCard = ({ p }) => {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ const ProductCard = ({ p }) => {
       className="cursor-pointer w-full bg-gray-100 dark:bg-[#151515] rounded-none shadow-none border border-gray-200 dark:border-gray-800 hover:border-orange-500 transition-all duration-300 relative group overflow-hidden"
     >
       <section className="relative aspect-[4/3] overflow-hidden">
+        <AdminProductControls product={p} />
         <Link to={`/product/${p._id}`}>
           <div className="absolute bottom-3 right-3 flex flex-col items-end gap-1 z-10">
             {p?.availableIn && (
@@ -116,7 +118,7 @@ const ProductCard = ({ p }) => {
             onClick={handleWhatsAppOrder}
             title="Order via WhatsApp"
           >
-            <FaWhatsapp size={20} />
+            <MessageCircle size={20} />
           </button>
 
           <button
@@ -124,7 +126,7 @@ const ProductCard = ({ p }) => {
             onClick={() => addToCartHandler(p, 1)}
             title="Add to Cart"
           >
-            <AiOutlineShoppingCart size={20} />
+            <ShoppingCart size={20} />
           </button>
         </section>
       </div>

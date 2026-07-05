@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { FaRegFrownOpen } from "react-icons/fa";
+import { Frown } from "lucide-react";
 import { selectFavoriteProduct } from "../../redux/features/favorites/favoriteSlice";
 import Product from "./Product";
 
@@ -20,7 +20,7 @@ const Favorites = () => {
 
       {favorites.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none w-full shadow-none mt-8">
-          <FaRegFrownOpen size={80} className="text-gray-700 mb-6" />
+          <Frown size={80} className="text-gray-700 mb-6" />
           <h2 className="text-2xl font-medium text-gray-900 dark:text-white mb-2 uppercase tracking-widest">No Favorites Yet</h2>
           <p className="text-gray-500 mb-8 italic">You haven't added any products to your favorites list.</p>
           <Link

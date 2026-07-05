@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { FaTrash, FaRegFrownOpen } from "react-icons/fa";
+import { Trash2, Frown } from "lucide-react";
 import { addToCart, removeFromCart } from "../redux/features/cart/cartSlice";
 import { useCurrency } from "../hooks/useCurrency";
 
@@ -42,7 +42,7 @@ const Cart = () => {
       <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-8 max-w-[1400px]">
         {cartItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none w-full shadow-none mt-8">
-            <FaRegFrownOpen size={80} className="text-gray-700 mb-6" />
+            <Frown size={80} className="text-gray-700 mb-6" />
             <h2 className="text-2xl font-medium text-gray-900 dark:text-white mb-2 uppercase tracking-widest">Your Cart Is Empty</h2>
             <p className="text-gray-500 mb-8 italic">Looks like you haven't added anything to your cart yet.</p>
             <Link
@@ -103,7 +103,7 @@ const Cart = () => {
                         className="p-2 text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors bg-gray-900 rounded-lg"
                         onClick={() => removeFromCartHandler(item._id)}
                       >
-                        <FaTrash size={18} />
+                        <Trash2 size={18} />
                       </button>
                     </div>
                   </div>

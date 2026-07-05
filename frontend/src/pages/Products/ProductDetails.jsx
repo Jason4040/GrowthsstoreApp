@@ -9,15 +9,15 @@ import {
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import {
-  FaBox,
-  FaClock,
-  FaShoppingCart,
-  FaStar,
-  FaStore,
-  FaTag,
-  FaWhatsapp,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
+  Box,
+  Clock,
+  ShoppingCart,
+  Star,
+  Store,
+  Tag,
+  MessageCircle,
+  MapPin,
+} from "lucide-react";
 import moment from "moment";
 import HeartIcon from "./HeartIcon";
 import Ratings from "./Ratings";
@@ -215,40 +215,40 @@ const ProductDetails = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-4">
                       <div className="flex items-center text-gray-700 dark:text-gray-300">
-                        <FaStore className="mr-3 text-orange-500" />
+                        <Store className="mr-3 text-orange-500" />
                         <span className="font-semibold mr-2">Brand:</span> {product.brand}
                       </div>
                       <div className="flex items-center text-gray-700 dark:text-gray-300">
-                        <FaTag className="mr-3 text-orange-500" />
+                        <Tag className="mr-3 text-orange-500" />
                         <span className="font-semibold mr-2">Category:</span> {product?.category?.name || "N/A"}
                       </div>
                       {product?.condition && (
                         <div className="flex items-center text-gray-700 dark:text-gray-300">
-                          <FaTag className="mr-3 text-purple-500" />
+                          <Tag className="mr-3 text-purple-500" />
                           <span className="font-semibold mr-2">Condition:</span> {product.condition}
                         </div>
                       )}
                       <div className="flex items-center text-gray-700 dark:text-gray-300">
-                        <FaClock className="mr-3 text-orange-500" />
+                        <Clock className="mr-3 text-orange-500" />
                         <span className="font-semibold mr-2">Added:</span> {moment(product.createAt).fromNow()}
                       </div>
                       <div className="flex items-center text-gray-700 dark:text-gray-300">
-                        <FaStar className="mr-3 text-orange-500" />
+                        <Star className="mr-3 text-orange-500" />
                         <span className="font-semibold mr-2">Reviews:</span> {product.numReviews}
                       </div>
                     </div>
 
                     <div className="space-y-4">
                       <div className="flex items-center text-gray-700 dark:text-gray-300">
-                        <FaStar className="mr-3 text-orange-500" />
+                        <Star className="mr-3 text-orange-500" />
                         <span className="font-semibold mr-2">Rating:</span> {product.rating}
                       </div>
                       <div className="flex items-center text-gray-700 dark:text-gray-300">
-                        <FaShoppingCart className="mr-3 text-orange-500" />
+                        <ShoppingCart className="mr-3 text-orange-500" />
                         <span className="font-semibold mr-2">Quantity:</span> {product.quantity}
                       </div>
                       <div className="flex items-center text-gray-700 dark:text-gray-300">
-                        <FaBox className="mr-3 text-orange-500" />
+                        <Box className="mr-3 text-orange-500" />
                         <span className="font-semibold mr-2">Status:</span> 
                         {product.stockStatus === 'requires_shipping' 
                           ? 'Available to Request' 
@@ -256,14 +256,14 @@ const ProductDetails = () => {
                       </div>
                       {product.availabilityStartDate && product.availabilityEndDate && (
                         <div className="flex items-center text-gray-700 dark:text-gray-300">
-                          <FaClock className="mr-3 text-orange-500" />
+                          <Clock className="mr-3 text-orange-500" />
                           <span className="font-semibold mr-2">Available:</span> 
                           {new Date(product.availabilityStartDate).toLocaleDateString()} - {new Date(product.availabilityEndDate).toLocaleDateString()}
                         </div>
                       )}
                       {product.availableIn && (
                         <div className="flex items-center text-gray-700 dark:text-gray-300">
-                          <FaMapMarkerAlt className="mr-3 text-orange-500" />
+                          <MapPin className="mr-3 text-orange-500" />
                           <span className="font-semibold mr-2">Region:</span> 
                           {product.availableIn === "Both" ? "Uganda & Rwanda" : `${product.availableIn} Only`}
                         </div>
@@ -338,7 +338,7 @@ const ProductDetails = () => {
                       onClick={handleWhatsAppOrder}
                       className="flex items-center justify-center bg-[#25D366] hover:bg-[#20bd5a] text-white font-medium py-3 rounded-none transition-all shadow-none transform active:scale-[0.98] w-full"
                     >
-                      <FaWhatsapp className="mr-2 text-xl" />
+                      <MessageCircle className="mr-2 text-xl" />
                       Order via WhatsApp
                     </button>
                   </div>

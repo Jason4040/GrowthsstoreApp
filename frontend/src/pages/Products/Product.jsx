@@ -1,12 +1,27 @@
 import { Link, useNavigate } from "react-router-dom";
 import HeartIcon from "./HeartIcon";
-import { FaWhatsapp } from "react-icons/fa";
+import { MessageCircle, ShoppingCart } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/features/cart/cartSlice";
+import { toast } from "react-toastify";
 import { useCurrency } from "../../hooks/useCurrency";
 import ProductVideo from "../../components/ProductVideo";
+import AdminProductControls from "../../components/AdminProductControls";
 
 const Product = ({ product }) => {
   const { formatPrice, currentCurrency, getDiscountValue } = useCurrency();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const addToCartHandler = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(addToCart({ ...product, qty: 1 }));
+    toast.success("Item added successfully", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+    });
+  };
 
   const getWhatsAppNumber = () => {
     if (currentCurrency === "RWF") return "250793392762";
@@ -27,6 +42,7 @@ const Product = ({ product }) => {
       className="cursor-pointer w-full relative bg-white dark:bg-[#1A1A1A] rounded-none overflow-hidden transition-all group border border-gray-200 dark:border-gray-800 hover:border-orange-500 shadow-none flex flex-col h-full"
     >
       <div className="relative overflow-hidden">
+        <AdminProductControls product={product} />
         <Link to={`/product/${product._id}`}>
           {product.video ? (
             <ProductVideo
@@ -85,13 +101,22 @@ const Product = ({ product }) => {
               </span>
             )}
           </div>
-          <button
-            className="p-2.5 bg-[#25D366] hover:bg-[#20bd5a] rounded-none text-white transition-colors flex items-center justify-center"
-            onClick={handleWhatsAppOrder}
-            title="Order via WhatsApp"
-          >
-            <FaWhatsapp size={20} />
-          </button>
+          <div className="flex gap-1">
+            <button
+              className="p-2.5 bg-[#25D366] hover:bg-[#20bd5a] rounded-none text-white transition-colors flex items-center justify-center"
+              onClick={handleWhatsAppOrder}
+              title="Order via WhatsApp"
+            >
+              <MessageCircle size={20} />
+            </button>
+            <button
+              className="p-2.5 bg-gray-800 hover:bg-gray-700 rounded-none text-white transition-colors flex items-center justify-center"
+              onClick={addToCartHandler}
+              title="Add to Cart"
+            >
+              <ShoppingCart size={20} />
+            </button>
+          </div>
         </div>
       </div>
     </div>

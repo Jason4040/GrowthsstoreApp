@@ -1,4 +1,4 @@
-import { FaTimes } from "react-icons/fa";
+import { X } from "lucide-react";
 
 const Modal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
@@ -14,7 +14,7 @@ const Modal = ({ isOpen, onClose, children }) => {
           className="absolute top-4 right-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white transition-colors focus:outline-none"
           onClick={onClose}
         >
-          <FaTimes />
+          <X size={20} />
         </button>
         <div className="mt-2">
           {children}
