@@ -3,13 +3,9 @@ import createToken from "../utils/createToken.js";
 import bcrypt from "bcryptjs";
 import { getCookieOptions } from "../utils/cookieConfig.js";
 
-// HARDCODED credentials - do not use env variables
-const GOOGLE_CLIENT_ID = "488963192171-mst5uq6uikvvmk5deu4cq3ea8k2mmep7.apps.googleusercontent.com";
-// !! IMPORTANT: This is the Client SECRET from Google Cloud Console → APIs & Services → Credentials
-// It is different from the Client ID above. It looks like: GOCSPX-xxxxxxxxxxxxxxxxxxxxxxxxx
-// Go to: https://console.cloud.google.com/apis/credentials
-// Click your OAuth 2.0 Client → copy the "Client Secret" value and paste it below
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "GOCSPX-REPLACE_THIS_WITH_YOUR_REAL_SECRET";
+// !! IMPORTANT: Use your own Google Client ID and Secret from Google Cloud Console
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "REPLACE_WITH_YOUR_CLIENT_ID";
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "REPLACE_WITH_YOUR_CLIENT_SECRET";
 
 // @desc    Redirect to Google OAuth consent screen
 // @route   GET /auth/google
@@ -192,5 +188,5 @@ const getGoogleCallbackUrl = (req) => {
     const protocol = req.secure || req.headers["x-forwarded-proto"] === "https" ? "https" : "http";
     return `${protocol}://${host}/auth/google/callback`;
   }
-  return "https://app.growthsstore.com/auth/google/callback";
+  return "http://localhost:5000/auth/google/callback";
 };
