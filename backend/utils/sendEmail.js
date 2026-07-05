@@ -7,13 +7,13 @@ const sendEmail = async ({ to, subject, html }) => {
       port: 465,
       secure: true,
       auth: {
-        user: "jaygrowth01@gmail.com",
-        pass: "spcw gaxj pvyq dpuz",
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     const mailOptions = {
-      from: '"Growth Shop" <jaygrowth01@gmail.com>',
+      from: `"Growth Shop" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       html,

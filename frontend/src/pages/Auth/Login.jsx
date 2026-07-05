@@ -5,6 +5,7 @@ import Loader from "../../components/Loader";
 import { useLoginMutation } from "../../redux/api/usersApiSlice";
 import { setCredentials } from "../../redux/features/auth/authSlice";
 import { toast } from "react-toastify";
+import { BASE_URL } from "../../redux/constants";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -42,9 +43,7 @@ const Login = () => {
   }, [search, navigate, sp]);
 
   const googleLoginHandler = () => {
-    const backendUrl = import.meta.env.MODE === "production"
-      ? `https://app.growthsstore.com/auth/google?state=${encodeURIComponent(redirect)}`
-      : `https://app.growthsstore.com/auth/google?state=${encodeURIComponent(redirect)}`;
+    const backendUrl = `${BASE_URL || window.location.origin}/auth/google?state=${encodeURIComponent(redirect)}`;
     window.location.href = backendUrl;
   };
 
@@ -89,7 +88,7 @@ const Login = () => {
             <input
               type="email"
               id="email"
-              className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
+              className="w-full bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
               placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -115,7 +114,7 @@ const Login = () => {
             <input
               type="password"
               id="password"
-              className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
+              className="w-full bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

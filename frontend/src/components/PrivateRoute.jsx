@@ -15,8 +15,11 @@ const PrivateRoute = () => {
   });
 
   useEffect(() => {
-    if (meData && !userInfo) {
-      dispatch(setCredentials({ ...meData }));
+    if (meData) {
+      const isDifferent = !userInfo || userInfo._id !== meData._id || userInfo.email !== meData.email;
+      if (isDifferent) {
+        dispatch(setCredentials({ ...meData }));
+      }
     }
   }, [meData, userInfo, dispatch]);
 

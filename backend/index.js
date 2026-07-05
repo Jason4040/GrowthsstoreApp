@@ -26,14 +26,26 @@ const app = express();
 
 app.set("trust proxy", 1);
 
+const allowedOrigins = [
+  "https://growthsstore.com",
+  "https://www.growthsstore.com",
+  "https://app.growthsstore.com",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+];
+
+if (process.env.PROD_FRONTEND_URL) {
+  allowedOrigins.push(process.env.PROD_FRONTEND_URL);
+}
+if (process.env.CLIENT_URL) {
+  allowedOrigins.push(process.env.CLIENT_URL);
+}
+
+const uniqueOrigins = [...new Set(allowedOrigins.filter(Boolean))];
+
 app.use(
   cors({
-    origin: [
-      "https://growthsstore.com",
-      "https://www.growthsstore.com",
-      "http://localhost:5173",
-      "http://127.0.0.1:5173",
-    ],
+    origin: uniqueOrigins,
     credentials: true,
   })
 );
@@ -59,4 +71,8 @@ app.get("/api/config/paypal", (req, res) => {
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
 
-app.listen(port, () => console.log(`Server running on port: ${port}`));
+if (!process.env.VERCEL) {
+  app.listen(port, () => console.log(`Server running on port: ${port}`));
+}
+
+export default app;
