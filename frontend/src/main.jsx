@@ -3,6 +3,7 @@ import "./index.css";
 import App from "./App.jsx";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import { HelmetProvider } from "react-helmet-async";
 import { Route, RouterProvider, createRoutesFromElements } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -88,7 +89,9 @@ const router = createBrowserRouter(
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <RouterProvider router={router} />
-  </Provider>
+  <HelmetProvider>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </HelmetProvider>
 );

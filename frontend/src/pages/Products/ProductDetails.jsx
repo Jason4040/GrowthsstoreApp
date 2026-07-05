@@ -23,6 +23,7 @@ import HeartIcon from "./HeartIcon";
 import Ratings from "./Ratings";
 import ProductTabs from "./ProductTabs";
 import ImagePreviewModal from "../../components/ImagePreviewModal";
+import SEO from "../../components/SEO";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -119,6 +120,12 @@ const ProductDetails = () => {
 
   return (
     <>
+      {product && (
+        <SEO 
+          title={`${product.name} | GrowthsStore`} 
+          description={product.description?.substring(0, 160) || "Buy premium products at GrowthsStore."} 
+        />
+      )}
       <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-0">
         <Link
           to="/"

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import SEO from "../components/SEO";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { Frown, ShoppingCart, Search } from "lucide-react";
 import { useGetProductsQuery } from "../redux/api/productApiSlice";
@@ -65,6 +66,10 @@ const Home = () => {
 
   return (
     <>
+      <SEO 
+        title="GrowthsStore | Premium Products & Accessories" 
+        description="Discover the latest premium products, electronics, art, fashion, and accessories. Experience excellent customer service with fast delivery." 
+      />
       {!keyword ? (
         <div className="w-full">
           {/* Top Banner */}

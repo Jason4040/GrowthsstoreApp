@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import SEO from "../components/SEO";
 import { Frown } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetFilteredProductsQuery } from "../redux/api/productApiSlice";
@@ -84,6 +85,10 @@ const Shop = () => {
 
   return (
     <>
+      <SEO 
+        title="Shop | GrowthsStore" 
+        description="Browse our wide selection of premium products. Filter by categories, brands, and prices to find exactly what you need at GrowthsStore." 
+      />
       <div className="max-w-[1400px] mx-auto px-4 mt-8 pb-[10rem] md:pb-8">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
 

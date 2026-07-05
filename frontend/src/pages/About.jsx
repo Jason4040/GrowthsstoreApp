@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
+import SEO from "../components/SEO";
 
 const About = () => {
   return (
-    <div className="max-w-[1000px] mx-auto px-4 py-12 md:py-24 text-white">
+    <>
+      <SEO 
+        title="About Us | GrowthsStore" 
+        description="Learn more about GrowthsStore, a trusted online store dedicated to serving customers across Uganda and East Africa with quality products." 
+      />
+      <div className="max-w-[1000px] mx-auto px-4 py-12 md:py-24 text-white">
       <h1 className="text-4xl md:text-5xl font-bold text-gray-100 mb-8 tracking-tight">About Us</h1>
       
       <div className="prose prose-invert max-w-none text-gray-300">
@@ -35,7 +41,8 @@ const About = () => {
           </Link>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 
