@@ -15,6 +15,7 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "GOCSPX-REPLACE
 // @route   GET /auth/google
 // @access  Public
 export const googleAuth = (req, res) => {
+  const { state } = req.query;
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
   const options = {
     redirect_uri: getGoogleCallbackUrl(req),
@@ -22,6 +23,7 @@ export const googleAuth = (req, res) => {
     access_type: "offline",
     response_type: "code",
     prompt: "consent",
+    state: state || "/",
     scope: [
       "https://www.googleapis.com/auth/userinfo.profile",
       "https://www.googleapis.com/auth/userinfo.email",
@@ -36,7 +38,7 @@ export const googleAuth = (req, res) => {
 // @route   GET /auth/google/callback
 // @access  Public
 export const googleCallback = async (req, res) => {
-  const { code } = req.query;
+  const { code, state } = req.query;
 
   if (!code) {
     console.error("[GoogleAuth] Authorization code is missing from Google redirect");
@@ -133,9 +135,11 @@ export const googleCallback = async (req, res) => {
     createToken(res, user._id);
 
     const frontendUrl = getFrontendUrl(req);
-    console.log("[GoogleAuth] Redirecting to:", `${frontendUrl}/?google_auth=success`);
+    const redirectUrl = state || "/";
+    const finalUrl = `${frontendUrl}${redirectUrl === "/" ? "" : redirectUrl}${redirectUrl === "/" ? "?" : "&"}google_auth=success`;
+    console.log("[GoogleAuth] Redirecting to:", finalUrl);
 
-    res.redirect(`${frontendUrl}/?google_auth=success`);
+    res.redirect(finalUrl);
   } catch (error) {
     console.error("[GoogleAuth] General error:", error.message, error.stack);
     res.redirect(`${getFrontendUrl(req)}/login?error=server_error`);

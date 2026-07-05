@@ -49,8 +49,8 @@ const Register = () => {
 
   const googleLoginHandler = () => {
     const backendUrl = import.meta.env.MODE === "production"
-      ? "https://app.growthsstore.com/auth/google"
-      : "https://app.growthsstore.com/auth/google";
+      ? `https://app.growthsstore.com/auth/google?state=${encodeURIComponent(redirect)}`
+      : `https://app.growthsstore.com/auth/google?state=${encodeURIComponent(redirect)}`;
     window.location.href = backendUrl;
   };
 

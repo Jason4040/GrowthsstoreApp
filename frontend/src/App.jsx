@@ -29,9 +29,9 @@ const App = () => {
     if (params.get("google_auth") === "success") {
       refetch();
       toast.success("Signed in with Google successfully!");
-      navigate("/", { replace: true });
+      navigate(location.pathname, { replace: true });
     }
-  }, [location.search, refetch, navigate]);
+  }, [location.search, refetch, navigate, location.pathname]);
 
   return (
     <>

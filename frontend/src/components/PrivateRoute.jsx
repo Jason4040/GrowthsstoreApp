@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetMeQuery } from "../redux/api/usersApiSlice";
 import { setCredentials } from "../redux/features/auth/authSlice";
@@ -7,6 +7,7 @@ import Loader from "./Loader";
 
 const PrivateRoute = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const { userInfo } = useSelector((state) => state.auth);
 
   const { data: meData, isLoading, isFetching } = useGetMeQuery(undefined, {
@@ -27,7 +28,7 @@ const PrivateRoute = () => {
     );
   }
 
-  return userInfo ? <Outlet /> : <Navigate to="/login" replace />;
+  return userInfo ? <Outlet /> : <Navigate to={`/login?redirect=${location.pathname}`} replace />;
 };
 
 export default PrivateRoute;
