@@ -1,11 +1,12 @@
-import { Globe, Camera, MessageCircle, Phone, Mail, Music } from 'lucide-react';
+import { Phone, Mail } from 'lucide-react';
+import { FaFacebookF, FaInstagram, FaTiktok, FaWhatsapp } from 'react-icons/fa';
 
 const SocialSidebar = () => {
   const socials = [
-    { icon: Globe, name: 'FACEBOOK', color: 'bg-[#3b5998]', link: 'https://www.facebook.com/profile.php?id=61574254704789' },
-    { icon: Camera, name: 'INSTAGRAM', color: 'bg-[#e4405f]', link: 'https://www.instagram.com/growthsstore' },
-    { icon: Music, name: 'TIKTOK', color: 'bg-[#010101]', link: 'https://www.tiktok.com/@growthsstore?_r=1&_t=ZS-94vl9X96Py' },
-    { icon: MessageCircle, name: 'WHATSAPP', color: 'bg-[#25D366]', link: 'https://wa.me/256771204748' },
+    { icon: FaFacebookF, name: 'FACEBOOK', color: 'bg-[#3b5998]', link: 'https://www.facebook.com/profile.php?id=61574254704789' },
+    { icon: FaInstagram, name: 'INSTAGRAM', color: 'bg-[#e4405f]', link: 'https://www.instagram.com/growthsstore' },
+    { icon: FaTiktok, name: 'TIKTOK', color: 'bg-[#010101]', link: 'https://www.tiktok.com/@growthsstore?_r=1&_t=ZS-94vl9X96Py' },
+    { icon: FaWhatsapp, name: 'WHATSAPP', color: 'bg-[#25D366]', link: 'https://wa.me/256771204748' },
     { icon: Phone, name: 'CALL US', color: 'bg-[#4CAF50]', link: 'tel:+250793392762' },
     { icon: Mail, name: 'EMAIL US', color: 'bg-[#EA4335]', link: 'mailto:jasonspectac13@gmail.com' },
   ];
