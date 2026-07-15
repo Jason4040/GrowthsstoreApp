@@ -29,21 +29,21 @@ const TopAnnouncement = () => {
   };
 
   return (
-    <div className="bg-[#2B429F] text-[#D8E2DC] w-full overflow-hidden z-[100] relative min-h-[40px] flex items-center">
-      <div className="w-full max-w-4xl mx-auto px-4">
+    <div className="bg-[#2B429F] text-[#D8E2DC] w-full z-[100] relative h-[50px] md:h-[44px] flex items-center justify-center overflow-hidden">
+      <div className="w-full max-w-4xl mx-auto px-4 h-full flex items-center">
         {activeAnnouncements.length === 1 ? (
-          <div className="py-2 flex items-center justify-center">
+          <div className="py-1 flex items-center justify-center w-full">
             <div 
-              className="quill-content-preview text-sm text-center"
+              className="quill-content-preview text-[11px] md:text-sm text-center leading-tight line-clamp-2"
               dangerouslySetInnerHTML={{ __html: activeAnnouncements[0].text }} 
             />
           </div>
         ) : (
-          <Slider {...sliderSettings} className="py-2">
+          <Slider {...sliderSettings} className="w-full">
             {activeAnnouncements.map((ann) => (
-              <div key={ann._id} className="flex items-center justify-center focus:outline-none">
+              <div key={ann._id} className="flex items-center justify-center focus:outline-none w-full">
                 <div 
-                  className="quill-content-preview text-sm text-center"
+                  className="quill-content-preview text-[11px] md:text-sm text-center leading-tight line-clamp-2"
                   dangerouslySetInnerHTML={{ __html: ann.text }} 
                 />
               </div>

@@ -44,6 +44,14 @@ export const faqApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["FAQ"],
     }),
+
+    deleteQuestion: builder.mutation({
+      query: (id) => ({
+        url: `${FAQ_URL}/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["FAQ"],
+    }),
   }),
 });
 
@@ -53,4 +61,5 @@ export const {
   useGetAdminFAQsQuery,
   useAskQuestionMutation,
   useAnswerQuestionMutation,
+  useDeleteQuestionMutation,
 } = faqApiSlice;

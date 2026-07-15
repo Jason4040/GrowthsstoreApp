@@ -38,7 +38,7 @@ const productSchema = mongoose.Schema(
     priceUGX: { type: Number, required: true, default: 0 },
     priceRWF: { type: Number, required: true, default: 0 },
     countInStock: { type: Number, required: false, default: 0 },
-    stockStatus: { type: String, enum: ['in_stock', 'requires_shipping'], default: 'in_stock' },
+    stockStatus: { type: String, enum: ['in_stock', 'requires_shipping', 'coming_soon'], default: 'in_stock' },
     availabilityStartDate: { type: Date },
     availabilityEndDate: { type: Date },
     discountQtyThreshold: { type: Number, default: 0 },

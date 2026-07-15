@@ -74,13 +74,13 @@ const Home = () => {
         <div className="w-full">
           {/* Top Banner */}
           <div
-            className="w-full h-[350px] md:h-[450px] relative bg-cover bg-center mb-8 flex items-center justify-start border-b border-gray-200 dark:border-gray-800 bg-[url('https://www.zilliondesigns.com/blog/wp-content/uploads/Perfect-Ecommerce-Sales-Banner.jpg')] md:bg-[url('/banner.jpg')]"
+            className="w-full h-[350px] md:h-[450px] relative bg-cover bg-center mb-8 flex items-center justify-start border-b border-gray-200 dark:border-gray-800 bg-[url('/banner.jpg')]"
           >
             {/* Dark overlay only on the left side where text is */}
             <div className="absolute inset-y-0 left-0 w-full md:w-2/3 lg:w-1/2 bg-gradient-to-r from-black/90 via-black/70 to-transparent z-0"></div>
 
             {/* Top Header Section with Black Bg, Centered Logo, and Cart */}
-            <div className={`fixed left-0 right-0 z-[99] pointer-events-none transition-all duration-300 ${hasActiveAnnouncement && !scrolled ? 'top-[40px] md:top-[44px]' : 'top-0'}`}>
+            <div className={`fixed left-0 right-0 z-[99] pointer-events-none transition-all duration-300 ${hasActiveAnnouncement && !scrolled ? 'top-[50px] md:top-[44px]' : 'top-0'}`}>
               {/* The black bg above logo */}
               <div className={`absolute top-0 left-0 w-full transition-all duration-300 bg-[#0a0a0a] pointer-events-auto border-b border-gray-800 shadow-lg ${scrolled ? 'h-[35px] md:h-[45px]' : 'h-[45px] md:h-[55px]'}`}></div>
               

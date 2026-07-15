@@ -169,10 +169,27 @@ const getPublicFAQs = async (req, res) => {
   }
 };
 
+// @desc    Delete a question
+// @route   DELETE /api/faq/:id
+// @access  Private/Admin
+const deleteFAQ = async (req, res) => {
+  try {
+    const faq = await FAQQuestion.findById(req.params.id);
+    if (!faq) {
+      return res.status(404).json({ message: "FAQ not found" });
+    }
+    await FAQQuestion.deleteOne({ _id: req.params.id });
+    res.json({ message: "FAQ deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export {
   askQuestion,
   answerQuestion,
   getMyQuestions,
   getAdminQuestions,
   getPublicFAQs,
+  deleteFAQ,
 };

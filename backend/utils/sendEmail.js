@@ -13,7 +13,7 @@ const sendEmail = async ({ to, subject, html }) => {
     });
 
     const mailOptions = {
-      from: `"Growth Shop" <${process.env.EMAIL_USER}>`,
+      from: `"Growths Store" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       html,

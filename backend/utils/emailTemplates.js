@@ -13,7 +13,7 @@ export const otpEmailHtml = (username, otp, title, subtitle) => `
       <p style="font-size: 12px; color: #718096;">This code is valid for 10 minutes. If you did not make this request, please ignore this email.</p>
     </div>
     <div style="border-top: 1px solid #e2e8f0; padding-top: 16px; font-size: 12px; color: #a0aec0; text-align: center;">
-      <p>© ${new Date().getFullYear()} Growth Shop. All rights reserved.</p>
+      <p>© ${new Date().getFullYear()} Growths Store. All rights reserved.</p>
     </div>
   </div>
 `;

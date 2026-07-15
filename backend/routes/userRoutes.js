@@ -13,6 +13,8 @@ import {
   resendOTP,
   forgotPassword,
   resetPassword,
+  userHeartbeat,
+  getActiveUsers,
 } from "../controllers/userController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
@@ -26,6 +28,10 @@ router
 
 router.post("/auth", loginUser);
 router.post("/logout", logoutCurrentUser);
+
+router.post("/heartbeat", authenticate, userHeartbeat);
+router.get("/active", authenticate, authorizeAdmin, getActiveUsers);
+
 router.post("/verify-otp", verifyOTP);
 router.post("/resend-otp", resendOTP);
 router.post("/forgot-password", forgotPassword);

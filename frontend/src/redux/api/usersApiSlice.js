@@ -90,6 +90,18 @@ export const userApiSlice = apiSlice.injectEndpoints({
         url: "/api/auth/me",
       }),
     }),
+    userHeartbeat: builder.mutation({
+      query: () => ({
+        url: `${USERS_URL}/heartbeat`,
+        method: "POST",
+      }),
+    }),
+    getActiveUsers: builder.query({
+      query: () => ({
+        url: `${USERS_URL}/active`,
+      }),
+      keepUnusedDataFor: 5,
+    }),
   }),
 });
 
@@ -107,4 +119,6 @@ export const {
   useUpdateUserMutation,
   useGetUserDetailsQuery,
   useGetMeQuery,
+  useUserHeartbeatMutation,
+  useGetActiveUsersQuery,
 } = userApiSlice;

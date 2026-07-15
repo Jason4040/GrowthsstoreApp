@@ -1,18 +1,22 @@
 import { useState } from "react";
-import { useGetAdminFAQsQuery, useAnswerQuestionMutation } from "../../redux/api/faqApiSlice";
+import { useGetAdminFAQsQuery, useAnswerQuestionMutation, useDeleteQuestionMutation } from "../../redux/api/faqApiSlice";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import Modal from "../../components/Modal";
 import { toast } from "react-toastify";
-import { HelpCircle } from "lucide-react";
+import { Trash2, HelpCircle } from "lucide-react";
+import ConfirmModal from "../../components/ConfirmModal";
 
 const FAQAdmin = () => {
   const { data: questions = [], isLoading, error, refetch } = useGetAdminFAQsQuery();
   const [answerQuestion, { isLoading: submitting }] = useAnswerQuestionMutation();
+  const [deleteQuestion] = useDeleteQuestionMutation();
 
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [answerText, setAnswerText] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [faqToDelete, setFaqToDelete] = useState(null);
 
   const handleOpenAnswer = (q) => {
     setSelectedQuestion(q);
@@ -34,6 +38,18 @@ const FAQAdmin = () => {
       refetch();
     } catch (err) {
       toast.error(err?.data?.message || err.error || "Failed to submit answer");
+    }
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await deleteQuestion(faqToDelete).unwrap();
+      toast.success("FAQ successfully deleted!");
+      setIsConfirmOpen(false);
+      setFaqToDelete(null);
+      refetch();
+    } catch (err) {
+      toast.error(err?.data?.message || err.error || "Failed to delete FAQ");
     }
   };
 
@@ -112,16 +128,27 @@ const FAQAdmin = () => {
                 )}
               </div>
 
-              <button
-                onClick={() => handleOpenAnswer(q)}
-                className={`px-5 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider shrink-0 transition-all active:scale-[0.98] ${
-                  q.isAnswered
-                    ? "bg-gray-800 hover:bg-gray-700 text-white"
-                    : "bg-orange-600 hover:bg-orange-700 text-white"
-                }`}
-              >
-                {q.isAnswered ? "Edit Answer" : "Answer"}
-              </button>
+              <div className="flex flex-col gap-2 shrink-0">
+                <button
+                  onClick={() => handleOpenAnswer(q)}
+                  className={`px-5 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all active:scale-[0.98] ${
+                    q.isAnswered
+                      ? "bg-gray-800 hover:bg-gray-700 text-white"
+                      : "bg-orange-600 hover:bg-orange-700 text-white"
+                  }`}
+                >
+                  {q.isAnswered ? "Edit Answer" : "Answer"}
+                </button>
+                <button
+                  onClick={() => {
+                    setFaqToDelete(q._id);
+                    setIsConfirmOpen(true);
+                  }}
+                  className="px-5 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider bg-red-900/30 hover:bg-red-800/50 text-red-500 border border-red-900/50 hover:border-red-700 transition-all active:scale-[0.98] flex items-center justify-center"
+                >
+                  <Trash2 size={16} className="mr-2" /> Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -175,6 +202,14 @@ const FAQAdmin = () => {
           </div>
         </Modal>
       )}
+
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={confirmDelete}
+        title="Delete FAQ"
+        message="Are you sure you want to delete this FAQ? This action cannot be undone."
+      />
     </div>
   );
 };

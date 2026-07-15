@@ -20,6 +20,7 @@ const UserList = () => {
   const [editableUserId, setEditableUserId] = useState(null);
   const [editableUserName, setEditableUserName] = useState("");
   const [editableUserEmail, setEditableUserEmail] = useState("");
+  const [editableUserIsAdmin, setEditableUserIsAdmin] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
 
@@ -38,10 +39,11 @@ const UserList = () => {
     }
   };
 
-  const toggleEdit = (id, username, email) => {
+  const toggleEdit = (id, username, email, isAdmin) => {
     setEditableUserId(id);
     setEditableUserName(username);
     setEditableUserEmail(email);
+    setEditableUserIsAdmin(isAdmin);
   };
 
   const updateHandler = async (id) => {
@@ -50,6 +52,7 @@ const UserList = () => {
         userId: id,
         username: editableUserName,
         email: editableUserEmail,
+        isAdmin: editableUserIsAdmin,
       });
       setEditableUserId(null);
       refetch();
@@ -105,7 +108,7 @@ const UserList = () => {
                         <div className="flex items-center justify-between group">
                           <span className="text-gray-900 dark:text-white font-medium">{user.username}</span>
                           <button
-                            onClick={() => toggleEdit(user._id, user.username, user.email)}
+                            onClick={() => toggleEdit(user._id, user.username, user.email, user.isAdmin)}
                             className="text-gray-500 hover:text-orange-500 opacity-0 group-hover:opacity-100 transition-all"
                           >
                             <Edit size={16} />
@@ -133,7 +136,7 @@ const UserList = () => {
                         <div className="flex items-center justify-between group">
                           <a href={`mailto:${user.email}`} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:text-white transition-colors">{user.email}</a>
                           <button
-                            onClick={() => toggleEdit(user._id, user.username, user.email)}
+                            onClick={() => toggleEdit(user._id, user.username, user.email, user.isAdmin)}
                             className="text-gray-500 hover:text-orange-500 opacity-0 group-hover:opacity-100 transition-all"
                           >
                             <Edit size={16} />
@@ -142,7 +145,16 @@ const UserList = () => {
                       )}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      {user.isAdmin ? (
+                      {editableUserId === user._id ? (
+                        <div className="flex items-center justify-center">
+                          <input
+                            type="checkbox"
+                            checked={editableUserIsAdmin}
+                            onChange={(e) => setEditableUserIsAdmin(e.target.checked)}
+                            className="w-5 h-5 text-orange-600 bg-gray-50 border-gray-300 rounded focus:ring-orange-500"
+                          />
+                        </div>
+                      ) : user.isAdmin ? (
                         <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-500/10 text-green-500">
                           <Check size={16} />
                         </span>

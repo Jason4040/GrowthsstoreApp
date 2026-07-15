@@ -1,5 +1,5 @@
 import Chart from "react-apexcharts";
-import { useGetUsersQuery } from "../../redux/api/usersApiSlice";
+import { useGetUsersQuery, useGetActiveUsersQuery } from "../../redux/api/usersApiSlice";
 import {
   useGetTotalOrdersQuery,
   useGetTotalSalesByDateQuery,
@@ -14,6 +14,7 @@ import Loader from "../../components/Loader";
 const AdminDashboard = () => {
   const { data: sales, isLoading } = useGetTotalSalesQuery();
   const { data: customers, isLoading: loading } = useGetUsersQuery();
+  const { data: activeCustomers, isLoading: loadingActive } = useGetActiveUsersQuery(undefined, { pollingInterval: 30000 });
   const { data: orders, isLoading: loadingTwo } = useGetTotalOrdersQuery();
   const { data: salesDetail } = useGetTotalSalesByDateQuery();
 
@@ -95,7 +96,7 @@ const AdminDashboard = () => {
       <section className="w-full">
         <h1 className="text-3xl font-semibold mb-8 text-gray-900 dark:text-white">Dashboard Overview</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
           <div className="rounded-2xl bg-gray-100 dark:bg-[#151515] p-6 border border-gray-200 dark:border-gray-800 shadow-xl relative overflow-hidden group hover:border-orange-500/50 transition-colors">
             <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
             <div className="flex items-center gap-4 mb-4 relative z-10">
@@ -132,6 +133,19 @@ const AdminDashboard = () => {
             </div>
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white relative z-10">
               {loadingTwo ? <Loader /> : orders?.totalOrders}
+            </h1>
+          </div>
+
+          <div className="rounded-2xl bg-gray-100 dark:bg-[#151515] p-6 border border-gray-200 dark:border-gray-800 shadow-xl relative overflow-hidden group hover:border-purple-500/50 transition-colors">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+            <div className="flex items-center gap-4 mb-4 relative z-10">
+              <div className="w-12 h-12 rounded-xl bg-purple-600 flex items-center justify-center font-bold text-xl text-white shadow-lg">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 font-medium tracking-wide uppercase text-sm">Active Now</p>
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white relative z-10">
+              {loadingActive ? <Loader /> : activeCustomers?.length}
             </h1>
           </div>
         </div>

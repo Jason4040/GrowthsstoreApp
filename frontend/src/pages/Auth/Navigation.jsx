@@ -14,7 +14,10 @@ import {
   DollarSign,
   Heart,
   LayoutDashboard,
-  Layers
+  Layers,
+  Menu,
+  X,
+  User
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -39,6 +42,7 @@ const Navigation = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [showAdminMenu, setShowAdminMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   useEffect(() => {
     let timeout;
@@ -378,15 +382,15 @@ const Navigation = () => {
 
       {/* Mobile Bottom Navigation */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg text-white py-3 px-6 flex justify-between items-center z-[9999] border-t border-gray-800 rounded-none shadow-2xl">
-        <Link to="/" className="flex flex-col items-center gap-1 group">
+        <Link to="/" onClick={() => setShowMobileMenu(false)} className="flex flex-col items-center gap-1 group">
           <Home size={22} className="group-hover:text-orange-500 transition-colors" />
           <span className="text-[10px] font-medium">Home</span>
         </Link>
-        <Link to="/shop" className="flex flex-col items-center gap-1 group">
+        <Link to="/shop" onClick={() => setShowMobileMenu(false)} className="flex flex-col items-center gap-1 group">
           <ShoppingBag size={22} className="group-hover:text-orange-500 transition-colors" />
           <span className="text-[10px] font-medium">Shop</span>
         </Link>
-        <Link to="/cart" className="flex flex-col items-center gap-1 relative group">
+        <Link to="/cart" onClick={() => setShowMobileMenu(false)} className="flex flex-col items-center gap-1 relative group">
           <ShoppingCart size={22} className="group-hover:text-orange-500 transition-colors" />
           <span className="text-[10px] font-medium">Cart</span>
           {cartItems.length > 0 && (
@@ -395,35 +399,84 @@ const Navigation = () => {
             </span>
           )}
         </Link>
-        <Link to="/favorite" className="flex flex-col items-center gap-1 relative group">
-          <Heart size={18} className="group-hover:text-orange-500 transition-colors" />
-          <span className="text-[10px] font-medium">Saved</span>
-          <FavoritesCount />
-        </Link>
-        <Link to="/faq" className="flex flex-col items-center gap-1 group">
-          <HelpCircle size={22} className="group-hover:text-orange-500 transition-colors" />
-          <span className="text-[10px] font-medium">FAQ</span>
-        </Link>
-        {showMessagesLink && (
-          <Link to="/messages" className="flex flex-col items-center gap-1 group">
-            <MessageSquare size={22} className="group-hover:text-orange-500 transition-colors" />
-            <span className="text-[10px] font-medium">Messages</span>
-          </Link>
-        )}
-        {userInfo ? (
-          <Link to="/profile" className="flex flex-col items-center gap-1">
-            <div className="w-6 h-6 rounded-none bg-orange-600 flex items-center justify-center text-[10px] font-medium">
+        <button onClick={() => setShowMobileMenu(!showMobileMenu)} className="flex flex-col items-center gap-1 group focus:outline-none">
+          {userInfo ? (
+            <div className={`w-6 h-6 rounded-none flex items-center justify-center text-[10px] font-medium transition-colors ${showMobileMenu ? 'bg-orange-500 text-white' : 'bg-gray-800 text-gray-300 group-hover:bg-orange-500 group-hover:text-white'}`}>
               {userInfo.username.charAt(0).toUpperCase()}
             </div>
-            <span className="text-[10px] font-medium truncate w-12 text-center">Account</span>
-          </Link>
-        ) : (
-          <Link to="/login" className="flex flex-col items-center gap-1 group">
-            <LogIn size={22} className="group-hover:text-orange-500 transition-colors" />
-            <span className="text-[10px] font-medium">Login</span>
-          </Link>
-        )}
+          ) : (
+            <Menu size={22} className={`transition-colors ${showMobileMenu ? 'text-orange-500' : 'group-hover:text-orange-500'}`} />
+          )}
+          <span className={`text-[10px] font-medium ${showMobileMenu ? 'text-orange-500' : ''}`}>Menu</span>
+        </button>
       </div>
+
+      {/* Mobile Full Screen Menu */}
+      {showMobileMenu && (
+        <div className="md:hidden fixed inset-0 bg-[#0f0f0f] z-[9998] overflow-y-auto pb-24 pt-6 px-6 animate-fadeIn">
+          <div className="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
+            <h2 className="text-2xl font-bold text-white tracking-tight">Menu</h2>
+            <button onClick={() => setShowMobileMenu(false)} className="p-2 -mr-2 text-gray-400 hover:text-white transition-colors bg-gray-900 rounded-full">
+              <X size={20} />
+            </button>
+          </div>
+          
+          <div className="flex flex-col space-y-2">
+            <Link to="/favorite" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-300 hover:text-white hover:bg-gray-900 p-3 rounded-xl transition-colors">
+              <div className="p-2 bg-gray-900 rounded-lg"><Heart size={20} /></div> <span className="font-medium">Saved Items</span>
+            </Link>
+            
+            <Link to="/faq" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-300 hover:text-white hover:bg-gray-900 p-3 rounded-xl transition-colors">
+              <div className="p-2 bg-gray-900 rounded-lg"><HelpCircle size={20} /></div> <span className="font-medium">FAQ & Help</span>
+            </Link>
+            
+            {showMessagesLink && (
+              <Link to="/messages" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-300 hover:text-white hover:bg-gray-900 p-3 rounded-xl transition-colors">
+                <div className="p-2 bg-gray-900 rounded-lg"><MessageSquare size={20} /></div> <span className="font-medium">Messages</span>
+              </Link>
+            )}
+
+            {userInfo ? (
+              <>
+                <Link to="/profile" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-300 hover:text-white hover:bg-gray-900 p-3 rounded-xl transition-colors mt-2">
+                  <div className="p-2 bg-orange-600 text-white rounded-lg"><User size={20} /></div> <span className="font-medium">My Account</span>
+                </Link>
+
+                {userInfo.isAdmin && (
+                  <div className="bg-black border border-gray-800 rounded-xl mt-6 overflow-hidden shadow-lg">
+                    <div className="flex items-center gap-3 text-orange-500 p-4 border-b border-gray-800 bg-orange-500/5">
+                      <LayoutDashboard size={20} /> <span className="font-bold tracking-wide uppercase text-sm">Admin Controls</span>
+                    </div>
+                    <div className="flex flex-col p-2 space-y-1">
+                        <Link to="/admin/dashboard" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">Dashboard</Link>
+                        <Link to="/admin/allproductslist" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">Products Management</Link>
+                        <Link to="/admin/categorylist" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">Categories</Link>
+                        <Link to="/admin/orderlist" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">Customer Orders</Link>
+                        <Link to="/admin/paymentproofs" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">Payment Proofs</Link>
+                        <Link to="/admin/userlist" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">User List</Link>
+                        <Link to="/admin/faqmanager" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">FAQ Manager</Link>
+                        <Link to="/admin/announcement" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">Announcements</Link>
+                    </div>
+                  </div>
+                )}
+
+                <button onClick={() => { logoutHandler(); setShowMobileMenu(false); }} className="flex items-center gap-4 text-red-500 hover:text-red-400 hover:bg-red-500/10 p-3 rounded-xl mt-6 w-full text-left transition-colors">
+                  <div className="p-2 bg-red-500/10 rounded-lg"><LogIn size={20} className="rotate-180" /></div> <span className="font-bold">Logout</span>
+                </button>
+              </>
+            ) : (
+              <div className="mt-6 flex flex-col gap-3">
+                <Link to="/login" onClick={() => setShowMobileMenu(false)} className="flex items-center justify-center gap-2 text-white bg-gray-800 hover:bg-gray-700 p-4 rounded-xl font-bold transition-colors w-full">
+                  <LogIn size={20} /> Login
+                </Link>
+                <Link to="/register" onClick={() => setShowMobileMenu(false)} className="flex items-center justify-center gap-2 text-white bg-orange-600 hover:bg-orange-700 p-4 rounded-xl font-bold transition-colors w-full">
+                  <UserPlus size={20} /> Create Account
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 };

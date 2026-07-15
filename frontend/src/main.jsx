@@ -1,49 +1,43 @@
+import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import { HelmetProvider } from "react-helmet-async";
-import { Route, RouterProvider, createRoutesFromElements } from "react-router";
-import { createBrowserRouter } from "react-router-dom";
+import { Route, RouterProvider, createRoutesFromElements, createBrowserRouter } from "react-router-dom";
 
 import PrivateRoute from "./components/PrivateRoute";
-
-// Auth
-import Login from "./pages/Auth/Login";
-import Register from "./pages/Auth/Register";
-import ForgotPassword from "./pages/Auth/ForgotPassword";
-
 import AdminRoute from "./pages/Admin/AdminRoute";
-import Profile from "./pages/User/Profile";
-import UserOrder from "./pages/User/UserOrder";
-import UserList from "./pages/Admin/UserList";
 
-import CategoryList from "./pages/Admin/CategoryList";
-
-import ProductList from "./pages/Admin/ProductList";
-import AllProducts from "./pages/Admin/AllProducts";
-import ProductUpdate from "./pages/Admin/ProductUpdate";
-
-import Home from "./pages/Home.jsx";
-import Favorites from "./pages/Products/Favorites.jsx";
-import ProductDetails from "./pages/Products/ProductDetails.jsx";
-
-import Cart from "./pages/Cart.jsx";
-import Shop from "./pages/Shop.jsx";
-
-import Shipping from "./pages/Orders/Shipping.jsx";
-import PlaceOrder from "./pages/Orders/PlaceOrder.jsx";
-import Order from "./pages/Orders/Order.jsx";
-import OrderList from "./pages/Admin/OrderList.jsx";
-import OrderProofs from "./pages/Admin/OrderProofs.jsx";
-import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
-import ManualOrder from "./pages/Admin/ManualOrder.jsx";
-import Messages from "./pages/Messages.jsx";
-import FAQ from "./pages/FAQ.jsx";
-import FAQAdmin from "./pages/Admin/FAQAdmin.jsx";
-import AnnouncementAdmin from "./pages/Admin/AnnouncementAdmin.jsx";
-import About from "./pages/About.jsx";
+// Lazy-loaded components
+const Login = lazy(() => import("./pages/Auth/Login"));
+const Register = lazy(() => import("./pages/Auth/Register"));
+const ForgotPassword = lazy(() => import("./pages/Auth/ForgotPassword"));
+const Profile = lazy(() => import("./pages/User/Profile"));
+const UserOrder = lazy(() => import("./pages/User/UserOrder"));
+const UserList = lazy(() => import("./pages/Admin/UserList"));
+const CategoryList = lazy(() => import("./pages/Admin/CategoryList"));
+const ProductList = lazy(() => import("./pages/Admin/ProductList"));
+const AllProducts = lazy(() => import("./pages/Admin/AllProducts"));
+const ProductUpdate = lazy(() => import("./pages/Admin/ProductUpdate"));
+const Home = lazy(() => import("./pages/Home.jsx"));
+const Favorites = lazy(() => import("./pages/Products/Favorites.jsx"));
+const ProductDetails = lazy(() => import("./pages/Products/ProductDetails.jsx"));
+const Cart = lazy(() => import("./pages/Cart.jsx"));
+const Shop = lazy(() => import("./pages/Shop.jsx"));
+const Shipping = lazy(() => import("./pages/Orders/Shipping.jsx"));
+const PlaceOrder = lazy(() => import("./pages/Orders/PlaceOrder.jsx"));
+const Order = lazy(() => import("./pages/Orders/Order.jsx"));
+const OrderList = lazy(() => import("./pages/Admin/OrderList.jsx"));
+const OrderProofs = lazy(() => import("./pages/Admin/OrderProofs.jsx"));
+const AdminDashboard = lazy(() => import("./pages/Admin/AdminDashboard.jsx"));
+const ManualOrder = lazy(() => import("./pages/Admin/ManualOrder.jsx"));
+const Messages = lazy(() => import("./pages/Messages.jsx"));
+const FAQ = lazy(() => import("./pages/FAQ.jsx"));
+const FAQAdmin = lazy(() => import("./pages/Admin/FAQAdmin.jsx"));
+const AnnouncementAdmin = lazy(() => import("./pages/Admin/AnnouncementAdmin.jsx"));
+const About = lazy(() => import("./pages/About.jsx"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(

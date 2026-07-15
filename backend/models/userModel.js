@@ -53,6 +53,11 @@ const userSchema = mongoose.Schema(
     picture: {
       type: String,
     },
+
+    lastActiveAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );

@@ -1,7 +1,7 @@
 const testRegistration = async () => {
   try {
     console.log("Testing user registration...");
-    const response = await fetch("https://app.growthsstore.com/api/users", {
+    const response = await fetch("http://localhost:5000/api/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

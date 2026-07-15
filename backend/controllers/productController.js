@@ -100,6 +100,7 @@ const updateProductDetails = asyncHandler(async (req, res) => {
         ...(availableIn !== undefined && { availableIn }),
         ...(isPinned !== undefined && { isPinned: isPinned === 'true' || isPinned === true }),
         ...(condition !== undefined && { condition }),
+        ...(req.fields.countInStock !== undefined && { countInStock: req.fields.countInStock }),
         ...(images !== undefined && { images }),
         ...(video !== undefined && { video: video || null }),
       },

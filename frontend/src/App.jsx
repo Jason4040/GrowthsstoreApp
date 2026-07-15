@@ -1,12 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Navigation from "./pages/Auth/Navigation";
 import TopAnnouncement from "./components/TopAnnouncement";
 import SocialSidebar from "./components/SocialSidebar";
 import Footer from "./components/Footer";
+import Loader from "./components/Loader";
 import { ToastContainer, toast } from "react-toastify";
-import { useGetMeQuery } from "./redux/api/usersApiSlice";
+import { useGetMeQuery, useUserHeartbeatMutation } from "./redux/api/usersApiSlice";
 import { setCredentials } from "./redux/features/auth/authSlice";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -23,6 +24,8 @@ const App = () => {
     skip: !!userInfo && !isGoogleAuthSuccess,
   });
 
+  const [sendHeartbeat] = useUserHeartbeatMutation();
+
   useEffect(() => {
     if (meData) {
       const isDifferent = !userInfo || userInfo._id !== meData._id || userInfo.email !== meData.email;
@@ -31,6 +34,16 @@ const App = () => {
       }
     }
   }, [meData, userInfo, dispatch]);
+
+  useEffect(() => {
+    if (userInfo) {
+      sendHeartbeat();
+      const interval = setInterval(() => {
+        sendHeartbeat();
+      }, 3 * 60 * 1000); // 3 minutes
+      return () => clearInterval(interval);
+    }
+  }, [userInfo, sendHeartbeat]);
 
   useEffect(() => {
     if (isGoogleAuthSuccess) {
@@ -69,7 +82,9 @@ const App = () => {
       <SocialSidebar />
       <main className="py-3 md:ml-[96px] min-h-screen flex flex-col justify-between">
         <div className="flex-grow">
-          <Outlet />
+          <Suspense fallback={<Loader />}>
+            <Outlet />
+          </Suspense>
         </div>
         <Footer />
       </main>

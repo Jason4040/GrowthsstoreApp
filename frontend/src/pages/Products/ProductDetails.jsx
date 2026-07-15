@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -17,6 +17,8 @@ import {
   Tag,
   MessageCircle,
   MapPin,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import moment from "moment";
 import HeartIcon from "./HeartIcon";
@@ -32,6 +34,30 @@ import "slick-carousel/slick/slick-theme.css";
 import { useCurrency } from "../../hooks/useCurrency";
 import ProductVideo from "../../components/ProductVideo";
 
+const NextArrow = (props) => {
+  const { onClick } = props;
+  return (
+    <div
+      className="absolute right-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-black/50 hover:bg-orange-500 text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
+      onClick={onClick}
+    >
+      <ChevronRight className="w-6 h-6" />
+    </div>
+  );
+};
+
+const PrevArrow = (props) => {
+  const { onClick } = props;
+  return (
+    <div
+      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-black/50 hover:bg-orange-500 text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
+      onClick={onClick}
+    >
+      <ChevronLeft className="w-6 h-6" />
+    </div>
+  );
+};
+
 const ProductDetails = () => {
   const { id: productId } = useParams();
   const navigate = useNavigate();
@@ -43,7 +69,9 @@ const ProductDetails = () => {
   const [comment, setComment] = useState("");
   const [reviewImage, setReviewImage] = useState("");
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-  const [previewImageUrl, setPreviewImageUrl] = useState("");
+  const [previewInitialIndex, setPreviewInitialIndex] = useState(0);
+  const [activeMediaIndex, setActiveMediaIndex] = useState(0);
+  const sliderRef = useRef(null);
 
   const {
     data: product,
@@ -96,12 +124,15 @@ const ProductDetails = () => {
   };
 
   const sliderSettings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    afterChange: (current) => setActiveMediaIndex(current),
   };
 
   let mediaList = [];
@@ -147,28 +178,52 @@ const ProductDetails = () => {
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row gap-12 items-start">
               {/* Product Image / Media Slider */}
-              <div className="w-full lg:w-1/2 relative bg-white dark:bg-[#1A1A1A] rounded-none overflow-hidden border border-gray-200 dark:border-gray-800 shadow-none pb-8">
+              <div className="w-full lg:w-1/2 relative bg-white dark:bg-[#1A1A1A] rounded-none overflow-hidden border border-gray-200 dark:border-gray-800 shadow-none pb-4 px-2">
                 {mediaList.length > 1 ? (
-                  <Slider {...sliderSettings} className="w-full">
-                    {mediaList.map((media, index) => (
-                      <div key={index} className="w-full outline-none">
-                        {media.type === 'video' ? (
-                          <ProductVideo
-                            videoUrl={media.url}
-                            isCover={false}
-                            className="w-full h-[30rem] lg:h-[40rem] object-contain bg-black rounded-none"
-                          />
-                        ) : (
-                          <img
-                            src={media.url}
-                            alt={`${product.name} - ${index}`}
-                            onClick={() => { setPreviewImageUrl(media.url); setIsPreviewModalOpen(true); }}
-                            className="w-full h-[30rem] lg:h-[40rem] object-contain rounded-none cursor-pointer"
-                          />
-                        )}
-                      </div>
-                    ))}
-                  </Slider>
+                  <>
+                    <Slider ref={sliderRef} {...sliderSettings} className="w-full">
+                      {mediaList.map((media, index) => (
+                        <div key={index} className="w-full outline-none">
+                          {media.type === 'video' ? (
+                            <ProductVideo
+                              videoUrl={media.url}
+                              isCover={false}
+                              className="w-full h-[30rem] lg:h-[40rem] object-contain bg-black rounded-none"
+                            />
+                          ) : (
+                            <img
+                              src={media.url}
+                              alt={`${product.name} - ${index}`}
+                              onClick={() => { setPreviewInitialIndex(index); setIsPreviewModalOpen(true); }}
+                              className="w-full h-[30rem] lg:h-[40rem] object-contain rounded-none cursor-pointer"
+                            />
+                          )}
+                        </div>
+                      ))}
+                    </Slider>
+                    <div className="flex gap-3 overflow-x-auto mt-6 pb-2 px-2 scrollbar-hide snap-x">
+                      {mediaList.map((media, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            setActiveMediaIndex(idx);
+                            sliderRef.current?.slickGoTo(idx);
+                          }}
+                          className={`relative shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 transition-all snap-center ${
+                            activeMediaIndex === idx 
+                              ? 'border-orange-500 scale-105 shadow-[0_0_10px_rgba(249,115,22,0.4)] opacity-100' 
+                              : 'border-transparent opacity-50 hover:opacity-100'
+                          }`}
+                        >
+                          {media.type === 'video' ? (
+                            <video src={media.url} className="w-full h-full object-cover" />
+                          ) : (
+                            <img src={media.url} className="w-full h-full object-cover" />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </>
                 ) : (
                   <>
                     {mediaList[0]?.type === 'video' ? (
@@ -181,7 +236,7 @@ const ProductDetails = () => {
                       <img
                         src={mediaList[0]?.url || product.image}
                         alt={product.name}
-                        onClick={() => { setPreviewImageUrl(mediaList[0]?.url || product.image); setIsPreviewModalOpen(true); }}
+                        onClick={() => { setPreviewInitialIndex(0); setIsPreviewModalOpen(true); }}
                         className="w-full h-auto max-h-[40rem] object-contain rounded-none cursor-pointer"
                       />
                     )}
@@ -325,7 +380,8 @@ const ProductDetails = () => {
       <ImagePreviewModal
         isOpen={isPreviewModalOpen}
         onClose={() => setIsPreviewModalOpen(false)}
-        imageUrl={previewImageUrl}
+        images={mediaList.filter(m => m.type === 'image').map(m => m.url)}
+        initialIndex={previewInitialIndex}
       />
     </>
   );

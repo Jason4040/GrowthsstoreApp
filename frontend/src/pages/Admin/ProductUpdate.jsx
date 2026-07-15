@@ -487,6 +487,7 @@ const AdminProductUpdate = () => {
                 >
                   <option value="in_stock">In Stock (Track Inventory)</option>
                   <option value="requires_shipping">Requires Shipping (Pre-order / Request)</option>
+                  <option value="coming_soon">Coming Soon</option>
                 </select>
               </div>
               

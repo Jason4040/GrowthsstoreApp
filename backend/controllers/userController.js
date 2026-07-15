@@ -52,12 +52,12 @@ const createUser = asyncHandler(async (req, res) => {
   try {
     await sendEmail({
       to: newUser.email,
-      subject: "Verify Your Account - Growth Shop OTP",
+      subject: "Verify Your Account - Growths Store OTP",
       html: otpEmailHtml(
         newUser.username,
         otp,
         "Account Verification",
-        "Growth Shop OTP Verification"
+        "Growths Store OTP Verification"
       ),
     });
   } catch (error) {
@@ -395,6 +395,25 @@ const updateUserById = asyncHandler(async (req, res) => {
   }
 });
 
+const userHeartbeat = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    user.lastActiveAt = new Date();
+    await user.save();
+    res.status(200).json({ message: "Heartbeat received" });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+const getActiveUsers = asyncHandler(async (req, res) => {
+  // Consider users active if they have pinged heartbeat within last 5 minutes (300,000 ms)
+  const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+  const activeUsers = await User.find({ lastActiveAt: { $gte: fiveMinutesAgo } }).select("-password");
+  res.json(activeUsers);
+});
+
 export {
   createUser,
   loginUser,
@@ -409,4 +428,6 @@ export {
   resendOTP,
   forgotPassword,
   resetPassword,
+  userHeartbeat,
+  getActiveUsers,
 };
