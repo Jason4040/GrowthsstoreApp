@@ -11,6 +11,11 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    build: {
+      outDir: "dist",
+      chunkSizeWarningLimit: 1000,
+      sourcemap: false,
+    },
     server: {
       proxy: {
         "/api/": {
