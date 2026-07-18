@@ -30,7 +30,7 @@ app.set("trust proxy", 1);
 const allowedOrigins = [
   "https://growthsstore.com",
   "https://www.growthsstore.com",
-  "http://localhost:5000",
+  "https://app.growthsstore.com",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
 ];
