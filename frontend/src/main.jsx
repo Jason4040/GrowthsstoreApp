@@ -6,6 +6,10 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import { HelmetProvider } from "react-helmet-async";
 import { Route, RouterProvider, createRoutesFromElements, createBrowserRouter } from "react-router-dom";
+import { initTranslation } from "./utils/translateService";
+
+// Init saved language on startup (after React renders)
+initTranslation();
 
 import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./pages/Admin/AdminRoute";

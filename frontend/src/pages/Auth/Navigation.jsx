@@ -30,6 +30,7 @@ import { logout } from "../../redux/features/auth/authSlice";
 import { setCurrency } from "../../redux/features/currency/currencySlice";
 import FavoritesCount from "../Products/FavoritesCount";
 import { useGetMyOrdersQuery } from "../../redux/api/orderApiSlice";
+import { switchLanguage } from "../../utils/translateService";
 
 const Navigation = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -50,10 +51,7 @@ const Navigation = () => {
 
   const handleLangChange = (langCode) => {
     setActiveLang(langCode);
-    // Call the global function defined in index.html
-    if (typeof window.doSwitchLang === 'function') {
-      window.doSwitchLang(langCode);
-    }
+    switchLanguage(langCode);
   };
 
   const toggleTheme = () => {

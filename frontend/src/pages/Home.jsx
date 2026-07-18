@@ -11,6 +11,7 @@ import Product from "./Products/Product";
 import { useCurrency } from "../hooks/useCurrency";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrency } from "../redux/features/currency/currencySlice";
+import { switchLanguage } from "../utils/translateService";
 
 const Home = () => {
   const { keyword } = useParams();
@@ -35,9 +36,7 @@ const Home = () => {
 
   const handleLangChange = (langCode) => {
     setActiveLang(langCode);
-    if (typeof window.doSwitchLang === 'function') {
-      window.doSwitchLang(langCode);
-    }
+    switchLanguage(langCode);
   };
 
   useEffect(() => {
