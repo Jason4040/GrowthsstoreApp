@@ -96,7 +96,7 @@ const Shop = () => {
           <div className="w-full lg:hidden mb-[-1rem]">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="w-full bg-gray-50 dark:bg-[#101010] hover:bg-gray-100 dark:bg-[#151515] border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white font-medium py-4 px-6 flex justify-between items-center transition-colors"
+              className="w-full bg-gray-50 dark:bg-[#101010] hover:bg-gray-100 dark:hover:bg-[#151515] border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white font-medium py-4 px-6 flex justify-between items-center transition-colors"
             >
               <span className="text-gray-700 dark:text-gray-300 tracking-wide uppercase text-sm">Filters & Sorting</span>
               <span className="text-orange-500">{showFilters ? "✕" : "▼"}</span>
@@ -172,7 +172,7 @@ const Shop = () => {
 
             <div className="px-2">
               <button
-                className="w-full bg-gray-800 hover:bg-gray-700 text-gray-900 dark:text-white font-medium py-3 rounded-none transition-all shadow-none active:scale-95"
+                className="w-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium py-3 rounded-none transition-all shadow-none active:scale-95"
                 onClick={() => window.location.reload()}
               >
                 Reset All Filters

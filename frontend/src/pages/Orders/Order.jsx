@@ -344,15 +344,15 @@ const Order = () => {
                       Resubmit Payment Proof
                     </button>
 
-                    <div className="border border-gray-800 p-4 rounded-lg bg-gray-900/50 space-y-3 mt-4">
-                      <h4 className="font-semibold text-sm text-white">Appeal Payment Rejection</h4>
+                    <div className="border border-gray-200 dark:border-gray-800 p-4 rounded-lg bg-gray-900/50 space-y-3 mt-4">
+                      <h4 className="font-semibold text-sm text-gray-900 dark:text-white">Appeal Payment Rejection</h4>
                       <p className="text-xs text-gray-400">If you have already paid, please write a brief message explaining your payment (e.g. transaction code, mobile number, date) and submit an appeal.</p>
                       <textarea
                         rows="3"
                         placeholder="Write your appeal message here..."
                         value={appealText}
                         onChange={(e) => setAppealText(e.target.value)}
-                        className="w-full bg-black border border-gray-800 rounded-lg p-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-orange-500"
+                        className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-lg p-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-orange-500"
                       />
                       <button
                         type="button"
@@ -371,7 +371,7 @@ const Order = () => {
                     <span className="font-semibold block mb-1">Appeal Submitted</span>
                     <span className="text-xs">Your payment rejection appeal has been submitted. The admin has been notified and is currently reviewing your appeal.</span>
                     {order.paymentAppealText && (
-                      <div className="mt-3 text-left p-3 bg-black/30 rounded border border-gray-800 text-xs text-gray-300">
+                      <div className="mt-3 text-left p-3 bg-white dark:bg-black/30 rounded border border-gray-200 dark:border-gray-800 text-xs text-gray-300">
                         <strong>Your Appeal:</strong> {order.paymentAppealText}
                       </div>
                     )}

@@ -119,7 +119,7 @@ const ProductTabs = ({
               <form onSubmit={async (e) => {
                 const success = await submitHandler(e);
                 if (success) setActiveTab(2);
-              }} className="space-y-8 bg-gray-100 dark:bg-[#151515] p-8 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl">
+              }} className="space-y-8 bg-gray-100 dark:bg-white dark:bg-[#151515] p-8 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl">
                 <div>
                   <label htmlFor="rating" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-3">
                     Your Rating
@@ -174,7 +174,7 @@ const ProductTabs = ({
                         </div>
                       </div>
                     ) : (
-                      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-[#101010] hover:border-orange-500 hover:bg-white dark:bg-[#1A1A1A] transition-all cursor-pointer group">
+                      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-[#101010] hover:border-orange-500 hover:bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] transition-all cursor-pointer group">
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
                           {loadingUpload ? (
                             <div className="flex flex-col items-center justify-center">
@@ -218,7 +218,7 @@ const ProductTabs = ({
                 </button>
               </form>
             ) : (
-              <div className="bg-white dark:bg-[#1A1A1A] p-8 rounded-none border border-dashed border-gray-300 dark:border-gray-700 text-center">
+              <div className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] p-8 rounded-none border border-dashed border-gray-300 dark:border-gray-700 text-center">
                 <p className="text-gray-600 dark:text-gray-400">
                   Want to share your thoughts?{" "}
                   <Link to="/login" className="text-orange-500 font-medium hover:underline">
@@ -234,13 +234,13 @@ const ProductTabs = ({
         {activeTab === 2 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fadeIn">
             {product.reviews.filter(r => userInfo?.isAdmin || !r.isHidden).length === 0 ? (
-              <div className="col-span-full text-center py-16 bg-gray-100 dark:bg-[#151515] rounded-2xl border border-gray-200 dark:border-gray-800">
+              <div className="col-span-full text-center py-16 bg-gray-100 dark:bg-white dark:bg-[#151515] rounded-2xl border border-gray-200 dark:border-gray-800">
                 <div className="text-gray-500 text-lg mb-2">No reviews yet.</div>
                 <div className="text-gray-600">Be the first to share your experience!</div>
               </div>
             ) : (
               product.reviews.filter(r => userInfo?.isAdmin || !r.isHidden).map((review) => (
-                <div key={review._id} className={`bg-gray-100 dark:bg-[#151515] flex flex-col p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:border-gray-700 hover:shadow-xl transition-all group ${review.isHidden ? 'opacity-60 grayscale' : ''}`}>
+                <div key={review._id} className={`bg-gray-100 dark:bg-white dark:bg-[#151515] flex flex-col p-6 rounded-2xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:border-gray-700 hover:shadow-xl transition-all group ${review.isHidden ? 'opacity-60 grayscale' : ''}`}>
                   <div className="flex justify-between items-start mb-6">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-600 to-purple-600 flex items-center justify-center font-bold text-xl text-gray-900 dark:text-white shadow-lg">

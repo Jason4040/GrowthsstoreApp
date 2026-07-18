@@ -57,7 +57,7 @@ const AdminProductControls = ({ product }) => {
   };
 
   return (
-    <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-20 flex gap-2 bg-black/70 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-20 flex gap-2 bg-white dark:bg-black/70 backdrop-blur-sm px-3 py-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
       <button 
         onClick={handleTogglePin} 
         title={product.isPinned ? "Unpin Product" : "Pin to Homepage Slider"}

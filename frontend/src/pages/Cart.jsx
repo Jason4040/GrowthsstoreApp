@@ -60,7 +60,7 @@ const Cart = () => {
 
               <div className="space-y-4">
                 {cartItems.map((item) => (
-                  <div key={item._id} className="bg-white dark:bg-[#1A1A1A] p-4 rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center gap-4 hover:border-orange-500 transition-all">
+                  <div key={item._id} className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] p-4 rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center gap-4 hover:border-orange-500 transition-all">
                     <div className="w-full sm:w-24 h-24 shrink-0">
                       <img
                         src={item.image}
@@ -73,7 +73,7 @@ const Cart = () => {
                       <Link to={`/product/${item._id}`} className="text-lg font-medium text-orange-500 hover:text-orange-400">
                         {item.name}
                       </Link>
-                      <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">{item.brand}</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-600 dark:text-gray-400 mt-1">{item.brand}</div>
                       <div className="text-lg font-medium text-gray-900 dark:text-white mt-1">
                         {formatPrice(getPriceValue(item))}
                         {item.discountQtyThreshold > 0 && item.qty >= item.discountQtyThreshold && (
@@ -87,7 +87,7 @@ const Cart = () => {
                     <div className="flex items-center gap-4 w-full sm:w-auto justify-between">
                       <div className="w-20">
                         <select
-                          className="w-full bg-white dark:bg-black border border-gray-300 dark:border-gray-700 rounded-lg p-2 text-white focus:border-orange-500 outline-none"
+                          className="w-full bg-white dark:bg-white dark:bg-black border border-gray-300 dark:border-gray-700 rounded-lg p-2 text-gray-900 dark:text-white focus:border-orange-500 outline-none"
                           value={item.qty}
                           onChange={(e) => addToCartHandler(item, Number(e.target.value))}
                         >
@@ -100,7 +100,7 @@ const Cart = () => {
                       </div>
 
                       <button
-                        className="p-2 text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors bg-gray-900 rounded-lg"
+                        className="p-2 text-gray-600 dark:text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors bg-gray-900 rounded-lg"
                         onClick={() => removeFromCartHandler(item._id)}
                       >
                         <Trash2 size={18} />
@@ -113,16 +113,16 @@ const Cart = () => {
 
             {/* Checkout Summary */}
             <div className="w-full lg:w-[25rem]">
-              <div className="bg-white dark:bg-[#1A1A1A] p-6 rounded-xl border border-gray-200 dark:border-gray-800 sticky top-24">
+              <div className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] p-6 rounded-xl border border-gray-200 dark:border-gray-800 sticky top-24">
                 <h2 className="text-2xl font-medium mb-6 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">Order Summary</h2>
 
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-gray-600 dark:text-gray-400">Total Items:</span>
+                  <span className="text-gray-600 dark:text-gray-600 dark:text-gray-400">Total Items:</span>
                   <span className="text-gray-900 dark:text-white font-medium">{cartItems.reduce((acc, item) => acc + item.qty, 0)}</span>
                 </div>
 
                 <div className="flex justify-between items-center mb-8">
-                  <span className="text-gray-600 dark:text-gray-400">Subtotal:</span>
+                  <span className="text-gray-600 dark:text-gray-600 dark:text-gray-400">Subtotal:</span>
                   <span className="text-3xl font-medium text-orange-500">
                     {formatPrice(cartItems.reduce((acc, item) => acc + calculateItemTotal(item), 0).toFixed(2))}
                   </span>

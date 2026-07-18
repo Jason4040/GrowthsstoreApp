@@ -38,19 +38,19 @@ const ProductCard = ({ p }) => {
   return (
     <div 
       onClick={() => navigate(`/product/${p._id}`)}
-      className="cursor-pointer w-full bg-gray-100 dark:bg-[#151515] rounded-none shadow-none border border-gray-200 dark:border-gray-800 hover:border-orange-500 transition-all duration-300 relative group overflow-hidden"
+      className="cursor-pointer w-full bg-gray-100 dark:bg-white dark:bg-[#151515] rounded-none shadow-none border border-gray-200 dark:border-gray-800 hover:border-orange-500 transition-all duration-300 relative group overflow-hidden"
     >
       <section className="relative aspect-[4/3] overflow-hidden">
         <AdminProductControls product={p} />
         <Link to={`/product/${p._id}`}>
           <div className="absolute bottom-3 right-3 flex flex-col items-end gap-1 z-10">
             {p?.availableIn && (
-              <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded-none shadow-lg group-hover:scale-105 transition-transform flex items-center gap-1">
+              <span className="bg-blue-600 text-gray-900 dark:text-white text-xs font-bold px-3 py-1.5 rounded-none shadow-lg group-hover:scale-105 transition-transform flex items-center gap-1">
                 📍 {p.availableIn === "Both" ? "Uganda & Rwanda" : `${p.availableIn} Only`}
               </span>
             )}
             {p?.condition && (
-              <span className="bg-purple-600 text-white text-xs font-bold px-3 py-1.5 rounded-none shadow-lg group-hover:scale-105 transition-transform">
+              <span className="bg-purple-600 text-gray-900 dark:text-white text-xs font-bold px-3 py-1.5 rounded-none shadow-lg group-hover:scale-105 transition-transform">
                 {p.condition}
               </span>
             )}
@@ -58,7 +58,7 @@ const ProductCard = ({ p }) => {
               {p?.brand}
             </span>
             {p?.discountQtyThreshold > 0 && (
-              <span className="bg-green-600 text-white text-xs font-bold px-3 py-1.5 rounded-none shadow-lg animate-pulse">
+              <span className="bg-green-600 text-gray-900 dark:text-white text-xs font-bold px-3 py-1.5 rounded-none shadow-lg animate-pulse">
                 Buy {p.discountQtyThreshold}+ Get {formatPrice(getDiscountValue(p))} OFF
               </span>
             )}
@@ -100,7 +100,7 @@ const ProductCard = ({ p }) => {
           </div>
         </div>
 
-        <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 leading-relaxed">
+        <p className="text-gray-600 dark:text-gray-600 dark:text-gray-400 text-sm mb-6 leading-relaxed">
           {p?.description?.substring(0, 80)}...
         </p>
 
@@ -114,7 +114,7 @@ const ProductCard = ({ p }) => {
           </Link>
 
           <button
-            className="p-2.5 bg-[#25D366] hover:bg-[#20bd5a] rounded-none text-white transition-colors"
+            className="p-2.5 bg-[#25D366] hover:bg-[#20bd5a] rounded-none text-gray-900 dark:text-white transition-colors"
             onClick={handleWhatsAppOrder}
             title="Order via WhatsApp"
           >

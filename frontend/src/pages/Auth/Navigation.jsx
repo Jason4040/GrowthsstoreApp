@@ -17,7 +17,9 @@ import {
   Layers,
   Menu,
   X,
-  User
+  User,
+  Sun,
+  Moon
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -43,6 +45,28 @@ const Navigation = () => {
   const [showVideo, setShowVideo] = useState(false);
   const [showAdminMenu, setShowAdminMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const [activeLang, setActiveLang] = useState(localStorage.getItem('appLang') || 'en');
+
+  const handleLangChange = (langCode) => {
+    setActiveLang(langCode);
+    // Call the global function defined in index.html
+    if (typeof window.doSwitchLang === 'function') {
+      window.doSwitchLang(langCode);
+    }
+  };
+
+  const toggleTheme = () => {
+    if (theme === 'dark') {
+      setTheme('light');
+      localStorage.setItem('theme', 'light');
+      document.documentElement.classList.remove('dark');
+    } else {
+      setTheme('dark');
+      localStorage.setItem('theme', 'dark');
+      document.documentElement.classList.add('dark');
+    }
+  };
 
   useEffect(() => {
     let timeout;
@@ -67,6 +91,7 @@ const Navigation = () => {
     try {
       await logoutApiCall().unwrap();
       dispatch(logout());
+      dispatch({ type: "api/resetApiState" }); // Manually dispatch the reset action if apiSlice is not imported
       navigate("/login");
     } catch (error) {
       console.error(error);
@@ -75,10 +100,54 @@ const Navigation = () => {
 
   return (
     <>
+      {/* Floating Action Buttons: Theme Toggle + Language Switcher */}
+      <div className="fixed bottom-[80px] md:bottom-6 right-4 md:right-6 z-[9999] flex flex-col items-end gap-3 pointer-events-none">
+        {/* Theme Toggle */}
+        <div
+          className="pointer-events-auto bg-white dark:bg-[#1A1A1A] rounded-full p-3 border border-gray-200 dark:border-gray-800 shadow-2xl flex items-center justify-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          onClick={toggleTheme}
+          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        >
+          {theme === 'dark' ? <Sun size={22} className="text-orange-500" /> : <Moon size={22} className="text-indigo-600" />}
+        </div>
+
+        {/* Language Switcher */}
+        <div className="pointer-events-auto lang-switcher">
+          <button
+            className={`lang-btn ${activeLang === 'en' ? 'active' : ''}`}
+            data-lang="en"
+            onClick={() => handleLangChange('en')}
+            title="English"
+          >
+            EN
+          </button>
+          <div className="lang-btn-divider" />
+          <button
+            className={`lang-btn ${activeLang === 'rw' ? 'active' : ''}`}
+            data-lang="rw"
+            onClick={() => handleLangChange('rw')}
+            title="Kinyarwanda"
+          >
+            RW
+          </button>
+          <div className="lang-btn-divider" />
+          <button
+            className={`lang-btn ${activeLang === 'lg' ? 'active' : ''}`}
+            data-lang="lg"
+            onClick={() => handleLangChange('lg')}
+            title="Luganda (Uganda)"
+          >
+            LG
+          </button>
+        </div>
+
+        {/* Hidden Google Translate target is in index.html body */}
+      </div>
+
       {/* Desktop Sidebar */}
       {/* Desktop Sidebar */}
       <div
-        className={`hidden md:flex flex-col justify-between py-3 text-white bg-black h-[100vh] fixed border-r border-gray-800 rounded-none`}
+        className={`hidden md:flex flex-col justify-between py-3 text-gray-900 dark:text-white bg-white dark:bg-black h-[100vh] fixed border-r border-gray-200 dark:border-gray-800 rounded-none`}
         id="sidebar-menu"
       >
         <div className="flex flex-col space-y-1.5 mt-2">
@@ -100,7 +169,7 @@ const Navigation = () => {
             </Link>
           </div>
 
-          <div className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative">
+          <div className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative">
             <div className="w-[96px] flex justify-center shrink-0">
               <DollarSign size={30} className="transform group-hover/link:scale-110 transition-transform" />
             </div>
@@ -108,7 +177,7 @@ const Navigation = () => {
               <select
                 value={currentCurrency}
                 onChange={(e) => dispatch(setCurrency(e.target.value))}
-                className="w-full bg-[#1A1A1A] text-white text-sm font-medium border border-gray-800 rounded-lg p-1.5 focus:ring-2 focus:ring-orange-500 outline-none transition-opacity"
+                className="w-full bg-gray-50 dark:bg-[#1A1A1A] text-gray-900 dark:text-white text-sm font-medium border border-gray-200 dark:border-gray-800 rounded-lg p-1.5 focus:ring-2 focus:ring-orange-500 outline-none transition-opacity"
               >
                 <option value="USD">USD ($)</option>
                 <option value="UGX">UGX (USh)</option>
@@ -119,7 +188,7 @@ const Navigation = () => {
 
           <Link
             to="/"
-            className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
+            className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
               <Home size={30} className="transform group-hover/link:scale-110 transition-transform" />
@@ -129,7 +198,7 @@ const Navigation = () => {
 
           <Link
             to="/shop"
-            className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
+            className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
               <ShoppingBag size={30} className="transform group-hover/link:scale-110 transition-transform" />
@@ -139,7 +208,7 @@ const Navigation = () => {
 
           <Link
             to="/cart"
-            className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
+            className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
               <div className="relative">
@@ -156,7 +225,7 @@ const Navigation = () => {
 
           <Link
             to="/favorite"
-            className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
+            className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
               <div className="relative">
@@ -169,7 +238,7 @@ const Navigation = () => {
 
           <Link
             to="/faq"
-            className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
+            className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
               <HelpCircle size={30} className="transform group-hover/link:scale-110 transition-transform" />
@@ -180,7 +249,7 @@ const Navigation = () => {
           {showMessagesLink && (
             <Link
               to="/messages"
-              className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
+              className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
             >
               <div className="w-[96px] flex justify-center shrink-0">
                 <MessageSquare size={30} className="transform group-hover/link:scale-110 transition-transform" />
@@ -190,19 +259,19 @@ const Navigation = () => {
           )}
 
           {userInfo && userInfo.isAdmin && (
-            <div className="flex flex-col space-y-1.5 border-t border-gray-800 pt-3 mt-3">
+            <div className="flex flex-col space-y-1.5 border-t border-gray-200 dark:border-gray-800 pt-3 mt-3">
               <button
                 onClick={() => setShowAdminMenu(!showAdminMenu)}
-                className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative w-full focus:outline-none"
+                className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative w-full focus:outline-none"
               >
                 <div className="w-[96px] flex justify-center shrink-0">
                   <LayoutDashboard size={28} className={`transform group-hover/link:scale-110 transition-transform ${showAdminMenu ? 'text-orange-500' : ''}`} />
                 </div>
-                <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-400">
+                <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">
                   Admin Menu
                 </span>
                 <svg
-                  className={`nav-item-name h-4 w-4 ml-auto mr-4 transition-transform text-gray-500 group-hover/link:text-white ${showAdminMenu ? "rotate-180" : ""}`}
+                  className={`nav-item-name h-4 w-4 ml-auto mr-4 transition-transform text-gray-500 group-hover/link:text-gray-900 dark:text-white ${showAdminMenu ? "rotate-180" : ""}`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -212,78 +281,78 @@ const Navigation = () => {
               </button>
 
               {showAdminMenu && (
-                <div className="flex flex-col space-y-1.5 bg-[#1A1A1A]/80 py-2 border-y border-gray-800/50">
+                <div className="flex flex-col space-y-1.5 bg-gray-50 dark:bg-[#1A1A1A]/80 py-2 border-y border-gray-200 dark:border-gray-800/50">
                   <Link
                     to="/admin/dashboard"
-                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                    className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
                       <LayoutDashboard size={24} className="transform group-hover/link:scale-110 transition-transform" />
                     </div>
-                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Dashboard</span>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Dashboard</span>
                   </Link>
                   <Link
                     to="/admin/allproductslist"
-                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                    className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
                       <Database size={24} className="transform group-hover/link:scale-110 transition-transform" />
                     </div>
-                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Products</span>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Products</span>
                   </Link>
                   <Link
                     to="/admin/categorylist"
-                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                    className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
                       <Layers size={24} className="transform group-hover/link:scale-110 transition-transform" />
                     </div>
-                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Categories</span>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Categories</span>
                   </Link>
                   <Link
                     to="/admin/orderlist"
-                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                    className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
                       <ListOrdered size={24} className="transform group-hover/link:scale-110 transition-transform" />
                     </div>
-                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Orders</span>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Orders</span>
                   </Link>
                   <Link
                     to="/admin/paymentproofs"
-                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                    className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
                       <FileText size={24} className="transform group-hover/link:scale-110 transition-transform" />
                     </div>
-                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Payment Proofs</span>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Payment Proofs</span>
                   </Link>
                   <Link
                     to="/admin/userlist"
-                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                    className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
                       <Users size={24} className="transform group-hover/link:scale-110 transition-transform" />
                     </div>
-                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Users</span>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Users</span>
                   </Link>
                   <Link
                     to="/admin/faqmanager"
-                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                    className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
                       <HelpCircle size={24} className="transform group-hover/link:scale-110 transition-transform" />
                     </div>
-                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">FAQ Manager</span>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">FAQ Manager</span>
                   </Link>
                   <Link
                     to="/admin/announcement"
-                    className="flex items-center text-gray-500 hover:text-white transition-colors py-2 group/link relative"
+                    className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
                       <MessageSquare size={24} className="transform group-hover/link:scale-110 transition-transform" />
                     </div>
-                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-400">Announcement</span>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Announcement</span>
                   </Link>
                 </div>
               )}
@@ -291,10 +360,10 @@ const Navigation = () => {
           )}
         </div>
 
-        <div className="relative border-t border-gray-800 pt-3 px-0 pb-2">
+        <div className="relative border-t border-gray-200 dark:border-gray-800 pt-3 px-0 pb-2">
           <button
             onClick={toggleDropdown}
-            className="flex items-center text-gray-400 focus:outline-none transition-all hover:text-white w-full group/btn"
+            className="flex items-center text-gray-700 dark:text-gray-300 focus:outline-none transition-all hover:text-gray-900 dark:hover:text-white w-full group/btn"
           >
             {userInfo ? (
               <div className="flex items-center w-full">
@@ -307,7 +376,7 @@ const Navigation = () => {
                   {userInfo.username}
                 </span>
                 <svg
-                  className={`nav-item-name h-5 w-5 ml-auto mr-4 transition-transform text-gray-500 group-hover/btn:text-white ${dropdownOpen ? "rotate-180" : ""
+                  className={`nav-item-name h-5 w-5 ml-auto mr-4 transition-transform text-gray-500 group-hover/btn:text-gray-900 dark:text-white ${dropdownOpen ? "rotate-180" : ""
                     }`}
                   fill="none"
                   viewBox="0 0 24 24"
@@ -328,12 +397,12 @@ const Navigation = () => {
 
           {dropdownOpen && userInfo && (
             <ul
-              className={`absolute bottom-20 left-[96px] p-3 space-y-2 bg-[#101010] border border-gray-800 text-gray-300 rounded-none w-48 shadow-2xl z-[9999]`}
+              className={`absolute bottom-20 left-[96px] p-3 space-y-2 bg-white dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none w-48 shadow-2xl z-[9999]`}
             >
               <li>
                 <Link
                   to="/profile"
-                  className="block px-4 py-3 hover:bg-gray-800 transition-colors text-sm font-medium"
+                  className="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors text-sm font-medium rounded-md"
                 >
                   Profile
                 </Link>
@@ -341,7 +410,7 @@ const Navigation = () => {
               <li>
                 <button
                   onClick={logoutHandler}
-                  className="block w-full text-left px-4 py-3 hover:bg-gray-800 transition-colors text-sm font-medium text-red-500 hover:text-red-400"
+                  className="block w-full text-left px-4 py-3 text-red-500 hover:bg-red-50 dark:hover:bg-gray-800 hover:text-red-600 transition-colors text-sm font-medium rounded-md"
                 >
                   Logout
                 </button>
@@ -354,7 +423,7 @@ const Navigation = () => {
               <li>
                 <Link
                   to="/login"
-                  className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
+                  className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                 >
                   <div className="w-[96px] flex justify-center shrink-0">
                     <LogIn size={30} className="transform group-hover/link:scale-110 transition-transform" />
@@ -365,7 +434,7 @@ const Navigation = () => {
               <li>
                 <Link
                   to="/register"
-                  className="flex items-center text-gray-400 hover:text-white transition-colors py-2 group/link relative"
+                  className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                 >
                   <div className="w-[96px] flex justify-center shrink-0">
                     <UserPlus size={30} className="transform group-hover/link:scale-110 transition-transform" />
@@ -381,7 +450,7 @@ const Navigation = () => {
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg text-white py-3 px-6 flex justify-between items-center z-[9999] border-t border-gray-800 rounded-none shadow-2xl">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-black/80 backdrop-blur-lg text-gray-700 dark:text-gray-200 py-3 px-6 flex justify-between items-center z-[9999] border-t border-gray-200 dark:border-gray-800 rounded-none shadow-2xl">
         <Link to="/" onClick={() => setShowMobileMenu(false)} className="flex flex-col items-center gap-1 group">
           <Home size={22} className="group-hover:text-orange-500 transition-colors" />
           <span className="text-[10px] font-medium">Home</span>
@@ -401,7 +470,7 @@ const Navigation = () => {
         </Link>
         <button onClick={() => setShowMobileMenu(!showMobileMenu)} className="flex flex-col items-center gap-1 group focus:outline-none">
           {userInfo ? (
-            <div className={`w-6 h-6 rounded-none flex items-center justify-center text-[10px] font-medium transition-colors ${showMobileMenu ? 'bg-orange-500 text-white' : 'bg-gray-800 text-gray-300 group-hover:bg-orange-500 group-hover:text-white'}`}>
+            <div className={`w-6 h-6 rounded-none flex items-center justify-center text-[10px] font-medium transition-colors ${showMobileMenu ? 'bg-orange-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 group-hover:bg-orange-500 group-hover:text-white'}`}>
               {userInfo.username.charAt(0).toUpperCase()}
             </div>
           ) : (
@@ -413,54 +482,54 @@ const Navigation = () => {
 
       {/* Mobile Full Screen Menu */}
       {showMobileMenu && (
-        <div className="md:hidden fixed inset-0 bg-[#0f0f0f] z-[9998] overflow-y-auto pb-24 pt-6 px-6 animate-fadeIn">
-          <div className="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
-            <h2 className="text-2xl font-bold text-white tracking-tight">Menu</h2>
-            <button onClick={() => setShowMobileMenu(false)} className="p-2 -mr-2 text-gray-400 hover:text-white transition-colors bg-gray-900 rounded-full">
+        <div className="md:hidden fixed inset-0 bg-white dark:bg-[#0f0f0f] z-[9998] overflow-y-auto pb-24 pt-6 px-6 animate-fadeIn">
+          <div className="flex justify-between items-center mb-8 border-b border-gray-200 dark:border-gray-800 pb-4">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Menu</h2>
+            <button onClick={() => setShowMobileMenu(false)} className="p-2 -mr-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors bg-gray-100 dark:bg-gray-800 rounded-full">
               <X size={20} />
             </button>
           </div>
           
           <div className="flex flex-col space-y-2">
-            <Link to="/favorite" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-300 hover:text-white hover:bg-gray-900 p-3 rounded-xl transition-colors">
-              <div className="p-2 bg-gray-900 rounded-lg"><Heart size={20} /></div> <span className="font-medium">Saved Items</span>
+            <Link to="/favorite" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-colors">
+              <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><Heart size={20} /></div> <span className="font-medium">Saved Items</span>
             </Link>
             
-            <Link to="/faq" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-300 hover:text-white hover:bg-gray-900 p-3 rounded-xl transition-colors">
-              <div className="p-2 bg-gray-900 rounded-lg"><HelpCircle size={20} /></div> <span className="font-medium">FAQ & Help</span>
+            <Link to="/faq" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-colors">
+              <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><HelpCircle size={20} /></div> <span className="font-medium">FAQ & Help</span>
             </Link>
             
             {showMessagesLink && (
-              <Link to="/messages" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-300 hover:text-white hover:bg-gray-900 p-3 rounded-xl transition-colors">
-                <div className="p-2 bg-gray-900 rounded-lg"><MessageSquare size={20} /></div> <span className="font-medium">Messages</span>
+              <Link to="/messages" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-colors">
+                <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><MessageSquare size={20} /></div> <span className="font-medium">Messages</span>
               </Link>
             )}
 
             {userInfo ? (
               <>
-                <Link to="/profile" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-300 hover:text-white hover:bg-gray-900 p-3 rounded-xl transition-colors mt-2">
+                <Link to="/profile" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-colors mt-2">
                   <div className="p-2 bg-orange-600 text-white rounded-lg"><User size={20} /></div> <span className="font-medium">My Account</span>
                 </Link>
 
                 {userInfo.isAdmin && (
-                  <div className="bg-black border border-gray-800 rounded-xl mt-6 overflow-hidden shadow-lg">
-                    <div className="flex items-center gap-3 text-orange-500 p-4 border-b border-gray-800 bg-orange-500/5">
+                  <div className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl mt-6 overflow-hidden shadow-lg">
+                    <div className="flex items-center gap-3 text-orange-500 p-4 border-b border-gray-200 dark:border-gray-800 bg-orange-500/5">
                       <LayoutDashboard size={20} /> <span className="font-bold tracking-wide uppercase text-sm">Admin Controls</span>
                     </div>
                     <div className="flex flex-col p-2 space-y-1">
-                        <Link to="/admin/dashboard" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">Dashboard</Link>
-                        <Link to="/admin/allproductslist" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">Products Management</Link>
-                        <Link to="/admin/categorylist" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">Categories</Link>
-                        <Link to="/admin/orderlist" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">Customer Orders</Link>
-                        <Link to="/admin/paymentproofs" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">Payment Proofs</Link>
-                        <Link to="/admin/userlist" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">User List</Link>
-                        <Link to="/admin/faqmanager" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">FAQ Manager</Link>
-                        <Link to="/admin/announcement" onClick={() => setShowMobileMenu(false)} className="text-gray-400 hover:text-white hover:bg-gray-900 p-3 rounded-lg font-medium text-sm transition-colors">Announcements</Link>
+                        <Link to="/admin/dashboard" onClick={() => setShowMobileMenu(false)} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-lg font-medium text-sm transition-colors">Dashboard</Link>
+                        <Link to="/admin/allproductslist" onClick={() => setShowMobileMenu(false)} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-lg font-medium text-sm transition-colors">Products Management</Link>
+                        <Link to="/admin/categorylist" onClick={() => setShowMobileMenu(false)} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-lg font-medium text-sm transition-colors">Categories</Link>
+                        <Link to="/admin/orderlist" onClick={() => setShowMobileMenu(false)} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-lg font-medium text-sm transition-colors">Customer Orders</Link>
+                        <Link to="/admin/paymentproofs" onClick={() => setShowMobileMenu(false)} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-lg font-medium text-sm transition-colors">Payment Proofs</Link>
+                        <Link to="/admin/userlist" onClick={() => setShowMobileMenu(false)} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-lg font-medium text-sm transition-colors">User List</Link>
+                        <Link to="/admin/faqmanager" onClick={() => setShowMobileMenu(false)} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-lg font-medium text-sm transition-colors">FAQ Manager</Link>
+                        <Link to="/admin/announcement" onClick={() => setShowMobileMenu(false)} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-lg font-medium text-sm transition-colors">Announcements</Link>
                     </div>
                   </div>
                 )}
 
-                <button onClick={() => { logoutHandler(); setShowMobileMenu(false); }} className="flex items-center gap-4 text-red-500 hover:text-red-400 hover:bg-red-500/10 p-3 rounded-xl mt-6 w-full text-left transition-colors">
+                <button onClick={() => { logoutHandler(); setShowMobileMenu(false); }} className="flex items-center gap-4 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 p-3 rounded-xl mt-6 w-full text-left transition-colors">
                   <div className="p-2 bg-red-500/10 rounded-lg"><LogIn size={20} className="rotate-180" /></div> <span className="font-bold">Logout</span>
                 </button>
               </>

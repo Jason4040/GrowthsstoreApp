@@ -6,34 +6,59 @@ body, input, select, textarea, button {
   font-family: "Comfortaa", sans-serif;
 }
 
+/* ===== LIGHT MODE (default) ===== */
 body {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/OR68VV0.jpg') no-repeat center center fixed;
-  background-color: #0f0f10;
-  background-size: cover;
-  color: #fff;
+  background-color: #f3f4f6;
+  color: #111827;
   font-optical-sizing: auto;
-}
-
-
-.bg-black,
-.bg-\[\#111\],
-.bg-\[\#101010\],
-.bg-\[\#1A1A1A\] {
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/OR68VV0.jpg') !important;
-  background-attachment: fixed !important;
-  background-size: cover !important;
-  background-position: center !important;
-  backdrop-filter: none !important;
 }
 
 input,
 textarea {
-  color: #000;
+  color: #111827;
+  background-color: #fff;
+}
+
+select {
+  color: #111827;
 }
 
 select option {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+/* ===== DARK MODE ===== */
+.dark body {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/OR68VV0.jpg') no-repeat center center fixed;
+  background-color: #0f0f10;
+  background-size: cover;
+  color: #fff;
+}
+
+.dark input,
+.dark textarea {
+  color: #fff;
+  background-color: #1a1a1a;
+}
+
+.dark select {
+  color: #fff;
+}
+
+.dark select option {
   background-color: #101010;
   color: #fff;
+}
+
+.dark .bg-black,
+.dark .bg-\[\#111\],
+.dark .bg-\[\#101010\],
+.dark .bg-\[\#1A1A1A\] {
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/OR68VV0.jpg') !important;
+  background-attachment: fixed !important;
+  background-size: cover !important;
+  background-position: center !important;
 }
 
 
@@ -50,37 +75,45 @@ select option {
 
 /* ===== React-Toastify Custom Theme ===== */
 .Toastify__toast {
-  background: #101010 !important;
-  border: 1px solid #1f2937 !important;
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
   border-radius: 0 !important;
-  box-shadow: none !important;
-  color: #fff !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10) !important;
+  color: #111827 !important;
   font-family: "Comfortaa", sans-serif !important;
   min-height: 52px !important;
   padding: 12px 16px !important;
 }
 
-.Toastify__toast-body {
+.dark .Toastify__toast {
+  background: #101010 !important;
+  border: 1px solid #1f2937 !important;
   color: #fff !important;
+}
+
+.Toastify__toast-body {
+  color: #111827 !important;
   font-size: 14px !important;
   font-weight: 500 !important;
   padding: 0 !important;
 }
 
-/* Success toast - orange accent matching the app */
+.dark .Toastify__toast-body {
+  color: #fff !important;
+}
+
+/* Success toast */
 .Toastify__toast--success {
   border-left: 3px solid #db2777 !important;
 }
-
 .Toastify__toast--success .Toastify__toast-icon svg {
   fill: #db2777 !important;
 }
 
-/* Error toast - red accent */
+/* Error toast */
 .Toastify__toast--error {
   border-left: 3px solid #ef4444 !important;
 }
-
 .Toastify__toast--error .Toastify__toast-icon svg {
   fill: #ef4444 !important;
 }
@@ -89,7 +122,6 @@ select option {
 .Toastify__toast--warning {
   border-left: 3px solid #eab308 !important;
 }
-
 .Toastify__toast--warning .Toastify__toast-icon svg {
   fill: #eab308 !important;
 }
@@ -98,7 +130,6 @@ select option {
 .Toastify__toast--info {
   border-left: 3px solid #6b7280 !important;
 }
-
 .Toastify__toast--info .Toastify__toast-icon svg {
   fill: #6b7280 !important;
 }
@@ -108,12 +139,14 @@ select option {
   color: #4b5563 !important;
   opacity: 1 !important;
 }
-
 .Toastify__close-button:hover {
+  color: #111827 !important;
+}
+.dark .Toastify__close-button:hover {
   color: #fff !important;
 }
 
-/* Progress bar (hidden by default, but style it just in case) */
+/* Progress bar */
 .Toastify__progress-bar {
   background: #db2777 !important;
   height: 2px !important;
@@ -128,4 +161,102 @@ select option {
 .animate-marquee {
   display: inline-block;
   animation: marquee 20s linear infinite;
+}
+
+/* ===== Language Switcher ===== */
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  padding: 4px 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+}
+
+.dark .lang-switcher {
+  background: rgba(26,26,26,0.95);
+  border-color: #374151;
+}
+
+.lang-switcher button {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+  font-family: "Comfortaa", sans-serif;
+}
+
+.lang-switcher button:hover {
+  color: #ea580c;
+  background: #fff7ed;
+}
+
+.dark .lang-switcher button {
+  color: #9ca3af;
+}
+
+.dark .lang-switcher button:hover {
+  color: #ea580c;
+  background: rgba(234,88,12,0.1);
+}
+
+.lang-switcher button.active {
+  background: #ea580c;
+  color: #fff !important;
+}
+
+.lang-btn-divider {
+  width: 1px;
+  height: 14px;
+  background: #e5e7eb;
+}
+
+.dark .lang-btn-divider {
+  background: #374151;
+}
+
+/* ===== Hide Google Translate bar & banner ===== */
+/* The #google_translate_element MUST stay in DOM (not display:none) for the widget to initialize */
+.goog-te-banner-frame,
+#goog-gt-tt,
+.goog-te-balloon-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Keep body at top even when translate adds top offset */
+body {
+  top: 0 !important;
+}
+
+/* Hide the gadget UI but keep the select accessible for JS */
+.goog-te-gadget {
+  font-size: 0 !important;
+  color: transparent !important;
+}
+
+/* Keep select in DOM but invisible - required for programmatic control */
+.goog-te-gadget .goog-te-combo {
+  position: absolute !important;
+  left: -9999px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* NOTE: .skiptranslate is NOT hidden here because it wraps the Google Translate widget.
+   Hiding it with display:none prevents the widget from working.
+   The banner/toolbar elements are hidden individually in index.html. */
+
+/* Remove Google Translate highlighted text styling */
+.goog-text-highlight {
+  background: none !important;
+  box-shadow: none !important;
 }

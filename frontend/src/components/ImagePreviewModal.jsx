@@ -38,7 +38,7 @@ const ImagePreviewModal = ({ isOpen, onClose, images = [], initialIndex = 0 }) =
           {images.length > 1 && (
             <button 
               onClick={handlePrev}
-              className="absolute left-0 md:-left-12 text-gray-400 hover:text-white p-2 focus:outline-none bg-black/50 rounded-full z-20"
+              className="absolute left-0 md:-left-12 text-gray-400 hover:text-white p-2 focus:outline-none bg-white dark:bg-black/50 rounded-full z-20"
             >
               <ChevronLeft size={32} />
             </button>
@@ -53,7 +53,7 @@ const ImagePreviewModal = ({ isOpen, onClose, images = [], initialIndex = 0 }) =
           {images.length > 1 && (
             <button 
               onClick={handleNext}
-              className="absolute right-0 md:-right-12 text-gray-400 hover:text-white p-2 focus:outline-none bg-black/50 rounded-full z-20"
+              className="absolute right-0 md:-right-12 text-gray-400 hover:text-white p-2 focus:outline-none bg-white dark:bg-black/50 rounded-full z-20"
             >
               <ChevronRight size={32} />
             </button>
@@ -80,7 +80,7 @@ const ImagePreviewModal = ({ isOpen, onClose, images = [], initialIndex = 0 }) =
                 </button>
               ))}
             </div>
-            <div className="text-white font-medium bg-black/50 px-4 py-1 rounded-full text-sm">
+            <div className="text-white font-medium bg-white dark:bg-black/50 px-4 py-1 rounded-full text-sm">
               {currentIndex + 1} / {images.length}
             </div>
           </div>

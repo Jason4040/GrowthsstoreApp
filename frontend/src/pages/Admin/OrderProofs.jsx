@@ -20,7 +20,7 @@ const ProductImagePreviewer = ({ productId }) => {
   const allImages = product.images?.length > 0 ? product.images : [product.image];
 
   return (
-    <div className="mt-3 bg-gray-50 dark:bg-black/30 p-3 rounded-lg border border-gray-200 dark:border-gray-800">
+    <div className="mt-3 bg-gray-50 dark:bg-white dark:bg-black/30 p-3 rounded-lg border border-gray-200 dark:border-gray-800">
       <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wide">
         Product Images ({allImages.length})
       </div>
@@ -109,16 +109,16 @@ const OrderProofs = () => {
           {error?.data?.message || error.error}
         </Message>
       ) : proofOrders.length === 0 ? (
-        <div className="bg-gray-100 dark:bg-[#151515] p-10 text-center rounded-2xl border border-gray-200 dark:border-gray-800">
+        <div className="bg-gray-100 dark:bg-white dark:bg-[#151515] p-10 text-center rounded-2xl border border-gray-200 dark:border-gray-800">
           <p className="text-gray-500 font-medium">No order payment proofs submitted yet.</p>
         </div>
       ) : (
         <>
         {/* Desktop Table View (hidden on small screens) */}
-        <div className="hidden md:block w-full overflow-x-auto bg-gray-100 dark:bg-[#151515] rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl">
+        <div className="hidden md:block w-full overflow-x-auto bg-gray-100 dark:bg-white dark:bg-[#151515] rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-white dark:bg-[#1A1A1A] border-b border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 text-xs uppercase tracking-wider">
+              <tr className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] border-b border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 text-xs uppercase tracking-wider">
                 <th className="px-6 py-4 font-semibold">PROOF</th>
                 <th className="px-6 py-4 font-semibold">ORDER ID</th>
                 <th className="px-6 py-4 font-semibold">CUSTOMER</th>
@@ -132,7 +132,7 @@ const OrderProofs = () => {
               {proofOrders.map((order) => {
                 const sym = getCurrencySymbol(order.currency || "USD");
                 return (
-                  <tr key={order._id} className="hover:bg-white dark:hover:bg-[#1A1A1A]/50 transition-colors">
+                  <tr key={order._id} className="hover:bg-white dark:hover:bg-gray-50 dark:bg-[#1A1A1A]/50 transition-colors">
                     <td className="px-6 py-4">
                       {isImageFile(order.paymentProof) ? (
                         <img
@@ -287,14 +287,14 @@ const OrderProofs = () => {
             {selectedOrder.paymentProofStatus === "appealed" && selectedOrder.paymentAppealText && (
               <div className="bg-orange-500/10 border border-orange-500/20 text-orange-400 p-4 rounded-xl">
                 <span className="font-semibold block mb-1">Customer Rejection Appeal</span>
-                <p className="text-xs font-mono bg-black/30 p-2 rounded mt-1 border border-orange-900/30">
+                <p className="text-xs font-mono bg-white dark:bg-black/30 p-2 rounded mt-1 border border-orange-900/30">
                   {selectedOrder.paymentAppealText}
                 </p>
               </div>
             )}
 
             {/* Customer & Order details */}
-            <div className="grid grid-cols-2 gap-4 bg-gray-50 dark:bg-black/20 p-4 rounded-xl border border-gray-200 dark:border-gray-800">
+            <div className="grid grid-cols-2 gap-4 bg-gray-50 dark:bg-white dark:bg-black/20 p-4 rounded-xl border border-gray-200 dark:border-gray-800">
               <div>
                 <span className="text-xs text-gray-500 block">Customer</span>
                 <span className="font-semibold text-gray-900 dark:text-white">{selectedOrder.user?.username || "Guest"}</span>
@@ -317,7 +317,7 @@ const OrderProofs = () => {
                 Items Purchased
               </span>
               {selectedOrder.orderItems.map((item, idx) => (
-                <div key={idx} className="border border-gray-200 dark:border-gray-800 rounded-xl p-3 bg-white dark:bg-[#1A1A1A]">
+                <div key={idx} className="border border-gray-200 dark:border-gray-800 rounded-xl p-3 bg-white dark:bg-gray-50 dark:bg-[#1A1A1A]">
                   <div className="flex gap-4 items-center">
                     <img
                       src={item.image}
@@ -350,10 +350,10 @@ const OrderProofs = () => {
                     <img
                       src={selectedOrder.paymentProof}
                       alt="payment proof"
-                      className="w-full max-h-[300px] object-contain bg-black"
+                      className="w-full max-h-[300px] object-contain bg-white dark:bg-black"
                     />
                   </a>
-                  <div className="text-center p-2 bg-gray-50 dark:bg-black/30 text-xs border-t border-gray-200 dark:border-gray-800">
+                  <div className="text-center p-2 bg-gray-50 dark:bg-white dark:bg-black/30 text-xs border-t border-gray-200 dark:border-gray-800">
                     <a
                       href={selectedOrder.paymentProof}
                       target="_blank"
@@ -365,11 +365,11 @@ const OrderProofs = () => {
                   </div>
                 </div>
               ) : isVideoFile(selectedOrder.paymentProof) ? (
-                <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 bg-black">
+                <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
                   <video src={selectedOrder.paymentProof} controls className="w-full max-h-[300px]" />
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-black/10">
+                <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-white dark:bg-black/10">
                   <svg className="w-8 h-8 text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>

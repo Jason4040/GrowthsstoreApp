@@ -77,8 +77,8 @@ const Login = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-white dark:bg-black/95 backdrop-blur-md p-4">
-      <div className="w-full max-w-md bg-[#111] border border-gray-200 dark:border-gray-800 p-8 md:p-10 relative shadow-2xl animate-fade-in-up">
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 dark:bg-black/95 backdrop-blur-md p-4">
+      <div className="w-full max-w-md bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 p-8 md:p-10 relative shadow-2xl animate-fade-in-up">
         {/* Close Button back to previous/home */}
         <Link
           to="/"
@@ -105,7 +105,7 @@ const Login = () => {
             <input
               type="email"
               id="email"
-              className="w-full bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
+              className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
               placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -131,7 +131,7 @@ const Login = () => {
             <input
               type="password"
               id="password"
-              className="w-full bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
+              className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -152,9 +152,9 @@ const Login = () => {
 
         <div className="relative my-6 flex items-center justify-center">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-800"></div>
+            <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
           </div>
-          <span className="relative bg-[#111] px-4 text-xs text-gray-500 uppercase">Or continue with</span>
+          <span className="relative bg-white dark:bg-[#111] px-4 text-xs text-gray-500 uppercase">Or continue with</span>
         </div>
 
         <button

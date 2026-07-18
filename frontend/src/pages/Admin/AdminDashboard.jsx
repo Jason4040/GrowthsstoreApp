@@ -97,7 +97,7 @@ const AdminDashboard = () => {
         <h1 className="text-3xl font-semibold mb-8 text-gray-900 dark:text-white">Dashboard Overview</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-          <div className="rounded-2xl bg-gray-100 dark:bg-[#151515] p-6 border border-gray-200 dark:border-gray-800 shadow-xl relative overflow-hidden group hover:border-orange-500/50 transition-colors">
+          <div className="rounded-2xl bg-gray-100 dark:bg-white dark:bg-[#151515] p-6 border border-gray-200 dark:border-gray-800 shadow-xl relative overflow-hidden group hover:border-orange-500/50 transition-colors">
             <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
             <div className="flex items-center gap-4 mb-4 relative z-10">
               <div className="w-12 h-12 rounded-xl bg-orange-600 flex items-center justify-center font-bold text-xl text-white shadow-lg">
@@ -110,7 +110,7 @@ const AdminDashboard = () => {
             </h1>
           </div>
 
-          <div className="rounded-2xl bg-gray-100 dark:bg-[#151515] p-6 border border-gray-200 dark:border-gray-800 shadow-xl relative overflow-hidden group hover:border-blue-500/50 transition-colors">
+          <div className="rounded-2xl bg-gray-100 dark:bg-white dark:bg-[#151515] p-6 border border-gray-200 dark:border-gray-800 shadow-xl relative overflow-hidden group hover:border-blue-500/50 transition-colors">
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
             <div className="flex items-center gap-4 mb-4 relative z-10">
               <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-xl text-white shadow-lg">
@@ -123,7 +123,7 @@ const AdminDashboard = () => {
             </h1>
           </div>
 
-          <div className="rounded-2xl bg-gray-100 dark:bg-[#151515] p-6 border border-gray-200 dark:border-gray-800 shadow-xl relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
+          <div className="rounded-2xl bg-gray-100 dark:bg-white dark:bg-[#151515] p-6 border border-gray-200 dark:border-gray-800 shadow-xl relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
             <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
             <div className="flex items-center gap-4 mb-4 relative z-10">
               <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center font-bold text-xl text-white shadow-lg">
@@ -136,7 +136,7 @@ const AdminDashboard = () => {
             </h1>
           </div>
 
-          <div className="rounded-2xl bg-gray-100 dark:bg-[#151515] p-6 border border-gray-200 dark:border-gray-800 shadow-xl relative overflow-hidden group hover:border-purple-500/50 transition-colors">
+          <div className="rounded-2xl bg-gray-100 dark:bg-white dark:bg-[#151515] p-6 border border-gray-200 dark:border-gray-800 shadow-xl relative overflow-hidden group hover:border-purple-500/50 transition-colors">
             <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
             <div className="flex items-center gap-4 mb-4 relative z-10">
               <div className="w-12 h-12 rounded-xl bg-purple-600 flex items-center justify-center font-bold text-xl text-white shadow-lg">
@@ -150,7 +150,7 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="bg-gray-100 dark:bg-[#151515] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl mb-10 w-full overflow-hidden">
+        <div className="bg-gray-100 dark:bg-white dark:bg-[#151515] p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl mb-10 w-full overflow-hidden">
           <Chart
             options={state.options}
             series={state.series}

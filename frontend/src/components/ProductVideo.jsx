@@ -14,7 +14,7 @@ const ProductVideo = ({ videoUrl, isCover = false, className = "" }) => {
       : `${embedUrl}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=1&playsinline=1`;
 
     return (
-      <div className={`relative w-full h-full overflow-hidden flex items-center justify-center bg-black ${className}`}>
+      <div className={`relative w-full h-full overflow-hidden flex items-center justify-center bg-white dark:bg-black ${className}`}>
         <iframe
           src={youtubeUrl}
           title="YouTube video player"
@@ -34,7 +34,7 @@ const ProductVideo = ({ videoUrl, isCover = false, className = "" }) => {
     const tiktokUrl = embedUrl;
     
     return (
-      <div className={`relative w-full h-full overflow-hidden flex items-center justify-center bg-black ${className}`}>
+      <div className={`relative w-full h-full overflow-hidden flex items-center justify-center bg-white dark:bg-black ${className}`}>
         <iframe
           src={tiktokUrl}
           title="TikTok video player"
@@ -56,7 +56,7 @@ const ProductVideo = ({ videoUrl, isCover = false, className = "" }) => {
         muted
         playsInline
         controls={!isCover}
-        className={`w-full h-full object-cover bg-black ${className}`}
+        className={`w-full h-full object-cover bg-white dark:bg-black ${className}`}
       />
     );
   }

@@ -239,7 +239,7 @@ const AdminProductUpdate = () => {
     <div className="p-4 md:p-8 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row gap-8">
         {/* <AdminMenu /> */}
-        <div className="w-full bg-gray-100 dark:bg-[#151515] p-6 md:p-10 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl">
+        <div className="w-full bg-gray-100 dark:bg-white dark:bg-[#151515] p-6 md:p-10 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl">
           <h1 className="text-3xl font-semibold mb-8 text-gray-900 dark:text-white">Update / Delete Product</h1>
 
           {image && (
@@ -254,7 +254,7 @@ const AdminProductUpdate = () => {
 
           <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-orange-500 hover:bg-white dark:bg-[#1A1A1A] transition-all text-gray-900 dark:text-white px-4 block w-full text-center rounded-xl cursor-pointer font-medium py-16 flex flex-col items-center justify-center group">
+              <label className="border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-orange-500 hover:bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] transition-all text-gray-900 dark:text-white px-4 block w-full text-center rounded-xl cursor-pointer font-medium py-16 flex flex-col items-center justify-center group">
                 <div className="w-12 h-12 mb-4 rounded-full bg-gray-800 group-hover:bg-orange-500/20 flex items-center justify-center transition-colors">
                   <svg className="w-6 h-6 text-gray-600 dark:text-gray-400 group-hover:text-orange-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
                 </div>
@@ -273,13 +273,28 @@ const AdminProductUpdate = () => {
               {images.length > 0 && (
                 <div className="mt-4 flex gap-2 overflow-x-auto pb-2">
                   {images.map((img, idx) => (
-                    <img key={idx} src={img} alt="preview" className="w-20 h-20 object-cover rounded-lg border border-gray-200 dark:border-gray-800" />
+                    <div key={idx} className="relative group shrink-0">
+                      <img src={img} alt="preview" className="w-20 h-20 object-cover rounded-lg border border-gray-200 dark:border-gray-800" />
+                      <button 
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const newImages = images.filter((_, i) => i !== idx);
+                          setImages(newImages);
+                          if (image === img) setImage(newImages[0] || "");
+                        }}
+                        className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-all shadow-lg z-10"
+                        title="Remove image"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                      </button>
+                    </div>
                   ))}
                 </div>
               )}
             </div>
 
-            <div className="bg-white dark:bg-[#1A1A1A] p-6 rounded-xl border border-gray-200 dark:border-gray-800">
+            <div className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] p-6 rounded-xl border border-gray-200 dark:border-gray-800">
               <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">
                 Video Source (Select Only One)
               </label>
@@ -310,7 +325,7 @@ const AdminProductUpdate = () => {
 
               {videoSourceType === "upload" ? (
                 <div>
-                  <label className="border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-orange-500 hover:bg-white dark:bg-[#101010] transition-all text-gray-900 dark:text-white px-4 block w-full text-center rounded-xl cursor-pointer font-medium py-10 flex flex-col items-center justify-center group">
+                  <label className="border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-orange-500 hover:bg-white dark:bg-gray-50 dark:bg-[#101010] transition-all text-gray-900 dark:text-white px-4 block w-full text-center rounded-xl cursor-pointer font-medium py-10 flex flex-col items-center justify-center group">
                     <div className="w-10 h-10 mb-3 rounded-full bg-gray-800 group-hover:bg-orange-500/20 flex items-center justify-center transition-colors">
                       <svg className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-orange-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
@@ -326,8 +341,19 @@ const AdminProductUpdate = () => {
                     />
                   </label>
                   {video && (
-                    <div className="mt-4">
-                      <ProductVideo videoUrl={video} isCover={false} className="w-full h-32 rounded-lg border border-gray-200 dark:border-gray-800" />
+                    <div className="mt-4 relative group rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+                      <ProductVideo videoUrl={video} isCover={false} className="w-full h-32" />
+                      <button 
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setVideo("");
+                        }}
+                        className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-all shadow-lg z-20"
+                        title="Remove video"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                      </button>
                     </div>
                   )}
                 </div>
@@ -379,7 +405,7 @@ const AdminProductUpdate = () => {
                 </label>
                 <div className="flex flex-wrap gap-4">
                   <div className="flex items-center bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 transition-all">
-                    <span className="bg-white dark:bg-[#1A1A1A] px-4 py-3 text-sm font-bold text-orange-500 border-r border-gray-200 dark:border-gray-800">USD</span>
+                    <span className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] px-4 py-3 text-sm font-bold text-orange-500 border-r border-gray-200 dark:border-gray-800">USD</span>
                     <input
                       type="number"
                       className="bg-transparent text-gray-900 dark:text-white px-4 py-3 w-32 outline-none text-sm placeholder-gray-600"
@@ -389,7 +415,7 @@ const AdminProductUpdate = () => {
                     />
                   </div>
                   <div className="flex items-center bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 transition-all">
-                    <span className="bg-white dark:bg-[#1A1A1A] px-4 py-3 text-sm font-bold text-orange-500 border-r border-gray-200 dark:border-gray-800">UGX</span>
+                    <span className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] px-4 py-3 text-sm font-bold text-orange-500 border-r border-gray-200 dark:border-gray-800">UGX</span>
                     <input
                       type="number"
                       className="bg-transparent text-gray-900 dark:text-white px-4 py-3 w-32 outline-none text-sm placeholder-gray-600"
@@ -399,7 +425,7 @@ const AdminProductUpdate = () => {
                     />
                   </div>
                   <div className="flex items-center bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 transition-all">
-                    <span className="bg-white dark:bg-[#1A1A1A] px-4 py-3 text-sm font-bold text-orange-500 border-r border-gray-200 dark:border-gray-800">RWF</span>
+                    <span className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] px-4 py-3 text-sm font-bold text-orange-500 border-r border-gray-200 dark:border-gray-800">RWF</span>
                     <input
                       type="number"
                       className="bg-transparent text-gray-900 dark:text-white px-4 py-3 w-32 outline-none text-sm placeholder-gray-600"
@@ -412,7 +438,7 @@ const AdminProductUpdate = () => {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-[#1A1A1A]/50 p-6 rounded-xl border border-gray-200 dark:border-gray-800 space-y-6">
+            <div className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A]/50 p-6 rounded-xl border border-gray-200 dark:border-gray-800 space-y-6">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Bulk Discounts</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -444,7 +470,7 @@ const AdminProductUpdate = () => {
                 <label className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Discount Values</label>
                 <div className="flex flex-wrap gap-4">
                   <div className="flex items-center bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 transition-all">
-                    <span className="bg-white dark:bg-[#1A1A1A] px-4 py-3 text-sm font-bold text-orange-500 border-r border-gray-200 dark:border-gray-800">USD</span>
+                    <span className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] px-4 py-3 text-sm font-bold text-orange-500 border-r border-gray-200 dark:border-gray-800">USD</span>
                     <input
                       type="number"
                       className="bg-transparent text-gray-900 dark:text-white px-4 py-3 w-32 outline-none text-sm placeholder-gray-600"
@@ -454,7 +480,7 @@ const AdminProductUpdate = () => {
                     />
                   </div>
                   <div className="flex items-center bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 transition-all">
-                    <span className="bg-white dark:bg-[#1A1A1A] px-4 py-3 text-sm font-bold text-orange-500 border-r border-gray-200 dark:border-gray-800">UGX</span>
+                    <span className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] px-4 py-3 text-sm font-bold text-orange-500 border-r border-gray-200 dark:border-gray-800">UGX</span>
                     <input
                       type="number"
                       className="bg-transparent text-gray-900 dark:text-white px-4 py-3 w-32 outline-none text-sm placeholder-gray-600"
@@ -464,7 +490,7 @@ const AdminProductUpdate = () => {
                     />
                   </div>
                   <div className="flex items-center bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 transition-all">
-                    <span className="bg-white dark:bg-[#1A1A1A] px-4 py-3 text-sm font-bold text-orange-500 border-r border-gray-200 dark:border-gray-800">RWF</span>
+                    <span className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] px-4 py-3 text-sm font-bold text-orange-500 border-r border-gray-200 dark:border-gray-800">RWF</span>
                     <input
                       type="number"
                       className="bg-transparent text-gray-900 dark:text-white px-4 py-3 w-32 outline-none text-sm placeholder-gray-600"

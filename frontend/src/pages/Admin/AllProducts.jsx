@@ -33,7 +33,7 @@ const AllProducts = () => {
               <Link
                 key={product._id}
                 to={`/admin/product/update/${product._id}`}
-                className="group bg-gray-100 dark:bg-[#151515] border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-gray-300 dark:border-gray-700 hover:shadow-xl transition-all flex flex-col sm:flex-row h-full"
+                className="group bg-gray-100 dark:bg-white dark:bg-[#151515] border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden hover:border-gray-300 dark:border-gray-700 hover:shadow-xl transition-all flex flex-col sm:flex-row h-full"
               >
                 <div className="sm:w-48 shrink-0 overflow-hidden bg-white dark:bg-black/50">
                   <img

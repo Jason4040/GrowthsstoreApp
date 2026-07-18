@@ -16,17 +16,21 @@
   background: transparent;
 }
 
-#sidebar-menu::-webkit-scrollbar-thumb {
-  background: transparent;
+#sidebar-menu:hover::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 3px;
   transition: background 0.3s ease;
 }
 
-#sidebar-menu:hover::-webkit-scrollbar-thumb {
+.dark #sidebar-menu:hover::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.25);
 }
 
 #sidebar-menu:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.30);
+}
+
+.dark #sidebar-menu:hover::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.45);
 }
 

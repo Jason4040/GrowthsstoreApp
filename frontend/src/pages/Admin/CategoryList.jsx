@@ -94,7 +94,7 @@ const CategoryList = () => {
     <div className="p-4 md:p-8 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row gap-8">
         {/* <AdminMenu /> */}
-        <div className="w-full bg-gray-100 dark:bg-[#151515] p-6 md:p-10 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl">
+        <div className="w-full bg-gray-100 dark:bg-white dark:bg-[#151515] p-6 md:p-10 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl">
           <h1 className="text-3xl font-semibold mb-8 text-gray-900 dark:text-white">Manage Categories</h1>
           
           <div className="bg-gray-50 dark:bg-[#101010] p-6 rounded-xl border border-gray-200 dark:border-gray-800 mb-8">

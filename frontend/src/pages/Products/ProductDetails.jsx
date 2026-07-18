@@ -38,7 +38,7 @@ const NextArrow = (props) => {
   const { onClick } = props;
   return (
     <div
-      className="absolute right-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-black/50 hover:bg-orange-500 text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
+      className="absolute right-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-white dark:bg-black/50 hover:bg-orange-500 text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
       onClick={onClick}
     >
       <ChevronRight className="w-6 h-6" />
@@ -50,7 +50,7 @@ const PrevArrow = (props) => {
   const { onClick } = props;
   return (
     <div
-      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-black/50 hover:bg-orange-500 text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
+      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-white dark:bg-black/50 hover:bg-orange-500 text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
       onClick={onClick}
     >
       <ChevronLeft className="w-6 h-6" />
@@ -178,7 +178,7 @@ const ProductDetails = () => {
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row gap-12 items-start">
               {/* Product Image / Media Slider */}
-              <div className="w-full lg:w-1/2 relative bg-white dark:bg-[#1A1A1A] rounded-none overflow-hidden border border-gray-200 dark:border-gray-800 shadow-none pb-4 px-2">
+              <div className="w-full lg:w-1/2 relative bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] rounded-none overflow-hidden border border-gray-200 dark:border-gray-800 shadow-none pb-4 px-2">
                 {mediaList.length > 1 ? (
                   <>
                     <Slider ref={sliderRef} {...sliderSettings} className="w-full">
@@ -188,7 +188,7 @@ const ProductDetails = () => {
                             <ProductVideo
                               videoUrl={media.url}
                               isCover={false}
-                              className="w-full h-[30rem] lg:h-[40rem] object-contain bg-black rounded-none"
+                              className="w-full h-[30rem] lg:h-[40rem] object-contain bg-white dark:bg-black rounded-none"
                             />
                           ) : (
                             <img
@@ -230,7 +230,7 @@ const ProductDetails = () => {
                       <ProductVideo
                         videoUrl={mediaList[0].url}
                         isCover={false}
-                        className="w-full h-auto max-h-[40rem] object-contain bg-black rounded-none"
+                        className="w-full h-auto max-h-[40rem] object-contain bg-white dark:bg-black rounded-none"
                       />
                     ) : (
                       <img
@@ -284,28 +284,28 @@ const ProductDetails = () => {
                 {/* Details Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-10 py-6 border-y border-gray-200 dark:border-gray-800">
                   <div className="flex items-center text-gray-700 dark:text-gray-300">
-                    <Store className="w-5 h-5 mr-3 text-gray-400" />
+                    <Store className="w-5 h-5 mr-3 text-gray-600 dark:text-gray-400" />
                     <span className="text-sm"><strong className="text-gray-900 dark:text-white font-medium mr-1">Brand:</strong> {product.brand}</span>
                   </div>
                   {product?.condition && (
                     <div className="flex items-center text-gray-700 dark:text-gray-300">
-                      <Tag className="w-5 h-5 mr-3 text-gray-400" />
+                      <Tag className="w-5 h-5 mr-3 text-gray-600 dark:text-gray-400" />
                       <span className="text-sm"><strong className="text-gray-900 dark:text-white font-medium mr-1">Condition:</strong> {product.condition}</span>
                     </div>
                   )}
                   <div className="flex items-center text-gray-700 dark:text-gray-300">
-                    <Box className="w-5 h-5 mr-3 text-gray-400" />
+                    <Box className="w-5 h-5 mr-3 text-gray-600 dark:text-gray-400" />
                     <span className="text-sm"><strong className="text-gray-900 dark:text-white font-medium mr-1">Status:</strong> 
                       {product.stockStatus === 'requires_shipping' ? 'Available to Request' : `${product.countInStock} In Stock`}
                     </span>
                   </div>
                   <div className="flex items-center text-gray-700 dark:text-gray-300">
-                    <Clock className="w-5 h-5 mr-3 text-gray-400" />
+                    <Clock className="w-5 h-5 mr-3 text-gray-600 dark:text-gray-400" />
                     <span className="text-sm"><strong className="text-gray-900 dark:text-white font-medium mr-1">Added:</strong> {moment(product.createAt).fromNow()}</span>
                   </div>
                   {product.availableIn && (
                     <div className="flex items-center text-gray-700 dark:text-gray-300">
-                      <MapPin className="w-5 h-5 mr-3 text-gray-400" />
+                      <MapPin className="w-5 h-5 mr-3 text-gray-600 dark:text-gray-400" />
                       <span className="text-sm"><strong className="text-gray-900 dark:text-white font-medium mr-1">Region:</strong> 
                         {product.availableIn === "Both" ? "Uganda & Rwanda" : `${product.availableIn} Only`}
                       </span>
@@ -324,7 +324,7 @@ const ProductDetails = () => {
                         className="w-24 bg-transparent border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white p-2.5 rounded-none focus:ring-1 focus:ring-orange-500 outline-none text-sm"
                       >
                         {[...Array(product.stockStatus === 'requires_shipping' ? 100 : product.countInStock).keys()].map((x) => (
-                          <option key={x + 1} value={x + 1} className="bg-[#101010] text-white">
+                          <option key={x + 1} value={x + 1} className="bg-gray-50 dark:bg-[#101010] text-gray-900 dark:text-white">
                             {x + 1}
                           </option>
                         ))}

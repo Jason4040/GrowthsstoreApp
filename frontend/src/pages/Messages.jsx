@@ -189,9 +189,9 @@ const Messages = () => {
         )}
 
         {/* Right Column: Chat Box */}
-        <div className={`flex flex-col h-full bg-white dark:bg-[#101010] ${userInfo.isAdmin ? "md:col-span-3" : "md:col-span-4"} ${!showInbox || !userInfo.isAdmin ? "flex" : "hidden md:flex"}`}>
+        <div className={`flex flex-col h-full bg-white dark:bg-gray-50 dark:bg-[#101010] ${userInfo.isAdmin ? "md:col-span-3" : "md:col-span-4"} ${!showInbox || !userInfo.isAdmin ? "flex" : "hidden md:flex"}`}>
           {userInfo.isAdmin && !selectedUser ? (
-            <div className="flex flex-col items-center justify-center flex-1 text-center p-8 bg-gray-50 dark:bg-black/10">
+            <div className="flex flex-col items-center justify-center flex-1 text-center p-8 bg-gray-50 dark:bg-white dark:bg-black/10">
               <MessageSquare size={64} className="text-gray-600 dark:text-gray-700 mb-4 animate-bounce" />
               <h3 className="text-lg font-bold text-gray-800 dark:text-gray-250">No Conversation Selected</h3>
               <p className="text-xs text-gray-500 max-w-sm mt-2">
@@ -252,7 +252,7 @@ const Messages = () => {
                         >
                           {/* File Attachment Previews */}
                           {msg.fileUrl && (
-                            <div className="mb-2.5 rounded-lg overflow-hidden border border-black/10 dark:border-white/10 bg-black/5 dark:bg-black/30">
+                            <div className="mb-2.5 rounded-lg overflow-hidden border border-black/10 dark:border-white/10 bg-white dark:bg-black/5 dark:bg-white dark:bg-black/30">
                               {msg.fileType === "image" ? (
                                 <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer">
                                   <img
@@ -330,7 +330,7 @@ const Messages = () => {
                 )}
 
                 <div className="flex items-center gap-3">
-                  <label className="p-3 text-gray-500 hover:text-orange-500 transition-colors bg-gray-50 hover:bg-orange-500/5 dark:bg-[#151515] rounded-xl cursor-pointer shrink-0 border border-gray-200 dark:border-gray-800">
+                  <label className="p-3 text-gray-500 hover:text-orange-500 transition-colors bg-gray-50 hover:bg-orange-500/5 dark:bg-white dark:bg-[#151515] rounded-xl cursor-pointer shrink-0 border border-gray-200 dark:border-gray-800">
                     {uploading ? (
                       <Loader2 className="animate-spin text-orange-500" size={20} />
                     ) : (
@@ -349,7 +349,7 @@ const Messages = () => {
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     placeholder="Type a message..."
-                    className="flex-1 bg-gray-50 dark:bg-[#151515] border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors"
+                    className="flex-1 bg-gray-50 dark:bg-white dark:bg-[#151515] border border-gray-200 dark:border-gray-800 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors"
                   />
 
                   <button

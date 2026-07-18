@@ -81,7 +81,7 @@ const AnnouncementAdmin = () => {
 
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto">
-      <div className="bg-gray-100 dark:bg-[#151515] p-6 md:p-10 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl mb-8">
+      <div className="bg-gray-100 dark:bg-white dark:bg-[#151515] p-6 md:p-10 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl mb-8">
         <h1 className="text-3xl font-semibold mb-8 text-gray-900 dark:text-white">
           {editingId ? "Edit Announcement" : "Create New Announcement"}
         </h1>
@@ -153,11 +153,11 @@ const AnnouncementAdmin = () => {
         </form>
       </div>
 
-      <div className="bg-gray-100 dark:bg-[#151515] p-6 md:p-10 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl">
+      <div className="bg-gray-100 dark:bg-white dark:bg-[#151515] p-6 md:p-10 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl">
         <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">Manage Announcements</h2>
         <div className="space-y-4">
           {Array.isArray(announcements) && announcements.map((ann) => (
-            <div key={ann._id} className="bg-white dark:bg-[#101010] p-4 rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div key={ann._id} className="bg-white dark:bg-gray-50 dark:bg-[#101010] p-4 rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="flex-1 overflow-hidden">
                 <div 
                   className="text-sm text-gray-800 dark:text-gray-200 line-clamp-2 quill-content-preview"

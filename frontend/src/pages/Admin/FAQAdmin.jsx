@@ -64,7 +64,7 @@ const FAQAdmin = () => {
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto pb-24 md:pb-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-semibold text-white tracking-tight flex items-center gap-2">
+        <h1 className="text-3xl font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
           <HelpCircle className="text-orange-500" /> FAQ Manager
         </h1>
         <p className="text-gray-500 text-sm mt-1">
@@ -79,7 +79,7 @@ const FAQAdmin = () => {
           {error?.data?.message || error.error}
         </Message>
       ) : sortedQuestions.length === 0 ? (
-        <div className="bg-[#151515] p-10 text-center rounded-2xl border border-gray-800">
+        <div className="bg-white dark:bg-[#151515] p-10 text-center rounded-2xl border border-gray-200 dark:border-gray-800">
           <p className="text-gray-500 font-medium">No user questions submitted yet.</p>
         </div>
       ) : (
@@ -87,15 +87,15 @@ const FAQAdmin = () => {
           {sortedQuestions.map((q) => (
             <div
               key={q._id}
-              className={`p-5 rounded-2xl border bg-[#151515] transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md ${
+              className={`p-5 rounded-2xl border bg-white dark:bg-[#151515] transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-md ${
                 q.isAnswered
-                  ? "border-gray-800/60 opacity-80"
+                  ? "border-gray-200 dark:border-gray-800/60 opacity-80"
                   : "border-orange-500/30 bg-orange-500/[0.01]"
               }`}
             >
               <div className="space-y-2 flex-1">
                 <div className="flex items-center gap-3">
-                  <span className="font-semibold text-white text-sm">
+                  <span className="font-semibold text-gray-900 dark:text-white text-sm">
                     {q.user ? q.user.username : "Anonymous"}
                   </span>
                   <span className="text-[10px] text-gray-400">
@@ -117,12 +117,12 @@ const FAQAdmin = () => {
                   </div>
                 </div>
 
-                <div className="text-sm text-gray-200 font-medium">
+                <div className="text-sm text-gray-800 dark:text-gray-200 font-medium">
                   Q: "{q.question}"
                 </div>
 
                 {q.isAnswered && (
-                  <div className="text-xs text-gray-400 bg-black/20 p-3 rounded-lg border border-gray-850 mt-2 font-sans">
+                  <div className="text-xs text-gray-400 bg-white dark:bg-black/20 p-3 rounded-lg border border-gray-850 mt-2 font-sans">
                     <strong>Answer:</strong> {q.answer}
                   </div>
                 )}
@@ -157,14 +157,14 @@ const FAQAdmin = () => {
       {/* Answer Modal */}
       {selectedQuestion && (
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          <h2 className="text-xl font-bold mb-4 text-white border-b border-gray-800 pb-2 flex items-center gap-2">
+          <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-2 flex items-center gap-2">
             <HelpCircle className="text-orange-500" /> Answer FAQ Question
           </h2>
 
-          <div className="space-y-4 text-sm text-gray-300">
+          <div className="space-y-4 text-sm text-gray-700 dark:text-gray-300">
             <div>
               <span className="text-[10px] uppercase text-gray-500 block font-semibold">User Question</span>
-              <p className="font-semibold text-white mt-1 italic">
+              <p className="font-semibold text-gray-900 dark:text-white mt-1 italic">
                 "{selectedQuestion.question}"
               </p>
             </div>
@@ -179,13 +179,13 @@ const FAQAdmin = () => {
                 placeholder="Type the answer details here..."
                 value={answerText}
                 onChange={(e) => setAnswerText(e.target.value)}
-                className="w-full bg-black border border-gray-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 resize-none"
+                className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 resize-none"
                 required
               />
             </div>
           </div>
 
-          <div className="flex gap-3 mt-6 border-t border-gray-800 pt-4">
+          <div className="flex gap-3 mt-6 border-t border-gray-200 dark:border-gray-800 pt-4">
             <button
               onClick={handleAnswerSubmit}
               disabled={submitting || !answerText.trim()}

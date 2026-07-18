@@ -19,10 +19,10 @@ const OrderList = () => {
       ) : (
         <div className="flex flex-col md:flex-row">
           {/* <AdminMenu /> */}
-          <div className="w-full overflow-x-auto bg-gray-100 dark:bg-[#151515] rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl">
+          <div className="w-full overflow-x-auto bg-gray-100 dark:bg-white dark:bg-[#151515] rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xl">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-white dark:bg-[#1A1A1A] border-b border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 text-xs uppercase tracking-wider">
+                <tr className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] border-b border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 text-xs uppercase tracking-wider">
                   <th className="px-6 py-4 font-semibold">ITEMS</th>
                   <th className="px-6 py-4 font-semibold">ID</th>
                   <th className="px-6 py-4 font-semibold">USER</th>
@@ -35,7 +35,7 @@ const OrderList = () => {
               </thead>
               <tbody className="divide-y divide-gray-800">
                 {orders.map((order) => (
-                  <tr key={order._id} className="hover:bg-white dark:bg-[#1A1A1A]/50 transition-colors">
+                  <tr key={order._id} className="hover:bg-white dark:bg-gray-50 dark:bg-[#1A1A1A]/50 transition-colors">
                     <td className="px-6 py-4">
                       <img
                         src={order.orderItems[0].image}

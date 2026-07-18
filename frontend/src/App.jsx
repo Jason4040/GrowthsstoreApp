@@ -66,12 +66,12 @@ const App = () => {
         draggable
         pauseOnHover
         theme="dark"
-        toastClassName="!bg-[#101010] !border !border-gray-800 !rounded-none !shadow-none !text-white !font-sans"
-        bodyClassName="!text-sm !text-white !font-medium"
+        toastClassName="!bg-gray-50 dark:bg-[#101010] !border !border-gray-200 dark:border-gray-800 !rounded-none !shadow-none !text-gray-900 dark:text-white !font-sans"
+        bodyClassName="!text-sm !text-gray-900 dark:text-white !font-medium"
         closeButton={({ closeToast }) => (
           <button
             onClick={closeToast}
-            className="text-gray-600 hover:text-white transition-colors text-lg leading-none px-1"
+            className="text-gray-600 hover:text-gray-900 dark:text-white transition-colors text-lg leading-none px-1"
           >
             ✕
           </button>

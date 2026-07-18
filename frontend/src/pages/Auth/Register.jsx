@@ -116,7 +116,7 @@ const Register = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-white dark:bg-black/95 backdrop-blur-md p-4 overflow-y-auto">
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-white dark:bg-white dark:bg-black/95 backdrop-blur-md p-4 overflow-y-auto">
       <div className="w-full max-w-md bg-[#111] border border-gray-200 dark:border-gray-800 p-8 md:p-10 relative shadow-2xl animate-fade-in-up my-auto">
         {/* Close Button */}
         <Link
@@ -132,14 +132,14 @@ const Register = () => {
           <>
             <div className="mb-8 text-center mt-4">
               <h1 className="text-3xl font-semibold text-gray-900 dark:text-white mb-2 tracking-tight">Verify Email</h1>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">We've sent a 6-digit verification code to <strong className="text-orange-500">{email}</strong>.</p>
+              <p className="text-gray-600 dark:text-gray-600 dark:text-gray-400 text-sm">We've sent a 6-digit verification code to <strong className="text-orange-500">{email}</strong>.</p>
             </div>
 
             <form onSubmit={otpSubmitHandler} className="space-y-4">
               <div>
                 <label
                   htmlFor="otp"
-                  className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide"
+                  className="block text-xs font-semibold text-gray-600 dark:text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide"
                 >
                   Verification Code (OTP)
                 </label>
@@ -147,7 +147,7 @@ const Register = () => {
                   type="text"
                   id="otp"
                   maxLength="6"
-                  className="w-full bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors text-center tracking-[8px] text-xl font-bold"
+                  className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 focus:border-orange-500 outline-none transition-colors text-center tracking-[8px] text-xl font-bold"
                   placeholder="000000"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
@@ -186,21 +186,21 @@ const Register = () => {
           <>
             <div className="mb-8 text-center mt-4">
               <h1 className="text-3xl font-semibold text-gray-900 dark:text-white mb-2 tracking-tight">Join Us</h1>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">Create your account to start shopping.</p>
+              <p className="text-gray-600 dark:text-gray-600 dark:text-gray-400 text-sm">Create your account to start shopping.</p>
             </div>
 
             <form onSubmit={submitHandler} className="space-y-4">
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide"
+                  className="block text-xs font-semibold text-gray-600 dark:text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide"
                 >
                   Full Name
                 </label>
                 <input
                   type="text"
                   id="name"
-                  className="w-full bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
+                  className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
                   placeholder="John Doe"
                   value={username}
                   onChange={(e) => setName(e.target.value)}
@@ -211,14 +211,14 @@ const Register = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide"
+                  className="block text-xs font-semibold text-gray-600 dark:text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide"
                 >
                   Email Address
                 </label>
                 <input
                   type="email"
                   id="email"
-                  className="w-full bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
+                  className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -229,14 +229,14 @@ const Register = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide"
+                  className="block text-xs font-semibold text-gray-600 dark:text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide"
                 >
                   Password
                 </label>
                 <input
                   type="password"
                   id="password"
-                  className="w-full bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
+                  className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -247,14 +247,14 @@ const Register = () => {
               <div>
                 <label
                   htmlFor="confirmPassword"
-                  className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide"
+                  className="block text-xs font-semibold text-gray-600 dark:text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide"
                 >
                   Confirm Password
                 </label>
                 <input
                   type="password"
                   id="confirmPassword"
-                  className="w-full bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
+                  className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
                   placeholder="••••••••"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
@@ -275,7 +275,7 @@ const Register = () => {
 
             <div className="relative my-6 flex items-center justify-center">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-800"></div>
+                <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
               </div>
               <span className="relative bg-[#111] px-4 text-xs text-gray-500 uppercase">Or continue with</span>
             </div>
@@ -307,7 +307,7 @@ const Register = () => {
             </button>
 
             <div className="mt-8 text-center pt-6 border-t border-gray-200 dark:border-gray-800">
-              <p className="text-gray-600 dark:text-gray-400 text-sm">
+              <p className="text-gray-600 dark:text-gray-600 dark:text-gray-400 text-sm">
                 Already have an account?{" "}
                 <Link
                   to={redirect ? `/login?redirect=${redirect}` : "/login"}
