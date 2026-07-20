@@ -39,7 +39,7 @@ const Product = ({ product }) => {
   return (
     <div 
       onClick={() => navigate(`/product/${product._id}`)}
-      className="cursor-pointer w-full relative bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] rounded-none overflow-hidden transition-all group border border-gray-200 dark:border-gray-800 hover:border-orange-500 shadow-none flex flex-col h-full"
+      className="cursor-pointer w-full relative bg-white dark:bg-[#1A1A1A] rounded-none overflow-hidden transition-all group border border-gray-200 dark:border-gray-800 hover:border-orange-500 shadow-none flex flex-col h-full"
     >
       <div className="relative overflow-hidden">
         <AdminProductControls product={product} />

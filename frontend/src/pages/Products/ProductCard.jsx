@@ -38,7 +38,7 @@ const ProductCard = ({ p }) => {
   return (
     <div 
       onClick={() => navigate(`/product/${p._id}`)}
-      className="cursor-pointer w-full bg-gray-100 dark:bg-white dark:bg-[#151515] rounded-none shadow-none border border-gray-200 dark:border-gray-800 hover:border-orange-500 transition-all duration-300 relative group overflow-hidden"
+      className="cursor-pointer w-full bg-white dark:bg-[#151515] rounded-none shadow-none border border-gray-200 dark:border-gray-800 hover:border-orange-500 transition-all duration-300 relative group overflow-hidden"
     >
       <section className="relative aspect-[4/3] overflow-hidden">
         <AdminProductControls product={p} />
@@ -100,7 +100,7 @@ const ProductCard = ({ p }) => {
           </div>
         </div>
 
-        <p className="text-gray-600 dark:text-gray-600 dark:text-gray-400 text-sm mb-6 leading-relaxed">
+        <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 leading-relaxed">
           {p?.description?.substring(0, 80)}...
         </p>
 

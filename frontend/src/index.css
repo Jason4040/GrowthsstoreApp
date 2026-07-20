@@ -253,7 +253,24 @@ body {
 
 /* NOTE: .skiptranslate is NOT hidden here because it wraps the Google Translate widget.
    Hiding it with display:none prevents the widget from working.
-   The banner/toolbar elements are hidden individually in index.html. */
+   The banner/* Translation Loader Overlay */
+#translation-loader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  font-size: 1.5rem;
+  z-index: 9999;
+  pointer-events: none;
+  visibility: hidden; /* hidden by default */
+}
+#translation-loader.visible {
+  visibility: visible;
+  pointer-events: all;
+}individually in index.html. */
 
 /* Remove Google Translate highlighted text styling */
 .goog-text-highlight {

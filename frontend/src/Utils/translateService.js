@@ -7,14 +7,15 @@
 const CACHE_KEY = 'gt_cache';
 const ORIG_KEY = 'gt_originals';
 
-// Load cache from sessionStorage
+// Use localStorage for persistent cache across sessions
 function loadCache() {
-  try { return JSON.parse(sessionStorage.getItem(CACHE_KEY) || '{}'); }
+  try { return JSON.parse(localStorage.getItem(CACHE_KEY) || '{}'); }
   catch { return {}; }
 }
 function saveCache(cache) {
-  try { sessionStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {}
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {}
 }
+
 
 // Translate a batch of strings via free Google Translate API
 async function translateBatch(texts, targetLang) {
@@ -182,10 +183,34 @@ function startObserver() {
   }
 }
 
-/**
- * Main function — call this from React components.
- * @param {string} langCode - 'en' | 'rw' | 'lg'
- */
+// Internal flag for UI loader
+let _isTranslating = false;
+function setTranslating(flag) {
+  _isTranslating = flag;
+  const loader = document.getElementById('translation-loader');
+  if (loader) {
+    loader.style.display = flag ? 'flex' : 'none';
+  }
+  // Dispatch custom events for any UI that wants to listen
+  window.dispatchEvent(new CustomEvent(flag ? 'translation-start' : 'translation-end'));
+}
+export function isTranslating() { return _isTranslating; }
+
+// Pre‑fetch translations for all supported languages (rw, lg) after the first load.
+async function prefetchAllLanguages() {
+  const root = document.getElementById('root');
+  if (!root) return;
+  const nodes = getTextNodes(root);
+  const texts = [...new Set(
+    nodes.map(n => n.textContent.trim()).filter(t => t.length > 1 && /[a-zA-Z]/.test(t))
+  )];
+  const langs = ['rw', 'lg'];
+  for (const lang of langs) {
+    await translateBatch(texts, lang);
+  }
+}
+
+// Update switchLanguage to use loader UI
 export async function switchLanguage(langCode) {
   currentLang = langCode;
   localStorage.setItem('appLang', langCode);
@@ -195,15 +220,17 @@ export async function switchLanguage(langCode) {
     return;
   }
 
+  setTranslating(true);
   // Wait a tick for React to finish rendering
   await new Promise(r => setTimeout(r, 100));
   await applyTranslation(langCode);
+  setTranslating(false);
 
-  // Start watching for React updates to re-translate new content
+  // Start watching for React updates to re‑translate new content
   startObserver();
 }
 
-// On initial load, apply saved language
+// Init translation now also triggers prefetch after applying saved language
 export async function initTranslation() {
   const saved = localStorage.getItem('appLang') || 'en';
   currentLang = saved;
@@ -211,5 +238,7 @@ export async function initTranslation() {
     await new Promise(r => setTimeout(r, 800)); // wait for React to render
     await applyTranslation(saved);
     startObserver();
+    // Prefetch other languages in background (non‑blocking)
+    prefetchAllLanguages().catch(() => {});
   }
 }

@@ -60,7 +60,7 @@ const Cart = () => {
 
               <div className="space-y-4">
                 {cartItems.map((item) => (
-                  <div key={item._id} className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] p-4 rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center gap-4 hover:border-orange-500 transition-all">
+                  <div key={item._id} className="bg-white dark:bg-[#1A1A1A] p-4 rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center gap-4 hover:border-orange-500 transition-all">
                     <div className="w-full sm:w-24 h-24 shrink-0">
                       <img
                         src={item.image}
@@ -87,7 +87,7 @@ const Cart = () => {
                     <div className="flex items-center gap-4 w-full sm:w-auto justify-between">
                       <div className="w-20">
                         <select
-                          className="w-full bg-white dark:bg-white dark:bg-black border border-gray-300 dark:border-gray-700 rounded-lg p-2 text-gray-900 dark:text-white focus:border-orange-500 outline-none"
+                          className="w-full bg-white dark:bg-black border border-gray-300 dark:border-gray-700 rounded-lg p-2 text-gray-900 dark:text-white focus:border-orange-500 outline-none"
                           value={item.qty}
                           onChange={(e) => addToCartHandler(item, Number(e.target.value))}
                         >
@@ -113,7 +113,7 @@ const Cart = () => {
 
             {/* Checkout Summary */}
             <div className="w-full lg:w-[25rem]">
-              <div className="bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] p-6 rounded-xl border border-gray-200 dark:border-gray-800 sticky top-24">
+              <div className="bg-white dark:bg-[#1A1A1A] p-6 rounded-xl border border-gray-200 dark:border-gray-800 sticky top-24">
                 <h2 className="text-2xl font-medium mb-6 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">Order Summary</h2>
 
                 <div className="flex justify-between items-center mb-4">

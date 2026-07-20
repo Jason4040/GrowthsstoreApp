@@ -71,7 +71,7 @@ const Profile = () => {
       {/* Left Sidebar Layout */}
       <div className="w-full lg:w-[320px] flex flex-col gap-6 shrink-0">
         {/* Navigation Card */}
-        <div className="w-full bg-[#111] border border-gray-200 dark:border-gray-800 p-6 shadow-2xl rounded-none">
+        <div className="w-full bg-white dark:bg-[#151515] border border-gray-200 dark:border-gray-800 p-6 shadow-2xl rounded-none">
           <div className="flex items-center gap-4 border-b border-gray-200 dark:border-gray-800/80 pb-6 mb-4">
             <div className="w-12 h-12 bg-orange-600 flex items-center justify-center text-white text-xl font-bold rounded-none shrink-0 shadow-lg">
               {userInfo.username.charAt(0).toUpperCase()}
@@ -83,7 +83,7 @@ const Profile = () => {
           </div>
           
           <div className="flex flex-col space-y-1">
-            <Link to="/profile" className="flex items-center justify-between text-gray-200 bg-gray-900 border-l-[3px] border-orange-500 px-4 py-3 transition-colors text-sm font-medium">
+            <Link to="/profile" className="flex items-center justify-between text-gray-900 dark:text-gray-200 bg-gray-100 dark:bg-gray-900 border-l-[3px] border-orange-500 px-4 py-3 transition-colors text-sm font-medium">
               <span className="flex items-center gap-3">
                 <User className="w-4 h-4 text-orange-500" /> My Profile
               </span>
@@ -110,7 +110,7 @@ const Profile = () => {
         </div>
 
         {/* Small Settings Card */}
-        <div className="w-full bg-[#111] border border-gray-200 dark:border-gray-800 p-6 shadow-2xl rounded-none">
+        <div className="w-full bg-white dark:bg-[#151515] border border-gray-200 dark:border-gray-800 p-6 shadow-2xl rounded-none">
           <div className="flex justify-between items-center mb-5">
             <h3 className="text-gray-700 dark:text-gray-300 font-semibold text-sm tracking-wide">Settings</h3>
             <X className="text-gray-600 cursor-pointer hover:text-gray-900 dark:text-white" />
@@ -127,7 +127,7 @@ const Profile = () => {
       </div>
 
       {/* Right Main Form Area */}
-      <div className="flex-1 w-full bg-[#111] border border-gray-200 dark:border-gray-800 p-8 lg:p-12 relative shadow-2xl rounded-none">
+      <div className="flex-1 w-full bg-white dark:bg-[#151515] border border-gray-200 dark:border-gray-800 p-8 lg:p-12 relative shadow-2xl rounded-none">
         
         {/* Header containing Name/Email + Close Icon */}
         <div className="flex justify-between items-start mb-14">
@@ -154,7 +154,7 @@ const Profile = () => {
             </label>
             <input
               type="text"
-              className="w-full bg-transparent sm:text-right text-gray-200 focus:outline-none placeholder-gray-700 text-[14px] font-medium"
+              className="w-full bg-transparent sm:text-right text-gray-900 dark:text-gray-200 focus:outline-none placeholder-gray-400 dark:placeholder-gray-700 text-[14px] font-medium"
               value={username}
               onChange={(e) => setUserName(e.target.value)}
             />
@@ -166,7 +166,7 @@ const Profile = () => {
             </label>
             <input
               type="email"
-              className="w-full bg-transparent sm:text-right text-gray-200 focus:outline-none placeholder-gray-700 text-[14px] font-medium"
+              className="w-full bg-transparent sm:text-right text-gray-900 dark:text-gray-200 focus:outline-none placeholder-gray-400 dark:placeholder-gray-700 text-[14px] font-medium"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -179,7 +179,7 @@ const Profile = () => {
             <input
               type="password"
               placeholder="Add new password"
-              className="w-full bg-transparent sm:text-right text-gray-200 focus:outline-none placeholder-gray-700 text-[14px] font-medium"
+              className="w-full bg-transparent sm:text-right text-gray-900 dark:text-gray-200 focus:outline-none placeholder-gray-400 dark:placeholder-gray-700 text-[14px] font-medium"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -192,7 +192,7 @@ const Profile = () => {
             <input
               type="password"
               placeholder="Confirm new password"
-              className="w-full bg-transparent sm:text-right text-gray-200 focus:outline-none placeholder-gray-700 text-[14px] font-medium"
+              className="w-full bg-transparent sm:text-right text-gray-900 dark:text-gray-200 focus:outline-none placeholder-gray-400 dark:placeholder-gray-700 text-[14px] font-medium"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />

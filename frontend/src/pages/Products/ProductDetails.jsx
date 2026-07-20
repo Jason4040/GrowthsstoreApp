@@ -178,7 +178,7 @@ const ProductDetails = () => {
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row gap-12 items-start">
               {/* Product Image / Media Slider */}
-              <div className="w-full lg:w-1/2 relative bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] rounded-none overflow-hidden border border-gray-200 dark:border-gray-800 shadow-none pb-4 px-2">
+              <div className="w-full lg:w-1/2 relative bg-white dark:bg-[#1A1A1A] rounded-none overflow-hidden border border-gray-200 dark:border-gray-800 shadow-none pb-4 px-2">
                 {mediaList.length > 1 ? (
                   <>
                     <Slider ref={sliderRef} {...sliderSettings} className="w-full">

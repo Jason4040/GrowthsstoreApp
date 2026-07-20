@@ -36,7 +36,7 @@ const SmallProduct = ({ product }) => {
   };
 
   return (
-    <div className="p-3 relative bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] rounded-none border border-gray-200 dark:border-gray-800 hover:border-orange-500 transition-all shadow-none group">
+    <div className="p-3 relative bg-white dark:bg-[#1A1A1A] rounded-none border border-gray-200 dark:border-gray-800 hover:border-orange-500 transition-all shadow-none group">
       <div className="relative">
         <AdminProductControls product={product} />
         {product.video ? (

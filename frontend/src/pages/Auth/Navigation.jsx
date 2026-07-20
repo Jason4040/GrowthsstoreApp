@@ -30,7 +30,7 @@ import { logout } from "../../redux/features/auth/authSlice";
 import { setCurrency } from "../../redux/features/currency/currencySlice";
 import FavoritesCount from "../Products/FavoritesCount";
 import { useGetMyOrdersQuery } from "../../redux/api/orderApiSlice";
-import { switchLanguage } from "../../utils/translateService";
+import { switchLanguage } from "../../Utils/translateService";
 
 const Navigation = () => {
   const { userInfo } = useSelector((state) => state.auth);

@@ -11,7 +11,7 @@ import Product from "./Products/Product";
 import { useCurrency } from "../hooks/useCurrency";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrency } from "../redux/features/currency/currencySlice";
-import { switchLanguage } from "../utils/translateService";
+import { switchLanguage } from "../Utils/translateService";
 
 const Home = () => {
   const { keyword } = useParams();
@@ -273,7 +273,7 @@ const Home = () => {
                     }}
                     onFocus={() => setShowSuggestions(true)}
                     onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                    className="w-full py-4 md:py-5 pl-8 pr-16 rounded-full bg-white/80 dark:bg-white dark:bg-black/40 backdrop-blur-md border border-white/30 text-gray-900 dark:text-white placeholder-gray-300 focus:outline-none focus:bg-white dark:focus:bg-white dark:bg-black/60 focus:border-orange-500 transition-all text-lg shadow-lg"
+                    className="w-full py-4 md:py-5 pl-8 pr-16 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur-md border border-white/30 text-gray-900 dark:text-white placeholder-gray-300 focus:outline-none focus:bg-white dark:focus:bg-white dark:bg-black/60 focus:border-orange-500 transition-all text-lg shadow-lg"
                   />
                   <button
                     type="submit"
@@ -287,7 +287,7 @@ const Home = () => {
 
                 {/* Suggestions Dropdown */}
                 {showSuggestions && debouncedKeyword.trim() && (
-                  <div className="absolute top-full left-0 w-full mt-2 bg-white dark:bg-gray-50 dark:bg-[#1A1A1A] rounded-2xl shadow-2xl overflow-hidden z-50 border border-gray-200 dark:border-gray-800 max-h-80 overflow-y-auto">
+                  <div className="absolute top-full left-0 w-full mt-2 bg-white dark:bg-[#1A1A1A] rounded-2xl shadow-2xl overflow-hidden z-50 border border-gray-200 dark:border-gray-800 max-h-80 overflow-y-auto">
                     {isSearching ? (
                       <div className="p-4 text-center text-gray-500">Loading suggestions...</div>
                     ) : searchResults?.products?.length > 0 ? (
