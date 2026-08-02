@@ -280,3 +280,65 @@ body {
 .slick-dots li.slick-active button:before {
   color: #ea580c !important;
 }
+
+/* ===== ApexCharts Menu & Toolbar Theme Customization ===== */
+.apexcharts-menu {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+  color: #111827 !important;
+  padding: 8px !important;
+  z-index: 9999 !important;
+  min-width: 150px !important;
+}
+
+.apexcharts-menu-item {
+  color: #111827 !important;
+  font-family: "Raleway", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.apexcharts-menu-item:hover {
+  background: #f3f4f6 !important;
+  color: #ea580c !important;
+}
+
+/* Dark Mode ApexCharts Menu */
+.dark .apexcharts-menu {
+  background: #18181b !important;
+  border: 1px solid #27272a !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+  color: #ffffff !important;
+}
+
+.dark .apexcharts-menu-item {
+  color: #e4e4e7 !important;
+}
+
+.dark .apexcharts-menu-item:hover {
+  background: #27272a !important;
+  color: #f97316 !important;
+}
+
+.apexcharts-toolbar-icon svg {
+  fill: #4b5563 !important;
+  transition: fill 0.2s ease;
+}
+
+.apexcharts-toolbar-icon:hover svg {
+  fill: #ea580c !important;
+}
+
+.dark .apexcharts-toolbar-icon svg {
+  fill: #a1a1aa !important;
+}
+
+.dark .apexcharts-toolbar-icon:hover svg {
+  fill: #f97316 !important;
+}

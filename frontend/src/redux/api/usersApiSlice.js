@@ -70,6 +70,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
         url: `${USERS_URL}/${userId}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["User"],
+    }),
+    deleteAllCustomers: builder.mutation({
+      query: () => ({
+        url: `${USERS_URL}/reset/customers`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["User"],
     }),
     getUserDetails: builder.query({
       query: (id) => ({
@@ -121,4 +129,5 @@ export const {
   useGetMeQuery,
   useUserHeartbeatMutation,
   useGetActiveUsersQuery,
+  useDeleteAllCustomersMutation,
 } = userApiSlice;

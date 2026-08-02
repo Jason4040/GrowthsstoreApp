@@ -17,6 +17,7 @@ import {
   rejectPaymentProof,
   appealPaymentProof,
   deleteOrder,
+  deleteAllOrders,
 } from "../controllers/orderController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
@@ -27,6 +28,7 @@ router
   .get(authenticate, authorizeAdmin, getAllOrders);
 
 router.route("/manual").post(authenticate, authorizeAdmin, createManualOrder);
+router.route("/reset/all").delete(authenticate, authorizeAdmin, deleteAllOrders);
 
 router.route("/mine").get(authenticate, getUserOrders);
 router.route("/total-orders").get(countTotalOrders);

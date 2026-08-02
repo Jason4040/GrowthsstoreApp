@@ -6,6 +6,7 @@ import {
   useDeleteUserMutation,
   useGetUsersQuery,
   useUpdateUserMutation,
+  useDeleteAllCustomersMutation,
 } from "../../redux/api/usersApiSlice";
 import { toast } from "react-toastify";
 import ConfirmModal from "../../components/ConfirmModal";
@@ -25,6 +26,20 @@ const UserList = () => {
   const [userToDelete, setUserToDelete] = useState(null);
 
   const [updateUser] = useUpdateUserMutation();
+  const [deleteAllCustomers] = useDeleteAllCustomersMutation();
+
+  const [isResetCustomersOpen, setIsResetCustomersOpen] = useState(false);
+
+  const handleResetCustomers = async () => {
+    try {
+      await deleteAllCustomers().unwrap();
+      toast.success("All non-admin customers deleted successfully!");
+      setIsResetCustomersOpen(false);
+      refetch();
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
 
   useEffect(() => {
     refetch();
@@ -63,7 +78,15 @@ const UserList = () => {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-semibold mb-8 text-gray-900 dark:text-white">Users</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-semibold text-gray-900 dark:text-white">Users</h1>
+        <button
+          onClick={() => setIsResetCustomersOpen(true)}
+          className="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 px-4 py-2 rounded-xl text-xs font-semibold transition-colors"
+        >
+          Reset All Customers
+        </button>
+      </div>
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -190,7 +213,15 @@ const UserList = () => {
         onClose={() => setIsConfirmOpen(false)}
         onConfirm={confirmDelete}
         title="Delete User"
-        message="Are you sure you want to delete this user? This action cannot be undone."
+        message="Are you sure you want to delete this user?"
+      />
+
+      <ConfirmModal
+        isOpen={isResetCustomersOpen}
+        onClose={() => setIsResetCustomersOpen(false)}
+        onConfirm={handleResetCustomers}
+        title="Reset All Customers"
+        message="Are you sure you want to delete ALL non-admin customer accounts? Admin accounts will be preserved. This cannot be undone."
       />
     </div>
   );

@@ -414,6 +414,12 @@ const getActiveUsers = asyncHandler(async (req, res) => {
   res.json(activeUsers);
 });
 
+const deleteAllCustomers = asyncHandler(async (req, res) => {
+  // Delete all non-admin users, preserving existing admins
+  await User.deleteMany({ isAdmin: { $ne: true } });
+  res.json({ message: "All customer accounts deleted successfully" });
+});
+
 export {
   createUser,
   loginUser,
@@ -430,4 +436,5 @@ export {
   resetPassword,
   userHeartbeat,
   getActiveUsers,
+  deleteAllCustomers,
 };

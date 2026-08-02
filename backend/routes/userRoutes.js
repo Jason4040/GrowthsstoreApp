@@ -15,6 +15,7 @@ import {
   resetPassword,
   userHeartbeat,
   getActiveUsers,
+  deleteAllCustomers,
 } from "../controllers/userController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
@@ -31,6 +32,7 @@ router.post("/logout", logoutCurrentUser);
 
 router.post("/heartbeat", authenticate, userHeartbeat);
 router.get("/active", authenticate, authorizeAdmin, getActiveUsers);
+router.delete("/reset/customers", authenticate, authorizeAdmin, deleteAllCustomers);
 
 router.post("/verify-otp", verifyOTP);
 router.post("/resend-otp", resendOTP);

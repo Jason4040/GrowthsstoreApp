@@ -456,6 +456,15 @@ const deleteOrder = async (req, res) => {
   }
 };
 
+const deleteAllOrders = async (req, res) => {
+  try {
+    await Order.deleteMany({});
+    res.json({ message: "All orders and sales history reset successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export {
   createOrder,
   getAllOrders,
@@ -472,4 +481,5 @@ export {
   rejectPaymentProof,
   appealPaymentProof,
   deleteOrder,
+  deleteAllOrders,
 };
