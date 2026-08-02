@@ -19,6 +19,9 @@ import {
   MapPin,
   ChevronLeft,
   ChevronRight,
+  Share2,
+  Repeat,
+  Heart,
 } from "lucide-react";
 import moment from "moment";
 import HeartIcon from "./HeartIcon";
@@ -54,6 +57,35 @@ const PrevArrow = (props) => {
       onClick={onClick}
     >
       <ChevronLeft className="w-6 h-6" />
+    </div>
+  );
+};
+
+const ImageMagnifier = ({ src, alt, onClick, className }) => {
+  const [position, setPosition] = useState({ x: '50%', y: '50%' });
+  const [isZoomed, setIsZoomed] = useState(false);
+
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setPosition({ x: `${x}%`, y: `${y}%` });
+  };
+
+  return (
+    <div
+      className={`relative overflow-hidden cursor-crosshair flex justify-center items-center ${className}`}
+      onMouseEnter={() => setIsZoomed(true)}
+      onMouseLeave={() => setIsZoomed(false)}
+      onMouseMove={handleMouseMove}
+      onClick={onClick}
+    >
+      <img 
+        src={src} 
+        alt={alt} 
+        className={`w-full h-full object-contain pointer-events-none transition-transform ${isZoomed ? 'scale-[2.5] duration-700 ease-out' : 'scale-100 duration-300'}`}
+        style={{ transformOrigin: `${position.x} ${position.y}` }}
+      />
     </div>
   );
 };
@@ -178,30 +210,30 @@ const ProductDetails = () => {
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row gap-12 items-start">
               {/* Product Image / Media Slider */}
-              <div className="w-full lg:w-1/2 relative bg-white dark:bg-[#1A1A1A] rounded-none overflow-hidden border border-gray-200 dark:border-gray-800 shadow-none pb-4 px-2">
+              <div className="w-full lg:w-1/2 relative bg-transparent overflow-hidden px-2 pt-6">
                 {mediaList.length > 1 ? (
                   <>
-                    <Slider ref={sliderRef} {...sliderSettings} className="w-full">
+                    <Slider ref={sliderRef} {...sliderSettings} className="w-full bg-transparent">
                       {mediaList.map((media, index) => (
-                        <div key={index} className="w-full outline-none">
+                        <div key={index} className="w-full outline-none flex justify-center">
                           {media.type === 'video' ? (
                             <ProductVideo
                               videoUrl={media.url}
                               isCover={false}
-                              className="w-full h-[30rem] lg:h-[40rem] object-contain bg-white dark:bg-black rounded-none"
+                              className="w-full h-[30rem] lg:h-[40rem] object-contain"
                             />
                           ) : (
-                            <img
+                            <ImageMagnifier
                               src={media.url}
                               alt={`${product.name} - ${index}`}
                               onClick={() => { setPreviewInitialIndex(index); setIsPreviewModalOpen(true); }}
-                              className="w-full h-[30rem] lg:h-[40rem] object-contain rounded-none cursor-pointer"
+                              className="w-full h-[30rem] lg:h-[40rem]"
                             />
                           )}
                         </div>
                       ))}
                     </Slider>
-                    <div className="flex gap-3 overflow-x-auto mt-6 pb-2 px-2 scrollbar-hide snap-x">
+                    <div className="flex gap-4 overflow-x-auto mt-6 pb-2 px-2 scrollbar-hide snap-x justify-center">
                       {mediaList.map((media, idx) => (
                         <button
                           key={idx}
@@ -209,16 +241,16 @@ const ProductDetails = () => {
                             setActiveMediaIndex(idx);
                             sliderRef.current?.slickGoTo(idx);
                           }}
-                          className={`relative shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 transition-all snap-center ${
+                          className={`relative shrink-0 w-20 h-20 bg-transparent overflow-hidden transition-all snap-center cursor-pointer ${
                             activeMediaIndex === idx 
-                              ? 'border-orange-500 scale-105 shadow-[0_0_10px_rgba(249,115,22,0.4)] opacity-100' 
-                              : 'border-transparent opacity-50 hover:opacity-100'
+                              ? 'border border-gray-900 dark:border-white opacity-100' 
+                              : 'border border-transparent opacity-50 hover:opacity-100'
                           }`}
                         >
                           {media.type === 'video' ? (
-                            <video src={media.url} className="w-full h-full object-cover" />
+                            <video src={media.url} className="w-full h-full object-contain p-2" />
                           ) : (
-                            <img src={media.url} className="w-full h-full object-cover" />
+                            <img src={media.url} className="w-full h-full object-contain p-2" />
                           )}
                         </button>
                       ))}
@@ -230,130 +262,141 @@ const ProductDetails = () => {
                       <ProductVideo
                         videoUrl={mediaList[0].url}
                         isCover={false}
-                        className="w-full h-auto max-h-[40rem] object-contain bg-white dark:bg-black rounded-none"
+                        className="w-full h-auto max-h-[40rem] object-contain bg-transparent"
                       />
                     ) : (
-                      <img
-                        src={mediaList[0]?.url || product.image}
-                        alt={product.name}
-                        onClick={() => { setPreviewInitialIndex(0); setIsPreviewModalOpen(true); }}
-                        className="w-full h-auto max-h-[40rem] object-contain rounded-none cursor-pointer"
-                      />
+                      <div className="bg-transparent flex justify-center w-full">
+                        <ImageMagnifier
+                          src={mediaList[0]?.url || product.image}
+                          alt={product.name}
+                          onClick={() => { setPreviewInitialIndex(0); setIsPreviewModalOpen(true); }}
+                          className="w-full h-auto max-h-[40rem]"
+                        />
+                      </div>
                     )}
                   </>
                 )}
-                <div className="absolute top-4 right-4 z-10">
-                  <HeartIcon product={product} />
-                </div>
               </div>
 
               {/* Product Details */}
-              <div className="w-full lg:w-1/2 flex flex-col">
-                {product?.category?.name && (
-                  <span className="text-xs font-semibold text-orange-500 uppercase tracking-widest mb-2 block">
-                    {product.category.name}
-                  </span>
-                )}
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+              <div className="w-full lg:w-1/2 flex flex-col pt-8 lg:pl-8">
+                <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm mb-4 tracking-wide font-medium">
+                  <Link to="/" className="hover:text-gray-900 dark:hover:text-white transition-colors">{product?.category?.name || "Category"}</Link>
+                  <span className="mx-2">&gt;</span>
+                  <span className="text-gray-900 dark:text-white">Products</span>
+                </div>
+
+                <h1 className="text-4xl md:text-5xl font-light text-gray-900 dark:text-white mb-2 leading-tight uppercase tracking-widest">
                   {product.name}
                 </h1>
                 
-                <div className="flex items-center gap-4 mb-6">
-                  <Ratings value={product.rating} text={`${product.numReviews} reviews`} color="orange-500" />
+                <div className="flex items-center gap-3 mb-6 border-b border-gray-200 dark:border-gray-800 pb-6">
+                  <Ratings value={product.rating} color="#F59E0B" />
+                  <span className="text-gray-400 dark:text-gray-500 text-sm">Reviews ({product.numReviews})</span>
                 </div>
 
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="text-4xl font-bold text-orange-500">{formatPrice(product)}</div>
-                  {product?.negotiable && (
-                    <span className="bg-yellow-500/20 text-yellow-500 text-xs font-bold px-3 py-1 rounded-sm uppercase tracking-wide border border-yellow-500/30">
-                      Negotiable
-                    </span>
-                  )}
-                </div>
-
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-base md:text-lg mb-8">
-                  {product.description}
-                </p>
-
-                {product?.discountQtyThreshold > 0 && (
-                  <div className="bg-green-600/10 text-green-500 border border-green-500/30 text-sm font-medium px-4 py-3 rounded-none mb-8 animate-pulse">
-                    🔥 Buy {product.discountQtyThreshold}+ items and get {formatPrice(getDiscountValue(product))} OFF {product.discountType === 'per_item' ? 'each item' : 'your total order'}!
+                <div className="flex items-center gap-6 mb-8 text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
+                  <div className="flex items-center gap-2 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer relative">
+                     <img src="/icons/savedProducts.png" className="w-[16px] h-[16px] object-contain dark:invert" alt="Saved" />
+                     <div className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer">
+                        <HeartIcon product={product} />
+                     </div>
+                     <span className="pointer-events-none">ADD TO WISHLIST</span>
                   </div>
-                )}
+                </div>
 
-                {/* Details Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-10 py-6 border-y border-gray-200 dark:border-gray-800">
-                  <div className="flex items-center text-gray-700 dark:text-gray-300">
-                    <Store className="w-5 h-5 mr-3 text-gray-600 dark:text-gray-400" />
-                    <span className="text-sm"><strong className="text-gray-900 dark:text-white font-medium mr-1">Brand:</strong> {product.brand}</span>
+                <div className="text-gray-500 dark:text-gray-400 leading-relaxed text-[13px] md:text-[14px] mb-8 space-y-4 max-w-2xl font-light">
+                  <p>{product.description}</p>
+                </div>
+
+                <div className="flex flex-col gap-2 mb-8 text-[13px] font-light text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center">
+                    <span className="w-24 text-gray-900 dark:text-white font-medium">Brand:</span>
+                    <span>{product.brand || 'N/A'}</span>
                   </div>
                   {product?.condition && (
-                    <div className="flex items-center text-gray-700 dark:text-gray-300">
-                      <Tag className="w-5 h-5 mr-3 text-gray-600 dark:text-gray-400" />
-                      <span className="text-sm"><strong className="text-gray-900 dark:text-white font-medium mr-1">Condition:</strong> {product.condition}</span>
+                    <div className="flex items-center">
+                      <span className="w-24 text-gray-900 dark:text-white font-medium">Condition:</span>
+                      <span>{product.condition}</span>
                     </div>
                   )}
-                  <div className="flex items-center text-gray-700 dark:text-gray-300">
-                    <Box className="w-5 h-5 mr-3 text-gray-600 dark:text-gray-400" />
-                    <span className="text-sm"><strong className="text-gray-900 dark:text-white font-medium mr-1">Status:</strong> 
+                  <div className="flex items-center">
+                    <span className="w-24 text-gray-900 dark:text-white font-medium">Status:</span>
+                    <span>
                       {product.stockStatus === 'requires_shipping' ? 'Available to Request' : `${product.countInStock} In Stock`}
                     </span>
                   </div>
-                  <div className="flex items-center text-gray-700 dark:text-gray-300">
-                    <Clock className="w-5 h-5 mr-3 text-gray-600 dark:text-gray-400" />
-                    <span className="text-sm"><strong className="text-gray-900 dark:text-white font-medium mr-1">Added:</strong> {moment(product.createAt).fromNow()}</span>
+                  <div className="flex items-center">
+                    <span className="w-24 text-gray-900 dark:text-white font-medium">Added:</span>
+                    <span>{moment(product.createdAt || product.createAt).fromNow()}</span>
                   </div>
                   {product.availableIn && (
-                    <div className="flex items-center text-gray-700 dark:text-gray-300">
-                      <MapPin className="w-5 h-5 mr-3 text-gray-600 dark:text-gray-400" />
-                      <span className="text-sm"><strong className="text-gray-900 dark:text-white font-medium mr-1">Region:</strong> 
+                    <div className="flex items-center">
+                      <span className="w-24 text-gray-900 dark:text-white font-medium">Region:</span>
+                      <span>
                         {product.availableIn === "Both" ? "Uganda & Rwanda" : `${product.availableIn} Only`}
                       </span>
                     </div>
                   )}
                 </div>
 
-                {/* Action Area */}
-                <div className="flex flex-col gap-5">
-                  {(product.stockStatus === 'requires_shipping' || product.countInStock > 0) && (
-                    <div className="flex items-center gap-4">
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Quantity:</span>
-                      <select
-                        value={qty}
-                        onChange={(e) => setQty(Number(e.target.value))}
-                        className="w-24 bg-transparent border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white p-2.5 rounded-none focus:ring-1 focus:ring-orange-500 outline-none text-sm"
-                      >
-                        {[...Array(product.stockStatus === 'requires_shipping' ? 100 : product.countInStock).keys()].map((x) => (
-                          <option key={x + 1} value={x + 1} className="bg-gray-50 dark:bg-[#101010] text-gray-900 dark:text-white">
-                            {x + 1}
-                          </option>
-                        ))}
-                      </select>
+                <div className="flex items-end gap-3 mb-8 border-b border-gray-200 dark:border-gray-800 pb-8">
+                  <div className="text-2xl font-light text-gray-900 dark:text-white tracking-wide">{formatPrice(product)}</div>
+                  {product?.negotiable && (
+                    <div className="text-sm font-light text-gray-400 dark:text-gray-500 tracking-wide mb-1">
+                      (Negotiable)
                     </div>
                   )}
+                </div>
 
-                  <div className="flex flex-col xl:flex-row gap-4 mt-2 w-full">
+                {product?.discountQtyThreshold > 0 && (
+                  <div className="bg-green-600/10 text-green-600 dark:text-green-400 border border-green-500/30 text-sm font-medium px-4 py-3 rounded-md mb-8 animate-pulse w-fit">
+                    🔥 Buy {product.discountQtyThreshold}+ items and get {formatPrice(getDiscountValue(product))} OFF!
+                  </div>
+                )}
+
+                {/* Action Area */}
+                <div className="flex flex-col gap-4 max-w-md">
+                  <div className="flex items-center gap-6">
+                    {(product.stockStatus === 'requires_shipping' || product.countInStock > 0) && (
+                      <div className="flex items-center gap-4">
+                        <span className="text-[11px] text-gray-500 dark:text-gray-400 uppercase tracking-widest">QTY</span>
+                        <div className="relative border border-gray-200 dark:border-gray-800 py-2 px-4 rounded-full w-20 flex justify-center">
+                          <select
+                            value={qty}
+                            onChange={(e) => setQty(Number(e.target.value))}
+                            className="w-full bg-transparent text-gray-900 dark:text-white outline-none text-sm appearance-none cursor-pointer text-center"
+                          >
+                            {[...Array(product.stockStatus === 'requires_shipping' ? 100 : product.countInStock).keys()].map((x) => (
+                              <option key={x + 1} value={x + 1} className="bg-white dark:bg-black text-gray-900 dark:text-white">
+                                {x + 1}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    )}
+                    
                     <button
                       onClick={addToCartHandler}
                       disabled={product.stockStatus !== 'requires_shipping' && product.countInStock === 0}
-                      className="flex-1 flex items-center justify-center gap-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3.5 px-6 rounded-none transition-colors disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed"
+                      className="bg-[#ff6b6b] hover:bg-[#ff5252] text-white font-bold text-[11px] uppercase tracking-widest py-3 px-8 rounded-full transition-all disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
                     >
-                      <ShoppingCart className="w-5 h-5" />
                       {product.stockStatus === 'requires_shipping' 
-                        ? "Request Item" 
+                        ? "REQUEST ITEM" 
                         : product.countInStock > 0 
-                          ? "Add To Cart" 
-                          : "Out of Stock"}
-                    </button>
-
-                    <button
-                      onClick={handleWhatsAppOrder}
-                      className="flex-1 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-semibold py-3.5 px-6 rounded-none transition-colors"
-                    >
-                      <MessageCircle className="w-5 h-5" />
-                      Order via WhatsApp
+                          ? "ADD TO CART" 
+                          : "OUT OF STOCK"}
                     </button>
                   </div>
+                  
+                  <button
+                    onClick={handleWhatsAppOrder}
+                    className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] uppercase tracking-widest py-3 px-8 rounded-full transition-all mt-4 max-w-[300px]"
+                  >
+                    <img src="/icons/whatsapp.png" className="w-[16px] h-[16px] object-contain" alt="WhatsApp" />
+                    ORDER VIA WHATSAPP
+                  </button>
                 </div>
               </div>
             </div>

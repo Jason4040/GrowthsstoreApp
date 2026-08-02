@@ -11,7 +11,11 @@ import Product from "./Products/Product";
 import { useCurrency } from "../hooks/useCurrency";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrency } from "../redux/features/currency/currencySlice";
+import { setBackendDown } from "../redux/features/system/serverStatusSlice";
 import { switchLanguage } from "../Utils/translateService";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const Home = () => {
   const { keyword } = useParams();
@@ -26,6 +30,23 @@ const Home = () => {
   const { formatPrice, currentCurrency } = useCurrency();
   const { cartItems } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    responsive: [
+      { breakpoint: 1536, settings: { slidesToShow: 4 } },
+      { breakpoint: 1280, settings: { slidesToShow: 4 } },
+      { breakpoint: 1024, settings: { slidesToShow: 3 } },
+      { breakpoint: 768, settings: { slidesToShow: 2 } },
+      { breakpoint: 640, settings: { slidesToShow: 2 } }
+    ]
+  };
 
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
@@ -79,6 +100,12 @@ const Home = () => {
   }, []);
   const { data, isLoading, isError, error } = useGetProductsQuery({ keyword });
 
+  useEffect(() => {
+    if (isError) {
+      dispatch(setBackendDown(true));
+    }
+  }, [isError, dispatch]);
+
   return (
     <>
       <SEO 
@@ -91,8 +118,8 @@ const Home = () => {
           <div
             className="w-full h-[350px] md:h-[450px] relative bg-cover bg-center mb-8 flex items-center justify-start border-b border-gray-200 dark:border-gray-800 bg-[url('/banner.jpg')]"
           >
-            {/* Dark overlay only on the left side where text is */}
-            <div className="absolute inset-y-0 left-0 w-full md:w-2/3 lg:w-1/2 bg-gradient-to-r from-black/90 via-black/70 to-transparent z-0"></div>
+            {/* Overlay only on the left side where text is */}
+            <div className="absolute inset-y-0 left-0 w-full md:w-2/3 lg:w-1/2 bg-gradient-to-r from-white/90 via-white/70 to-transparent dark:from-black/90 dark:via-black/70 dark:to-transparent z-0 transition-colors duration-300"></div>
 
             {/* Top Header Section with Black Bg, Centered Logo, and Cart */}
             <div className={`fixed left-0 right-0 z-[99] pointer-events-none transition-all duration-300 ${hasActiveAnnouncement && !scrolled ? 'top-[50px] md:top-[44px]' : 'top-0'}`}>
@@ -111,27 +138,25 @@ const Home = () => {
                     className="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 border border-gray-300 dark:border-white/20 transition-all"
                   >
                     {theme === 'dark'
-                      ? <Sun size={14} className="text-orange-400" />
-                      : <Moon size={14} className="text-indigo-600" />}
+                      ? <img src="/icons/them mode.png" className="w-[14px] h-[14px] object-contain dark:invert" alt="Light Mode" />
+                      : <img src="/icons/them mode.png" className="w-[14px] h-[14px] object-contain dark:invert" alt="Dark Mode" />}
                   </button>
 
                   {/* Language Switcher */}
-                  <div className="hidden sm:flex items-center gap-0.5 bg-gray-100 dark:bg-white/10 border border-gray-300 dark:border-white/20 rounded-full px-1.5 py-1">
-                    {[['en','EN'],['rw','RW'],['lg','LG']].map(([code, label], i, arr) => (
-                      <span key={code} className="flex items-center">
-                        <button
-                          onClick={() => handleLangChange(code)}
-                          title={code === 'en' ? 'English' : code === 'rw' ? 'Kinyarwanda' : 'Luganda'}
-                          className={`text-[10px] md:text-xs font-bold px-1.5 md:px-2 py-0.5 rounded-full transition-all ${
-                            activeLang === code
-                              ? 'bg-orange-500 text-white'
-                              : 'text-gray-600 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400'
-                          }`}
-                        >
-                          {label}
-                        </button>
-                        {i < arr.length - 1 && <span className="w-px h-3 bg-gray-300 dark:bg-white/20 mx-0.5" />}
-                      </span>
+                  <div className="hidden sm:flex items-center gap-1 md:gap-1.5 bg-gray-100 dark:bg-white/10 border border-gray-300 dark:border-white/20 rounded-full px-1 md:px-2 py-1">
+                    {[['en','/icons/united-kingdom.png','English'],['rw','/icons/rwanda.png','Kinyarwanda'],['lg','/icons/uganda.png','Luganda']].map(([code, iconSrc, title], i) => (
+                      <button
+                        key={code}
+                        onClick={() => handleLangChange(code)}
+                        title={title}
+                        className={`relative w-4 h-4 md:w-5 md:h-5 rounded-full overflow-hidden transition-all duration-300 border-2 ${
+                          activeLang === code
+                            ? 'border-orange-500 scale-125 shadow-md z-10'
+                            : 'border-transparent hover:border-gray-400 opacity-70 hover:opacity-100 hover:scale-[1.5] hover:z-20'
+                        }`}
+                      >
+                        <img src={iconSrc} className="w-full h-full object-cover" alt={title} />
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -139,27 +164,34 @@ const Home = () => {
                 {/* RIGHT SIDE: Currency + Search + Cart */}
                 <div className={`absolute top-0 right-4 md:right-8 flex items-center gap-2 md:gap-4 pointer-events-auto z-50 transition-all duration-300 ${scrolled ? 'h-[35px] md:h-[45px]' : 'h-[45px] md:h-[55px]'}`}>
                   {/* Currency Selector */}
-                  <select
-                    value={currentCurrency}
-                    onChange={(e) => dispatch(setCurrency(e.target.value))}
-                    className="bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white text-[10px] md:text-sm font-semibold border border-gray-300 dark:border-white/20 rounded-md p-1 px-1 md:px-2 outline-none transition-colors cursor-pointer w-[58px] md:w-auto hover:border-orange-400 focus:border-orange-500"
-                  >
-                    <option value="USD">USD</option>
-                    <option value="UGX">UGX</option>
-                    <option value="RWF">RWF</option>
-                  </select>
+                  <div className="flex items-center gap-1 md:gap-1.5 bg-gray-100 dark:bg-white/10 border border-gray-300 dark:border-white/20 rounded-full px-1 md:px-2 py-0.5 md:py-1">
+                    {[['USD','/icons/currency-dollar.png','USD'],['UGX','/icons/currency-uganda.png','UGX'],['RWF','/icons/currency-rwanda.png','RWF']].map(([code, iconSrc, title]) => (
+                      <button
+                        key={code}
+                        onClick={() => dispatch(setCurrency(code))}
+                        title={title}
+                        className={`relative w-4 h-4 md:w-5 md:h-5 rounded-full overflow-hidden transition-all duration-300 border-2 ${
+                          currentCurrency === code
+                            ? 'border-orange-500 scale-125 shadow-md z-10'
+                            : 'border-transparent hover:border-gray-400 opacity-70 hover:opacity-100 hover:scale-[1.5] hover:z-20'
+                        }`}
+                      >
+                        <img src={iconSrc} className={`w-full h-full object-contain ${code !== 'USD' ? 'dark:invert' : ''}`} alt={title} />
+                      </button>
+                    ))}
+                  </div>
 
                   {/* Mobile Search Icon */}
                   <button
                     onClick={() => setShowMobileSearch(!showMobileSearch)}
                     className="md:hidden text-gray-700 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
                   >
-                    <Search size={20} />
+                    <img src="/icons/search.png" className="w-[20px] h-[20px] object-contain" alt="Search" />
                   </button>
 
                   {/* Cart Icon */}
                   <Link to="/cart" className="relative flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors group">
-                    <ShoppingCart size={scrolled ? 22 : 26} className="transition-all" />
+                    <img src="/icons/cart.png" className={`object-contain transition-all dark:invert ${scrolled ? 'w-[22px] h-[22px]' : 'w-[26px] h-[26px]'}`} alt="Cart" />
                     {cartItems.length > 0 && (
                       <span className={`absolute bg-orange-600 text-white font-bold rounded-full shadow-lg border border-orange-800 animate-pulse ${scrolled ? '-top-1.5 -right-1.5 text-[9px] px-1 py-0.5' : '-top-1.5 -right-2 text-[11px] px-1.5 py-0.5'}`}>
                         {cartItems.reduce((a, c) => a + c.qty, 0)}
@@ -170,9 +202,9 @@ const Home = () => {
               </div>
 
               {/* Centered Top Tab Logo - Always hanging */}
-              <div className={`absolute top-0 left-1/2 transform -translate-x-1/2 pointer-events-auto bg-white transition-all duration-300 ${scrolled ? 'px-3 py-2 md:px-5 md:py-3 rounded-b-2xl shadow-md' : 'px-5 py-3 md:px-8 md:py-5 rounded-b-3xl shadow-2xl'}`}>
+              <div className={`absolute top-0 left-1/2 transform -translate-x-1/2 pointer-events-auto bg-white transition-all duration-300 ${scrolled ? 'px-2 py-1.5 md:px-5 md:py-3 rounded-b-xl shadow-md' : 'px-3 py-2 md:px-8 md:py-5 rounded-b-2xl shadow-2xl'}`}>
                 <Link to="/">
-                  <img src="/logo.png" alt="Logo" className={`object-contain transition-all duration-300 ${scrolled ? 'h-[20px] md:h-[35px]' : 'h-[25px] md:h-[45px]'}`} />
+                  <img src="/logo.png" alt="Logo" className={`object-contain transition-all duration-300 ${scrolled ? 'h-[16px] md:h-[35px]' : 'h-[20px] md:h-[45px]'}`} />
                 </Link>
               </div>
 
@@ -197,7 +229,7 @@ const Home = () => {
                         type="submit"
                         className="absolute right-1 top-1 bottom-1 bg-orange-600 hover:bg-orange-500 text-white px-4 rounded-md transition-all flex items-center justify-center shadow-sm"
                       >
-                        <Search size={18} />
+                        <img src="/icons/search.png" className="w-[18px] h-[18px] object-contain" alt="Search" />
                       </button>
                     </div>
 
@@ -243,12 +275,12 @@ const Home = () => {
             {/* Aligned Container */}
             <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 relative z-10">
               <div className="text-left max-w-lg mt-12 md:mt-0 flex flex-col items-start">
-                <h2 className="flex flex-col items-start w-full text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight text-left">
+                <h2 className="flex flex-col items-start w-full text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight text-left">
                   <span className="satisfy-regular font-satisfy text-orange-500 normal-case text-6xl md:text-8xl mb-2 text-left">Elevate</span>
-                  <span className="uppercase text-left text-white">Your Style</span>
+                  <span className="uppercase text-left text-gray-900 dark:text-white">Your Style</span>
                 </h2>
-                <p className="text-gray-200 text-lg mb-8 hidden md:block text-left">
-                  <span className="text-white">Discover the latest premium products designed to elevate your lifestyle.</span>
+                <p className="text-gray-700 dark:text-gray-200 text-lg mb-8 hidden md:block text-left">
+                  <span className="text-gray-900 dark:text-white">Discover the latest premium products designed to elevate your lifestyle.</span>
                 </p>
                 <Link
                   to="/shop"
@@ -273,15 +305,13 @@ const Home = () => {
                     }}
                     onFocus={() => setShowSuggestions(true)}
                     onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                    className="w-full py-4 md:py-5 pl-8 pr-16 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur-md border border-white/30 text-gray-900 dark:text-white placeholder-gray-300 focus:outline-none focus:bg-white dark:focus:bg-white dark:bg-black/60 focus:border-orange-500 transition-all text-lg shadow-lg"
+                    className="w-full py-4 md:py-5 pl-8 pr-16 rounded-full bg-white/80 dark:bg-black/40 backdrop-blur-md border border-gray-300 dark:border-white/30 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-300 focus:outline-none focus:bg-white dark:focus:bg-black/80 focus:border-orange-500 transition-all text-lg shadow-lg"
                   />
                   <button
                     type="submit"
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-orange-600 hover:bg-orange-500 text-white p-3 md:p-4 rounded-full transition-all shadow-md"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
+                    <img src="/icons/search.png" className="w-[24px] h-[24px] object-contain" alt="Search" />
                   </button>
                 </div>
 
@@ -336,16 +366,19 @@ const Home = () => {
       ) : (
         <>
           <div className="max-w-[1400px] mx-auto px-4 md:px-8 mt-[2rem] md:mt-[8rem]">
-            <div className="flex flex-col sm:flex-row justify-between items-center mb-12 gap-4">
-              <h1 className="text-4xl md:text-6xl font-semibold text-gray-900 dark:text-white text-center sm:text-left tracking-tight">
+            <div className="flex flex-col items-center justify-center mb-14 gap-2">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white text-center tracking-[0.15em] uppercase">
                 Special Products
               </h1>
-
+              <p className="text-gray-500 dark:text-gray-400 text-2xl satisfy-regular mb-4">
+                Discover our curated selection
+              </p>
+              
               <Link
                 to="/shop"
-                className="bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-none py-4 px-14 transition-all transform hover:scale-105 border border-orange-500"
+                className="text-xs font-bold uppercase tracking-widest text-orange-600 dark:text-orange-500 hover:text-gray-900 dark:hover:text-white transition-colors border-b-2 border-transparent hover:border-gray-900 dark:hover:border-white pb-1"
               >
-                Enter Shop
+                Shop All Products
               </Link>
             </div>
 
@@ -362,12 +395,14 @@ const Home = () => {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 sm:gap-8 justify-items-center">
-                {data.products.map((product) => (
-                  <div key={product._id} className="w-full">
-                    <Product product={product} />
-                  </div>
-                ))}
+              <div className="w-full px-2 md:px-6 slider-container">
+                <Slider {...sliderSettings} className="w-full product-slider">
+                  {data.products.map((product) => (
+                    <div key={product._id} className="px-2 md:px-3 pb-8 outline-none">
+                      <Product product={product} />
+                    </div>
+                  ))}
+                </Slider>
               </div>
             )}
           </div>

@@ -36,7 +36,7 @@ const SmallProduct = ({ product }) => {
   };
 
   return (
-    <div className="p-3 relative bg-white dark:bg-[#1A1A1A] rounded-none border border-gray-200 dark:border-gray-800 hover:border-orange-500 transition-all shadow-none group">
+    <div className="p-3 relative bg-white dark:bg-[#121212] rounded-sm transition-all duration-300 group">
       <div className="relative">
         <AdminProductControls product={product} />
         {product.video ? (
@@ -52,14 +52,20 @@ const SmallProduct = ({ product }) => {
             className="w-full h-48 object-cover rounded-none"
           />
         )}
-        <div className="absolute top-2 left-2 z-10 flex flex-col gap-1">
+        <div className="absolute top-2 left-2 z-10 flex flex-col gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           {product?.availableIn && (
-            <span className="bg-blue-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-sm shadow-sm flex items-center gap-1 w-fit">
-              📍 {product.availableIn === "Both" ? "Uganda & Rwanda" : `${product.availableIn} Only`}
+            <span className="bg-white/60 dark:bg-black/50 backdrop-blur-md text-gray-900 dark:text-white border border-white/40 dark:border-gray-700/50 text-[9px] font-bold px-1.5 py-1 shadow-none flex items-center gap-1.5 w-fit uppercase tracking-wider rounded-full">
+              {product.availableIn === "Both" || product.availableIn === "Uganda" ? (
+                <img src="/icons/uganda.png" className="w-3.5 h-3.5 object-cover rounded-full shadow-sm" alt="Uganda" />
+              ) : null}
+              {product.availableIn === "Both" || product.availableIn === "Rwanda" ? (
+                <img src="/icons/rwanda.png" className="w-3.5 h-3.5 object-cover rounded-full shadow-sm" alt="Rwanda" />
+              ) : null}
+              {product.availableIn === "Both" ? "UG & RW" : `${product.availableIn}`}
             </span>
           )}
           {product?.condition && (
-            <span className="bg-purple-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-sm shadow-sm w-fit">
+            <span className="bg-white/60 dark:bg-black/50 backdrop-blur-md text-gray-900 dark:text-white border border-white/40 dark:border-gray-700/50 text-[8px] font-bold px-1.5 py-0.5 shadow-none w-fit uppercase tracking-widest rounded-full">
               {product.condition}
             </span>
           )}
@@ -69,27 +75,35 @@ const SmallProduct = ({ product }) => {
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-3">
         <Link to={`/product/${product._id}`}>
-          <div className="flex justify-between items-center gap-2">
-            <div className="text-sm font-semibold truncate text-gray-900 dark:text-white flex-1">{product.name}</div>
-            <button
-              className="p-1.5 bg-[#25D366] hover:bg-[#20bd5a] rounded-none text-white transition-colors flex items-center justify-center"
-              onClick={handleWhatsAppOrder}
-              title="Order via WhatsApp"
-            >
-              <MessageCircle size={14} />
-            </button>
-            <button
-              className="p-1.5 bg-gray-800 hover:bg-gray-700 rounded-none text-white transition-colors flex items-center justify-center"
-              onClick={addToCartHandler}
-              title="Add to Cart"
-            >
-              <ShoppingCart size={14} />
-            </button>
-            <span className="bg-orange-900 border border-orange-500 text-orange-300 text-xs font-semibold px-2 py-1 rounded-none whitespace-nowrap">
-              {formatPrice(product)}
-            </span>
+          <div className="flex flex-col gap-2">
+            <div className="text-xs font-semibold truncate text-gray-800 dark:text-gray-200 text-center hover:text-orange-500 transition-colors">
+              {product.name}
+            </div>
+            
+            <div className="flex justify-between items-center gap-2 mt-1">
+              <span className="text-[#25D366] text-sm font-bold tracking-wide">
+                {formatPrice(product)}
+              </span>
+              
+              <div className="flex gap-2">
+                <button
+                  className="p-1.5 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full text-[#25D366] transition-colors flex items-center justify-center border border-[#25D366]/30 hover:border-[#25D366]"
+                  onClick={handleWhatsAppOrder}
+                  title="Order via WhatsApp"
+                >
+                  <img src="/icons/whatsapp.png" className="w-[14px] h-[14px] object-contain" alt="WhatsApp" />
+                </button>
+                <button
+                  className="p-1.5 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full text-gray-900 dark:text-white transition-colors flex items-center justify-center border border-gray-300 dark:border-gray-700 hover:border-gray-900 dark:hover:border-white"
+                  onClick={addToCartHandler}
+                  title="Add to Cart"
+                >
+                  <img src="/icons/cart.png" className="w-[14px] h-[14px] object-contain dark:invert" alt="Cart" />
+                </button>
+              </div>
+            </div>
           </div>
         </Link>
       </div>

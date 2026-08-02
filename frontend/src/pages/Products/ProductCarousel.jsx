@@ -61,61 +61,61 @@ const ProductCarousel = () => {
                 <ProductVideo
                   videoUrl={product.video}
                   isCover={true}
-                  className="w-full rounded-none object-cover h-[20rem] md:h-[30rem] 2xl:h-[35rem] shadow-none border border-gray-200 dark:border-gray-800"
+                  className="w-full rounded-2xl object-cover h-[20rem] md:h-[30rem] 2xl:h-[35rem] shadow-none"
                 />
               ) : (
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full rounded-none object-cover h-[20rem] md:h-[30rem] 2xl:h-[35rem] shadow-none border border-gray-200 dark:border-gray-800"
+                  className="w-full rounded-2xl object-cover h-[20rem] md:h-[30rem] 2xl:h-[35rem] shadow-none"
                 />
               )}
               <div className="absolute top-4 right-4 z-10">
                 <HeartIcon product={product} />
               </div>
 
-              <div className="mt-8 flex flex-col lg:flex-row justify-between gap-8 px-4">
+              <div className="mt-8 flex flex-col lg:flex-row justify-between gap-8 px-2 md:px-4">
                 <div className="flex-1">
-                  <h2 className="text-2xl 2xl:text-3xl font-semibold text-gray-900 dark:text-white">{product.name}</h2>
-                  <div className="flex items-center gap-4 mt-2">
-                    <p className="text-orange-500 font-semibold text-xl">{formatPrice(product)}</p>
+                  <h2 className="text-3xl md:text-4xl 2xl:text-5xl font-bold text-gray-900 dark:text-white tracking-tight leading-tight">{product.name}</h2>
+                  <div className="flex items-center gap-6 mt-4">
+                    <p className="text-[#25D366] font-bold text-2xl tracking-wide">{formatPrice(product)}</p>
                     <button
-                      className="px-4 py-2 bg-[#25D366] hover:bg-[#20bd5a] rounded-none text-white transition-colors flex items-center justify-center text-sm font-bold shadow-md"
+                      className="px-6 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] rounded-full text-white transition-all transform hover:scale-105 flex items-center justify-center text-sm font-bold shadow-none"
                       onClick={(e) => handleWhatsAppOrder(e, product)}
                       title="Order via WhatsApp"
                     >
-                      <MessageCircle size={16} className="mr-2" />
+                      <MessageCircle size={18} strokeWidth={2} className="mr-2" />
                       Order Now
                     </button>
                   </div>
-                  <p className="mt-4 text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl">
+                  <p className="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed text-sm md:text-base max-w-2xl">
                     {product.description.substring(0, 160)}...
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-x-8 gap-y-4 lg:w-[20rem] 2xl:w-[25rem] bg-gray-900/50 p-6 rounded-none border border-gray-200 dark:border-gray-800 backdrop-blur-sm">
-                  <div className="space-y-3">
-                    <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                      <Store className="mr-2 text-orange-500" /> {product.brand}
+                <div className="grid grid-cols-2 gap-x-8 gap-y-5 lg:w-[22rem] 2xl:w-[26rem] bg-white dark:bg-[#121212] p-6 rounded-2xl shadow-none border border-gray-100 dark:border-gray-800">
+                  <div className="space-y-4">
+                    <div className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 transition-colors hover:text-orange-500">
+                      <Store size={18} strokeWidth={1.5} className="mr-3 text-orange-500" /> {product.brand}
                     </div>
-                    <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                      <Clock className="mr-2 text-orange-500" />{" "}
+                    <div className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 transition-colors hover:text-orange-500">
+                      <Clock size={18} strokeWidth={1.5} className="mr-3 text-orange-500" />{" "}
                       {moment(product.createdAt).fromNow()}
                     </div>
-                    <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                      <Star className="mr-2 text-orange-500" /> {product.numReviews} Reviews
+                    <div className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 transition-colors hover:text-orange-500">
+                      <MessageCircle size={18} strokeWidth={1.5} className="mr-3 text-orange-500" /> {product.numReviews} Reviews
                     </div>
                   </div>
 
-                  <div className="space-y-3">
-                    <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                      <Star className="mr-2 text-orange-500" /> {Math.round(product.rating)} Ratings
+                  <div className="space-y-4">
+                    <div className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 transition-colors hover:text-orange-500">
+                      <Star size={18} strokeWidth={1.5} className="mr-3 text-orange-500" /> {Math.round(product.rating)} Ratings
                     </div>
-                    <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                      <ShoppingCart className="mr-2 text-orange-500" /> {product.quantity} Qty
+                    <div className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 transition-colors hover:text-orange-500">
+                      <ShoppingCart size={18} strokeWidth={1.5} className="mr-3 text-orange-500" /> {product.quantity} Qty
                     </div>
-                    <div className="flex items-center text-sm font-medium text-gray-700 dark:text-gray-300">
-                      <Box className="mr-2 text-orange-500" /> {product.countInStock} Stock
+                    <div className="flex items-center text-sm font-semibold text-gray-700 dark:text-gray-300 transition-colors hover:text-orange-500">
+                      <Box size={18} strokeWidth={1.5} className="mr-3 text-orange-500" /> {product.countInStock} Stock
                     </div>
                   </div>
                 </div>

@@ -6,6 +6,7 @@ import TopAnnouncement from "./components/TopAnnouncement";
 import SocialSidebar from "./components/SocialSidebar";
 import Footer from "./components/Footer";
 import Loader from "./components/Loader";
+import UnderMaintenance from "./components/UnderMaintenance";
 import { ToastContainer, toast } from "react-toastify";
 import { useGetMeQuery, useUserHeartbeatMutation } from "./redux/api/usersApiSlice";
 import { setCredentials } from "./redux/features/auth/authSlice";
@@ -55,6 +56,7 @@ const App = () => {
 
   return (
     <>
+      <UnderMaintenance />
       <ToastContainer
         position="bottom-right"
         autoClose={3000}

@@ -6,8 +6,8 @@ const SocialSidebar = () => {
     { icon: FaFacebookF, name: 'FACEBOOK', color: 'bg-[#3b5998]', link: 'https://www.facebook.com/profile.php?id=61574254704789' },
     { icon: FaInstagram, name: 'INSTAGRAM', color: 'bg-[#e4405f]', link: 'https://www.instagram.com/growthsstore' },
     { icon: FaTiktok, name: 'TIKTOK', color: 'bg-[#010101]', link: 'https://www.tiktok.com/@growthsstore?_r=1&_t=ZS-94vl9X96Py' },
-    { icon: FaWhatsapp, name: 'WHATSAPP', color: 'bg-[#25D366]', link: 'https://wa.me/256771204748' },
-    { icon: Phone, name: 'CALL US', color: 'bg-[#4CAF50]', link: 'tel:+250793392762' },
+    { icon: () => <img src="/icons/whatsapp.png" className="w-5 h-5 object-contain" alt="WhatsApp" />, name: 'WHATSAPP', color: 'bg-[#25D366]', link: 'https://wa.me/256771204748' },
+    { icon: () => <img src="/icons/rwanda tele code.png" className="w-5 h-5 object-contain" alt="Rwanda Call" />, name: 'CALL US', color: 'bg-[#4CAF50]', link: 'tel:+250793392762' },
     { icon: Mail, name: 'EMAIL US', color: 'bg-[#EA4335]', link: 'mailto:jaygrowth01@gmail.com' },
   ];
 

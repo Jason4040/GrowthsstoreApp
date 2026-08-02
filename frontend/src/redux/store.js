@@ -6,6 +6,7 @@ import favoritesReducer from "../redux/features/favorites/favoriteSlice";
 import cartSliceReducer from "../redux/features/cart/cartSlice";
 import shopReducer from "../redux/features/shop/shopSlice";
 import currencyReducer from "./features/currency/currencySlice";
+import serverStatusReducer from "./features/system/serverStatusSlice";
 import { getFavoritesFromLocalStorage } from "../Utils/localStorage";
 
 const initialFavorites = getFavoritesFromLocalStorage() || [];
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   cart: cartSliceReducer,
   shop: shopReducer,
   currency: currencyReducer,
+  serverStatus: serverStatusReducer,
 });
 
 const store = configureStore({

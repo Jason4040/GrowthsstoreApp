@@ -89,19 +89,19 @@ const ProductTabs = ({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-12">
+    <div className="flex flex-col gap-16 pb-12">
       {/* Tab Navigation */}
-      <section className="flex flex-row lg:flex-col border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-800 shrink-0">
+      <section className="flex flex-row justify-center items-center border-b border-gray-200 dark:border-gray-800 shrink-0 gap-8 md:gap-16 w-full">
         {[
-          { id: 1, label: userReview ? "Edit Review" : "Write Review" },
-          { id: 2, label: "All Reviews" },
-          { id: 3, label: "Related Products" },
+          { id: 1, label: userReview ? "EDIT REVIEW" : "WRITE REVIEW" },
+          { id: 2, label: `REVIEWS (${product?.numReviews || 0})` },
+          { id: 3, label: "RELATED PRODUCTS" },
         ].map((tab) => (
           <div
             key={tab.id}
-            className={`p-4 md:p-6 cursor-pointer text-sm md:text-lg transition-all whitespace-nowrap ${activeTab === tab.id
-              ? "text-orange-500 font-medium border-b-2 lg:border-b-0 lg:border-r-2 border-orange-500 bg-orange-500/5"
-              : "text-gray-600 dark:text-gray-400 hover:text-white"
+            className={`py-4 cursor-pointer text-xs md:text-sm font-bold tracking-widest transition-all whitespace-nowrap uppercase ${activeTab === tab.id
+              ? "text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white"
+              : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
               }`}
             onClick={() => handleTabClick(tab.id)}
           >
@@ -111,15 +111,15 @@ const ProductTabs = ({
       </section>
 
       {/* Tab Content */}
-      <section className="flex-1 min-w-0">
+      <section className="w-full flex justify-center">
         {/* Write Review */}
         {activeTab === 1 && (
-          <div className="max-w-2xl animate-fadeIn">
+          <div className="w-full max-w-2xl animate-fadeIn">
             {userInfo ? (
               <form onSubmit={async (e) => {
                 const success = await submitHandler(e);
                 if (success) setActiveTab(2);
-              }} className="space-y-8 bg-gray-100 dark:bg-[#151515] p-8 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl">
+              }} className="space-y-8 bg-transparent p-0 lg:p-4">
                 <div>
                   <label htmlFor="rating" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-3">
                     Your Rating
@@ -232,11 +232,11 @@ const ProductTabs = ({
 
         {/* All Reviews */}
         {activeTab === 2 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fadeIn">
+          <div className="w-full max-w-4xl grid grid-cols-1 gap-8 animate-fadeIn">
             {product.reviews.filter(r => userInfo?.isAdmin || !r.isHidden).length === 0 ? (
-              <div className="col-span-full text-center py-16 bg-gray-100 dark:bg-[#151515] rounded-2xl border border-gray-200 dark:border-gray-800">
-                <div className="text-gray-500 text-lg mb-2">No reviews yet.</div>
-                <div className="text-gray-600">Be the first to share your experience!</div>
+              <div className="col-span-full text-center py-16 bg-transparent">
+                <div className="text-gray-500 text-sm md:text-base font-light mb-2">No reviews yet.</div>
+                <div className="text-gray-400 text-xs md:text-sm font-light">Be the first to share your experience!</div>
               </div>
             ) : (
               product.reviews.filter(r => userInfo?.isAdmin || !r.isHidden).map((review) => (
@@ -320,7 +320,9 @@ const ProductTabs = ({
 
         {/* Related Products */}
         {activeTab === 3 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 animate-fadeIn">
+          <div className="w-full">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 uppercase tracking-widest text-center">Related Products</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-6 animate-fadeIn">
             {!data ? (
               <Loader />
             ) : (
@@ -330,6 +332,7 @@ const ProductTabs = ({
                 </div>
               ))
             )}
+            </div>
           </div>
         )}
       </section>

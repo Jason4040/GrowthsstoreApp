@@ -2,10 +2,12 @@ import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import { Link } from "react-router-dom";
 import { useGetOrdersQuery } from "../../redux/api/orderApiSlice";
+import { useCurrency } from "../../hooks/useCurrency";
 import AdminMenu from "./AdminMenu";
 
 const OrderList = () => {
   const { data: orders, isLoading, error } = useGetOrdersQuery();
+  const { formatPrice } = useCurrency();
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto">
@@ -48,7 +50,7 @@ const OrderList = () => {
                     <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
                       {order.createdAt ? order.createdAt.substring(0, 10) : "N/A"}
                     </td>
-                    <td className="px-6 py-4 text-orange-500 font-semibold">$ {order.totalPrice}</td>
+                    <td className="px-6 py-4 text-orange-500 font-semibold">{formatPrice(order.totalPrice)}</td>
                     <td className="px-6 py-4">
                       {order.isPaid ? (
                         <span className="inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/10 text-green-500 border border-green-500/20">

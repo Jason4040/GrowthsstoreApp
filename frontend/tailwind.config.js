@@ -10,7 +10,7 @@ export default {
         orange: colors.orange,
       },
       fontFamily: {
-        sans: ["Comfortaa", "sans-serif"],
+        sans: ["Raleway", "sans-serif"],
         satisfy: ["Satisfy", "cursive"],
       },
     },

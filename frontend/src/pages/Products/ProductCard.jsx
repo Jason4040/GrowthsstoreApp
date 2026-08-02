@@ -38,27 +38,33 @@ const ProductCard = ({ p }) => {
   return (
     <div 
       onClick={() => navigate(`/product/${p._id}`)}
-      className="cursor-pointer w-full bg-white dark:bg-[#151515] rounded-none shadow-none border border-gray-200 dark:border-gray-800 hover:border-orange-500 transition-all duration-300 relative group overflow-hidden"
+      className="cursor-pointer w-full bg-white dark:bg-[#121212] rounded-sm transition-all duration-300 relative group overflow-hidden flex flex-col h-full"
     >
       <section className="relative aspect-[4/3] overflow-hidden">
         <AdminProductControls product={p} />
         <Link to={`/product/${p._id}`}>
-          <div className="absolute bottom-3 right-3 flex flex-col items-end gap-1 z-10">
+          <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             {p?.availableIn && (
-              <span className="bg-blue-600 text-gray-900 dark:text-white text-xs font-bold px-3 py-1.5 rounded-none shadow-lg group-hover:scale-105 transition-transform flex items-center gap-1">
-                📍 {p.availableIn === "Both" ? "Uganda & Rwanda" : `${p.availableIn} Only`}
+              <span className="bg-white/60 dark:bg-black/50 backdrop-blur-md text-gray-900 dark:text-white border border-white/40 dark:border-gray-700/50 text-[9px] font-bold px-2 py-1 shadow-none flex items-center gap-1.5 w-fit uppercase tracking-wider rounded-full transition-transform group-hover:scale-105">
+                {p.availableIn === "Both" || p.availableIn === "Uganda" ? (
+                  <img src="/icons/uganda.png" className="w-3.5 h-3.5 object-cover rounded-full shadow-sm" alt="Uganda" />
+                ) : null}
+                {p.availableIn === "Both" || p.availableIn === "Rwanda" ? (
+                  <img src="/icons/rwanda.png" className="w-3.5 h-3.5 object-cover rounded-full shadow-sm" alt="Rwanda" />
+                ) : null}
+                {p.availableIn === "Both" ? "UG & RW" : `${p.availableIn}`}
               </span>
             )}
             {p?.condition && (
-              <span className="bg-purple-600 text-gray-900 dark:text-white text-xs font-bold px-3 py-1.5 rounded-none shadow-lg group-hover:scale-105 transition-transform">
+              <span className="bg-white/60 dark:bg-black/50 backdrop-blur-md text-gray-900 dark:text-white border border-white/40 dark:border-gray-700/50 text-[8px] font-bold px-2 py-0.5 shadow-none w-fit uppercase tracking-widest rounded-full transition-transform group-hover:scale-105">
                 {p.condition}
               </span>
             )}
-            <span className="bg-orange-600 text-white text-xs font-bold px-3 py-1.5 rounded-none shadow-lg group-hover:scale-105 transition-transform">
+            <span className="bg-white/60 dark:bg-black/50 backdrop-blur-md text-gray-900 dark:text-white border border-white/40 dark:border-gray-700/50 text-[8px] font-bold px-2 py-0.5 shadow-none w-fit uppercase tracking-widest rounded-full transition-transform group-hover:scale-105">
               {p?.brand}
             </span>
             {p?.discountQtyThreshold > 0 && (
-              <span className="bg-green-600 text-gray-900 dark:text-white text-xs font-bold px-3 py-1.5 rounded-none shadow-lg animate-pulse">
+              <span className="bg-green-600/80 backdrop-blur-md text-white border border-green-500/50 text-[8px] font-bold px-2 py-0.5 shadow-none w-fit uppercase tracking-widest rounded-full animate-pulse">
                 Buy {p.discountQtyThreshold}+ Get {formatPrice(getDiscountValue(p))} OFF
               </span>
             )}
@@ -78,55 +84,59 @@ const ProductCard = ({ p }) => {
             />
           )}
         </Link>
-        <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="absolute top-2 right-2 md:top-3 md:right-3 z-10">
           <HeartIcon product={p} />
         </div>
       </section>
 
-      <div className="p-5 flex flex-col gap-4">
-        <div className="flex justify-between items-start gap-4">
-          <h5 className="text-lg font-bold text-gray-900 dark:text-white truncate leading-tight flex-1">
-            {p?.name}
-          </h5>
-          <div className="flex flex-col items-end">
-            <p className="font-bold text-orange-500 text-lg whitespace-nowrap">
-              {formatPrice(p)}
-            </p>
-            {p?.negotiable && (
-              <span className="bg-yellow-500/20 text-yellow-500 text-[10px] font-bold px-2 py-0.5 rounded-sm mt-1 uppercase tracking-wide border border-yellow-500/30">
-                Negotiable
-              </span>
-            )}
-          </div>
+      <div className="p-4 flex flex-col flex-grow items-start text-left">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-[#25D366] text-base md:text-lg font-bold tracking-tight">
+            {formatPrice(p)}
+          </span>
+          {p?.negotiable && (
+            <span className="text-yellow-600 dark:text-yellow-500 text-[10px] font-semibold uppercase tracking-wider">
+              (Negotiable)
+            </span>
+          )}
         </div>
 
-        <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 leading-relaxed">
-          {p?.description?.substring(0, 80)}...
-        </p>
+        <h5 className="text-sm md:text-base font-semibold text-gray-800 dark:text-gray-200 leading-snug mb-2 hover:text-orange-500 transition-colors line-clamp-2 w-full">
+          {p?.name}
+        </h5>
 
-        <section className="flex justify-between items-center gap-2">
+        <div className="text-xs text-gray-500 dark:text-gray-400 truncate w-full flex items-center gap-1 mb-4">
+          {p?.availableIn && (
+            <span>{p.availableIn === "Both" ? "Uganda & Rwanda" : p.availableIn}</span>
+          )}
+          {p?.availableIn && p?.condition && <span>•</span>}
+          {p?.condition && <span>{p.condition}</span>}
+        </div>
+
+        {/* Actions */}
+        <section className="mt-auto flex justify-start items-center gap-3 w-full opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button
+            className="p-1.5 md:p-2 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full text-[#25D366] transition-colors flex items-center justify-center border border-[#25D366]/30 hover:border-[#25D366]"
+            onClick={handleWhatsAppOrder}
+            title="Order via WhatsApp"
+          >
+            <img src="/icons/whatsapp.png" className="w-[16px] h-[16px] md:w-[18px] md:h-[18px] object-contain" alt="WhatsApp" />
+          </button>
+          
           <Link
             to={`/product/${p._id}`}
             onClick={(e) => e.stopPropagation()}
-            className="flex-1 text-center bg-orange-600 hover:bg-orange-700 text-white text-sm font-medium py-2.5 rounded-none transition-colors flex items-center justify-center gap-2"
+            className="flex-1 text-center bg-transparent hover:bg-orange-600 text-gray-900 dark:text-white hover:text-white text-[10px] md:text-xs font-bold uppercase tracking-widest py-2 rounded-full transition-colors border border-gray-300 dark:border-gray-700 hover:border-orange-600"
           >
             Details
           </Link>
 
           <button
-            className="p-2.5 bg-[#25D366] hover:bg-[#20bd5a] rounded-none text-gray-900 dark:text-white transition-colors"
-            onClick={handleWhatsAppOrder}
-            title="Order via WhatsApp"
-          >
-            <MessageCircle size={20} />
-          </button>
-
-          <button
-            className="p-2.5 bg-gray-800 hover:bg-gray-700 rounded-none text-gray-900 dark:text-white transition-colors"
+            className="p-1.5 md:p-2 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full text-gray-900 dark:text-white transition-colors flex items-center justify-center border border-gray-300 dark:border-gray-700 hover:border-gray-900 dark:hover:border-white"
             onClick={() => addToCartHandler(p, 1)}
             title="Add to Cart"
           >
-            <ShoppingCart size={20} />
+            <img src="/icons/cart.png" className="w-[16px] h-[16px] md:w-[18px] md:h-[18px] object-contain dark:invert" alt="Cart" />
           </button>
         </section>
       </div>

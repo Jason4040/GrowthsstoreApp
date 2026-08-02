@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body, input, select, textarea, button {
-  font-family: "Comfortaa", sans-serif;
+  font-family: "Raleway", sans-serif;
 }
 
 /* ===== LIGHT MODE (default) ===== */
@@ -30,9 +30,7 @@ select option {
 
 /* ===== DARK MODE ===== */
 .dark body {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/OR68VV0.jpg') no-repeat center center fixed;
   background-color: #0f0f10;
-  background-size: cover;
   color: #fff;
 }
 
@@ -51,15 +49,7 @@ select option {
   color: #fff;
 }
 
-.dark .bg-black,
-.dark .bg-\[\#111\],
-.dark .bg-\[\#101010\],
-.dark .bg-\[\#1A1A1A\] {
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/OR68VV0.jpg') !important;
-  background-attachment: fixed !important;
-  background-size: cover !important;
-  background-position: center !important;
-}
+
 
 
 /* ===== Custom Font Helpers ===== */
@@ -69,8 +59,8 @@ select option {
   font-style: normal;
 }
 
-.comfortaa-regular {
-  font-family: "Comfortaa", sans-serif !important;
+.raleway-regular {
+  font-family: "Raleway", sans-serif !important;
 }
 
 /* ===== React-Toastify Custom Theme ===== */
@@ -80,7 +70,7 @@ select option {
   border-radius: 0 !important;
   box-shadow: 0 4px 24px rgba(0,0,0,0.10) !important;
   color: #111827 !important;
-  font-family: "Comfortaa", sans-serif !important;
+  font-family: "Raleway", sans-serif !important;
   min-height: 52px !important;
   padding: 12px 16px !important;
 }
@@ -191,7 +181,7 @@ select option {
   cursor: pointer;
   transition: all 0.2s;
   letter-spacing: 0.03em;
-  font-family: "Comfortaa", sans-serif;
+  font-family: "Raleway", sans-serif;
 }
 
 .lang-switcher button:hover {
@@ -267,13 +257,26 @@ body {
   pointer-events: none;
   visibility: hidden; /* hidden by default */
 }
-#translation-loader.visible {
-  visibility: visible;
-  pointer-events: all;
-}individually in index.html. */
 
 /* Remove Google Translate highlighted text styling */
 .goog-text-highlight {
   background: none !important;
   box-shadow: none !important;
+}
+
+/* ===== Slick Carousel Theme Adaptations ===== */
+.slick-prev:before, .slick-next:before {
+  color: #111827 !important;
+}
+.dark .slick-prev:before, .dark .slick-next:before {
+  color: #ffffff !important;
+}
+.slick-dots li button:before {
+  color: #111827 !important;
+}
+.dark .slick-dots li button:before {
+  color: #ffffff !important;
+}
+.slick-dots li.slick-active button:before {
+  color: #ea580c !important;
 }

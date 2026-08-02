@@ -10,6 +10,7 @@ import {
   setProducts,
   setChecked,
 } from "../redux/features/shop/shopSlice";
+import { setBackendDown } from "../redux/features/system/serverStatusSlice";
 import Loader from "../components/Loader";
 import ProductCard from "./Products/ProductCard";
 
@@ -29,10 +30,16 @@ const Shop = () => {
   });
 
   useEffect(() => {
-    if (!categoriesQuery.isLoading) {
+    if (categoriesQuery.isError || filteredProductsQuery.isError) {
+      dispatch(setBackendDown(true));
+    }
+  }, [categoriesQuery.isError, filteredProductsQuery.isError, dispatch]);
+
+  useEffect(() => {
+    if (!categoriesQuery.isLoading && categoriesQuery.data) {
       dispatch(setCategories(categoriesQuery.data));
     }
-  }, [categoriesQuery.data, dispatch]);
+  }, [categoriesQuery.data, categoriesQuery.isLoading, dispatch]);
 
   useEffect(() => {
     if (!checked.length || !radio.length) {

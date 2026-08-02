@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Heart } from "lucide-react";
+
 import { useSelector, useDispatch } from "react-redux";
 import {
   addToFavorites,
@@ -37,13 +37,22 @@ const HeartIcon = ({ product }) => {
 
   return (
     <div
-      className="cursor-pointer p-2 transition-all hover:scale-110 active:scale-95 bg-white dark:bg-black/20 rounded-none backdrop-blur-sm border border-transparent hover:border-orange-500/30"
+      className="cursor-pointer transition-all hover:scale-115 active:scale-95 p-1 flex items-center justify-center"
       onClick={toggleFavorites}
+      title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
     >
       {isFavorite ? (
-        <Heart size={26} fill="currentColor" className="text-orange-500 transition-colors drop-shadow-lg" />
+        <img 
+          src="/icons/favourites.png" 
+          className="w-7 h-7 md:w-8 md:h-8 object-contain drop-shadow-lg scale-110" 
+          alt="Favorited" 
+        />
       ) : (
-        <Heart size={26} className="text-orange-500 hover:text-orange-400 transition-colors drop-shadow-lg" />
+        <img 
+          src="/icons/favourites.png" 
+          className="w-7 h-7 md:w-8 md:h-8 object-contain dark:invert opacity-60 hover:opacity-100 transition-opacity drop-shadow-md" 
+          alt="Favorite" 
+        />
       )}
     </div>
   );

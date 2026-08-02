@@ -45,6 +45,7 @@ const Navigation = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [showAdminMenu, setShowAdminMenu] = useState(false);
+  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
   const [activeLang, setActiveLang] = useState(localStorage.getItem('appLang') || 'en');
@@ -106,38 +107,10 @@ const Navigation = () => {
           onClick={toggleTheme}
           title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         >
-          {theme === 'dark' ? <Sun size={22} className="text-orange-500" /> : <Moon size={22} className="text-indigo-600" />}
+          {theme === 'dark' ? <img src="/icons/them mode.png" className="w-[22px] h-[22px] object-contain" alt="Light Mode" /> : <img src="/icons/them mode.png" className="w-[22px] h-[22px] object-contain" alt="Dark Mode" />}
         </div>
 
-        {/* Language Switcher */}
-        <div className="pointer-events-auto lang-switcher">
-          <button
-            className={`lang-btn ${activeLang === 'en' ? 'active' : ''}`}
-            data-lang="en"
-            onClick={() => handleLangChange('en')}
-            title="English"
-          >
-            EN
-          </button>
-          <div className="lang-btn-divider" />
-          <button
-            className={`lang-btn ${activeLang === 'rw' ? 'active' : ''}`}
-            data-lang="rw"
-            onClick={() => handleLangChange('rw')}
-            title="Kinyarwanda"
-          >
-            RW
-          </button>
-          <div className="lang-btn-divider" />
-          <button
-            className={`lang-btn ${activeLang === 'lg' ? 'active' : ''}`}
-            data-lang="lg"
-            onClick={() => handleLangChange('lg')}
-            title="Luganda (Uganda)"
-          >
-            LG
-          </button>
-        </div>
+
 
         {/* Hidden Google Translate target is in index.html body */}
       </div>
@@ -167,29 +140,31 @@ const Navigation = () => {
             </Link>
           </div>
 
-          <div className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative">
+          <button
+            onClick={() => {
+              const order = ['USD', 'UGX', 'RWF'];
+              const next = order[(order.indexOf(currentCurrency) + 1) % order.length];
+              dispatch(setCurrency(next));
+            }}
+            className="flex items-center text-left w-full text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative z-[60]"
+          >
             <div className="w-[96px] flex justify-center shrink-0">
-              <DollarSign size={30} className="transform group-hover/link:scale-110 transition-transform" />
+              <img src={currentCurrency === 'UGX' ? '/icons/currency-uganda.png' : currentCurrency === 'RWF' ? '/icons/currency-rwanda.png' : '/icons/currency-dollar.png'} className={`w-[26px] h-[26px] object-contain transform group-hover/link:scale-110 transition-transform ${currentCurrency !== 'USD' ? 'dark:invert' : ''}`} alt="Currency" />
             </div>
-            <div className="nav-item-name pr-4 w-full">
-              <select
-                value={currentCurrency}
-                onChange={(e) => dispatch(setCurrency(e.target.value))}
-                className="w-full bg-gray-50 dark:bg-[#1A1A1A] text-gray-900 dark:text-white text-sm font-medium border border-gray-200 dark:border-gray-800 rounded-lg p-1.5 focus:ring-2 focus:ring-orange-500 outline-none transition-opacity"
-              >
-                <option value="USD">USD ($)</option>
-                <option value="UGX">UGX (USh)</option>
-                <option value="RWF">RWF (FRw)</option>
-              </select>
+            <div className="nav-item-name flex flex-col justify-center">
+              <span className="text-[10px] uppercase font-bold text-gray-500 dark:text-gray-400">Currency</span>
+              <span className="font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500 leading-tight">
+                {currentCurrency === 'USD' ? 'USD ($)' : currentCurrency === 'UGX' ? 'UGX (USh)' : 'RWF (FRw)'}
+              </span>
             </div>
-          </div>
+          </button>
 
           <Link
             to="/"
             className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
-              <Home size={30} className="transform group-hover/link:scale-110 transition-transform" />
+              <img src="/icons/home.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Home" />
             </div>
             <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">Home</span>
           </Link>
@@ -199,7 +174,7 @@ const Navigation = () => {
             className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
-              <ShoppingBag size={30} className="transform group-hover/link:scale-110 transition-transform" />
+              <img src="/icons/products.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Shop" />
             </div>
             <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">Shop</span>
           </Link>
@@ -210,7 +185,7 @@ const Navigation = () => {
           >
             <div className="w-[96px] flex justify-center shrink-0">
               <div className="relative">
-                <ShoppingCart size={30} className="transform group-hover/link:scale-110 transition-transform" />
+                <img src="/icons/cart.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Cart" />
                 {cartItems.length > 0 && (
                   <span className="absolute top-[-8px] right-[-10px] px-1.5 py-0.5 text-[10px] font-semibold text-white bg-orange-600 rounded-none z-10 animate-pulse border border-red-800">
                     {cartItems.reduce((a, c) => a + c.qty, 0)}
@@ -227,7 +202,7 @@ const Navigation = () => {
           >
             <div className="w-[96px] flex justify-center shrink-0">
               <div className="relative">
-                <Heart size={26} className="transform group-hover/link:scale-110 transition-transform group-hover/link:text-orange-500" />
+                <img src="/icons/savedProducts.png" className="w-[26px] h-[26px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Saved" />
                 <FavoritesCount />
               </div>
             </div>
@@ -239,7 +214,7 @@ const Navigation = () => {
             className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
-              <HelpCircle size={30} className="transform group-hover/link:scale-110 transition-transform" />
+              <img src="/icons/faq.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="FAQ" />
             </div>
             <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">FAQ</span>
           </Link>
@@ -250,7 +225,7 @@ const Navigation = () => {
               className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
             >
               <div className="w-[96px] flex justify-center shrink-0">
-                <MessageSquare size={30} className="transform group-hover/link:scale-110 transition-transform" />
+                <img src="/icons/email.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Messages" />
               </div>
               <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">Messages</span>
             </Link>
@@ -263,7 +238,7 @@ const Navigation = () => {
                 className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative w-full focus:outline-none"
               >
                 <div className="w-[96px] flex justify-center shrink-0">
-                  <LayoutDashboard size={28} className={`transform group-hover/link:scale-110 transition-transform ${showAdminMenu ? 'text-orange-500' : ''}`} />
+                  <img src="/icons/menu.png" className={`w-[28px] h-[28px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert ${showAdminMenu ? 'opacity-75' : ''}`} alt="Admin Menu" />
                 </div>
                 <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">
                   Admin Menu
@@ -285,7 +260,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <LayoutDashboard size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                      <img src="/icons/menu.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Dashboard" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Dashboard</span>
                   </Link>
@@ -294,7 +269,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <Database size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                      <img src="/icons/products.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Products" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Products</span>
                   </Link>
@@ -303,7 +278,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <Layers size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                      <img src="/icons/categories.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Categories" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Categories</span>
                   </Link>
@@ -312,7 +287,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <ListOrdered size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                      <img src="/icons/orders.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Orders" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Orders</span>
                   </Link>
@@ -321,7 +296,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <FileText size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                      <img src="/icons/paymentsProof.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Payment Proofs" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Payment Proofs</span>
                   </Link>
@@ -330,7 +305,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <Users size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                      <img src="/icons/customers.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Users" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Users</span>
                   </Link>
@@ -339,7 +314,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <HelpCircle size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                      <img src="/icons/faq.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="FAQ Manager" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">FAQ Manager</span>
                   </Link>
@@ -348,7 +323,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <MessageSquare size={24} className="transform group-hover/link:scale-110 transition-transform" />
+                      <img src="/icons/email.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Announcement" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Announcement</span>
                   </Link>
@@ -424,7 +399,7 @@ const Navigation = () => {
                   className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                 >
                   <div className="w-[96px] flex justify-center shrink-0">
-                    <LogIn size={30} className="transform group-hover/link:scale-110 transition-transform" />
+                    <img src="/icons/login.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Login" />
                   </div>
                   <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">Login</span>
                 </Link>
@@ -435,7 +410,7 @@ const Navigation = () => {
                   className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                 >
                   <div className="w-[96px] flex justify-center shrink-0">
-                    <UserPlus size={30} className="transform group-hover/link:scale-110 transition-transform" />
+                    <img src="/icons/register.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Register" />
                   </div>
                   <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">
                     Register
@@ -450,15 +425,15 @@ const Navigation = () => {
       {/* Mobile Bottom Navigation */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-black/80 backdrop-blur-lg text-gray-700 dark:text-gray-200 py-3 px-6 flex justify-between items-center z-[9999] border-t border-gray-200 dark:border-gray-800 rounded-none shadow-2xl">
         <Link to="/" onClick={() => setShowMobileMenu(false)} className="flex flex-col items-center gap-1 group">
-          <Home size={22} className="group-hover:text-orange-500 transition-colors" />
+          <img src="/icons/home.png" className="w-[22px] h-[22px] object-contain dark:invert" alt="Home" />
           <span className="text-[10px] font-medium">Home</span>
         </Link>
         <Link to="/shop" onClick={() => setShowMobileMenu(false)} className="flex flex-col items-center gap-1 group">
-          <ShoppingBag size={22} className="group-hover:text-orange-500 transition-colors" />
+          <img src="/icons/products.png" className="w-[22px] h-[22px] object-contain dark:invert" alt="Shop" />
           <span className="text-[10px] font-medium">Shop</span>
         </Link>
         <Link to="/cart" onClick={() => setShowMobileMenu(false)} className="flex flex-col items-center gap-1 relative group">
-          <ShoppingCart size={22} className="group-hover:text-orange-500 transition-colors" />
+          <img src="/icons/cart.png" className="w-[22px] h-[22px] object-contain dark:invert" alt="Cart" />
           <span className="text-[10px] font-medium">Cart</span>
           {cartItems.length > 0 && (
             <span className="absolute -top-1 -right-2 px-1.5 py-0.5 text-[9px] font-medium text-white bg-orange-600 rounded-none animate-pulse">
@@ -472,7 +447,7 @@ const Navigation = () => {
               {userInfo.username.charAt(0).toUpperCase()}
             </div>
           ) : (
-            <Menu size={22} className={`transition-colors ${showMobileMenu ? 'text-orange-500' : 'group-hover:text-orange-500'}`} />
+            <img src="/icons/menu.png" className={`w-[22px] h-[22px] object-contain dark:invert ${showMobileMenu ? 'opacity-75' : ''}`} alt="Menu" />
           )}
           <span className={`text-[10px] font-medium ${showMobileMenu ? 'text-orange-500' : ''}`}>Menu</span>
         </button>
@@ -490,29 +465,29 @@ const Navigation = () => {
           
           <div className="flex flex-col space-y-2">
             <Link to="/favorite" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-colors">
-              <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><Heart size={20} /></div> <span className="font-medium">Saved Items</span>
+              <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><img src="/icons/savedProducts.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="Saved" /></div> <span className="font-medium">Saved Items</span>
             </Link>
             
             <Link to="/faq" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-colors">
-              <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><HelpCircle size={20} /></div> <span className="font-medium">FAQ & Help</span>
+              <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><img src="/icons/faq.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="FAQ" /></div> <span className="font-medium">FAQ & Help</span>
             </Link>
             
             {showMessagesLink && (
               <Link to="/messages" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-colors">
-                <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><MessageSquare size={20} /></div> <span className="font-medium">Messages</span>
+                <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><img src="/icons/email.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="Messages" /></div> <span className="font-medium">Messages</span>
               </Link>
             )}
 
             {userInfo ? (
               <>
                 <Link to="/profile" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-colors mt-2">
-                  <div className="p-2 bg-orange-600 text-white rounded-lg"><User size={20} /></div> <span className="font-medium">My Account</span>
+                  <div className="p-2 bg-orange-600 rounded-lg"><img src="/icons/customers.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="My Account" /></div> <span className="font-medium">My Account</span>
                 </Link>
 
                 {userInfo.isAdmin && (
                   <div className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl mt-6 overflow-hidden shadow-lg">
                     <div className="flex items-center gap-3 text-orange-500 p-4 border-b border-gray-200 dark:border-gray-800 bg-orange-500/5">
-                      <LayoutDashboard size={20} /> <span className="font-bold tracking-wide uppercase text-sm">Admin Controls</span>
+                      <img src="/icons/menu.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="Admin Controls" /> <span className="font-bold tracking-wide uppercase text-sm">Admin Controls</span>
                     </div>
                     <div className="flex flex-col p-2 space-y-1">
                         <Link to="/admin/dashboard" onClick={() => setShowMobileMenu(false)} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-lg font-medium text-sm transition-colors">Dashboard</Link>
@@ -528,16 +503,16 @@ const Navigation = () => {
                 )}
 
                 <button onClick={() => { logoutHandler(); setShowMobileMenu(false); }} className="flex items-center gap-4 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 p-3 rounded-xl mt-6 w-full text-left transition-colors">
-                  <div className="p-2 bg-red-500/10 rounded-lg"><LogIn size={20} className="rotate-180" /></div> <span className="font-bold">Logout</span>
+                  <div className="p-2 bg-red-500/10 rounded-lg"><img src="/icons/login.png" className="w-[20px] h-[20px] object-contain rotate-180 dark:invert" alt="Logout" /></div> <span className="font-bold">Logout</span>
                 </button>
               </>
             ) : (
               <div className="mt-6 flex flex-col gap-3">
                 <Link to="/login" onClick={() => setShowMobileMenu(false)} className="flex items-center justify-center gap-2 text-white bg-gray-800 hover:bg-gray-700 p-4 rounded-xl font-bold transition-colors w-full">
-                  <LogIn size={20} /> Login
+                  <img src="/icons/login.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="Login" /> Login
                 </Link>
                 <Link to="/register" onClick={() => setShowMobileMenu(false)} className="flex items-center justify-center gap-2 text-white bg-orange-600 hover:bg-orange-700 p-4 rounded-xl font-bold transition-colors w-full">
-                  <UserPlus size={20} /> Create Account
+                  <img src="/icons/register.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="Register" /> Create Account
                 </Link>
               </div>
             )}

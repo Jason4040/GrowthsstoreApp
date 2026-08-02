@@ -9,8 +9,8 @@ const check = async () => {
     try {
         await connectDB();
         const faqs = await FAQQuestion.find({});
-        console.log("First FAQ from DB:");
-        console.dir(faqs[0].toObject(), { depth: null });
+        console.log("Total FAQs:", faqs.length);
+        faqs.forEach(f => console.log(f.question, f.createdAt));
         process.exit();
     } catch (e) {
         console.error(e);

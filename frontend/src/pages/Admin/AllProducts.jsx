@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { useAllProductsQuery } from "../../redux/api/productApiSlice";
+import { useCurrency } from "../../hooks/useCurrency";
 import AdminMenu from "./AdminMenu";
 
 const AllProducts = () => {
   const { data: products, isLoading, isError } = useAllProductsQuery();
+  const { formatPrice } = useCurrency();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -63,7 +65,7 @@ const AllProducts = () => {
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M1 5h12m0 0L9 1m4 4L9 9" />
                       </svg>
                     </div>
-                    <p className="text-xl font-bold text-gray-900 dark:text-white">$ {product?.price}</p>
+                    <p className="text-xl font-bold text-gray-900 dark:text-white">{formatPrice(product)}</p>
                   </div>
                 </div>
               </Link>
