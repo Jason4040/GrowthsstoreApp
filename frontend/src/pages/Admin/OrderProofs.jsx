@@ -7,6 +7,7 @@ import {
   useGetOrdersQuery,
   useApprovePaymentProofMutation,
   useRejectPaymentProofMutation,
+  useDeleteOrderMutation,
 } from "../../redux/api/orderApiSlice";
 import { useGetProductByIdQuery } from "../../redux/api/productApiSlice";
 import { toast } from "react-toastify";
@@ -49,6 +50,7 @@ const OrderProofs = () => {
   const { data: orders = [], isLoading, error, refetch } = useGetOrdersQuery();
   const [approvePaymentProof, { isLoading: loadingApprove }] = useApprovePaymentProofMutation();
   const [rejectPaymentProof, { isLoading: loadingReject }] = useRejectPaymentProofMutation();
+  const [deleteOrder] = useDeleteOrderMutation();
 
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -80,6 +82,19 @@ const OrderProofs = () => {
       refetch();
     } catch (err) {
       toast.error(err?.data?.message || err.error || "Rejection failed");
+    }
+  };
+
+  const handleDelete = async (orderId) => {
+    if (window.confirm("Are you sure you want to permanently delete this order and its proof?")) {
+      try {
+        await deleteOrder(orderId).unwrap();
+        toast.success("Order deleted successfully.");
+        setIsModalOpen(false);
+        refetch();
+      } catch (err) {
+        toast.error(err?.data?.message || err.error || "Deletion failed");
+      }
     }
   };
 
@@ -413,6 +428,13 @@ const OrderProofs = () => {
                 This proof has already been processed (status: {selectedOrder.paymentProofStatus}).
               </div>
             )}
+            <button
+              type="button"
+              onClick={() => handleDelete(selectedOrder._id)}
+              className="px-4 bg-red-500/10 hover:bg-red-500/20 text-red-500 font-medium py-3 rounded-xl border border-red-500/30 transition-all active:scale-[0.98]"
+            >
+              Delete Order
+            </button>
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}

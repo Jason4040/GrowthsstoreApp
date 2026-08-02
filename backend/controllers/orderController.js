@@ -442,6 +442,20 @@ const appealPaymentProof = async (req, res) => {
   }
 };
 
+const deleteOrder = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      await Order.deleteOne({ _id: order._id });
+      res.json({ message: "Order deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export {
   createOrder,
   getAllOrders,
@@ -457,4 +471,5 @@ export {
   approvePaymentProof,
   rejectPaymentProof,
   appealPaymentProof,
+  deleteOrder,
 };

@@ -16,6 +16,7 @@ import {
   approvePaymentProof,
   rejectPaymentProof,
   appealPaymentProof,
+  deleteOrder,
 } from "../controllers/orderController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
@@ -31,7 +32,10 @@ router.route("/mine").get(authenticate, getUserOrders);
 router.route("/total-orders").get(countTotalOrders);
 router.route("/total-sales").get(calculateTotalSales);
 router.route("/total-sales-by-date").get(calcualteTotalSalesByDate);
-router.route("/:id").get(authenticate, findOrderById);
+router
+  .route("/:id")
+  .get(authenticate, findOrderById)
+  .delete(authenticate, authorizeAdmin, deleteOrder);
 router.route("/:id/pay").put(authenticate, markOrderAsPaid);
 router.route("/:id/pay-proof").put(authenticate, uploadPaymentProof);
 router.route("/:id/pay-approve").put(authenticate, authorizeAdmin, approvePaymentProof);

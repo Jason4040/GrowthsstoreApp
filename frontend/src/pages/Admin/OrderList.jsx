@@ -1,13 +1,35 @@
+import { useState } from "react";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import { Link } from "react-router-dom";
-import { useGetOrdersQuery } from "../../redux/api/orderApiSlice";
+import { useGetOrdersQuery, useDeleteOrderMutation } from "../../redux/api/orderApiSlice";
 import { useCurrency } from "../../hooks/useCurrency";
+import { Trash2 } from "lucide-react";
+import { toast } from "react-toastify";
+import ConfirmModal from "../../components/ConfirmModal";
 import AdminMenu from "./AdminMenu";
 
 const OrderList = () => {
   const { data: orders, isLoading, error } = useGetOrdersQuery();
+  const [deleteOrder] = useDeleteOrderMutation();
   const { formatPrice } = useCurrency();
+
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [orderToDelete, setOrderToDelete] = useState(null);
+
+  const handleDeleteOrder = (orderId) => {
+    setOrderToDelete(orderId);
+    setIsConfirmOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await deleteOrder(orderToDelete).unwrap();
+      toast.success("Order deleted successfully");
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto">
@@ -74,11 +96,20 @@ const OrderList = () => {
                       )}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <Link to={`/order/${order._id}`}>
-                        <button className="bg-gray-800 hover:bg-gray-700 text-gray-900 dark:text-white px-4 py-2 rounded-lg transition-colors border border-gray-300 dark:border-gray-700 hover:border-gray-600 text-sm font-medium">
-                          More Details
+                      <div className="flex items-center justify-center gap-2">
+                        <Link to={`/order/${order._id}`}>
+                          <button className="bg-gray-800 hover:bg-gray-700 text-white px-3 py-1.5 rounded-lg transition-colors border border-gray-700 hover:border-gray-600 text-xs font-medium">
+                            Details
+                          </button>
+                        </Link>
+                        <button
+                          onClick={() => handleDeleteOrder(order._id)}
+                          className="bg-red-500/10 hover:bg-red-500/20 text-red-500 p-2 rounded-lg transition-colors border border-red-500/20 hover:border-red-500/40"
+                          title="Delete Order"
+                        >
+                          <Trash2 size={16} />
                         </button>
-                      </Link>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -87,6 +118,14 @@ const OrderList = () => {
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={confirmDelete}
+        title="Delete Order"
+        message="Are you sure you want to permanently delete this order? This action cannot be undone."
+      />
     </div>
   );
 };
