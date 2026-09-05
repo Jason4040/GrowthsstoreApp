@@ -299,7 +299,9 @@ const logoutCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).select(
+    "-password -otp -otpExpires -resetOtp -resetOtpExpires"
+  );
   res.json(users);
 });
 
@@ -410,7 +412,9 @@ const userHeartbeat = asyncHandler(async (req, res) => {
 const getActiveUsers = asyncHandler(async (req, res) => {
   // Consider users active if they have pinged heartbeat within last 5 minutes (300,000 ms)
   const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
-  const activeUsers = await User.find({ lastActiveAt: { $gte: fiveMinutesAgo } }).select("-password");
+  const activeUsers = await User.find({ lastActiveAt: { $gte: fiveMinutesAgo } }).select(
+    "-password -otp -otpExpires -resetOtp -resetOtpExpires"
+  );
   res.json(activeUsers);
 });
 

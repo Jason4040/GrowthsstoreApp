@@ -13,6 +13,7 @@ initTranslation();
 
 import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./pages/Admin/AdminRoute";
+import RouteError from "./components/RouteError";
 
 // Lazy-loaded components
 const Login = lazy(() => import("./pages/Auth/Login"));
@@ -46,7 +47,7 @@ const About = lazy(() => import("./pages/About.jsx"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<App />}>
+    <Route path="/" element={<App />} errorElement={<RouteError />}>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />

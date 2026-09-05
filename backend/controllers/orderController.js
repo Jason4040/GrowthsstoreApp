@@ -2,36 +2,55 @@ import Order from "../models/orderModel.js";
 import Product from "../models/productModel.js";
 import sendEmail from "../utils/sendEmail.js";
 
-// Utility Function
-function calcPrices(orderItems) {
-  const itemsPrice = orderItems.reduce(
-    (acc, item) => acc + item.price * item.qty,
-    0
-  );
+// Currency-aware pricing. Mirrors frontend/src/pages/Orders/PlaceOrder.jsx's
+// calculateItemTotal/shippingPrice logic exactly, so orders keep matching
+// what the customer was shown at checkout — recomputed server-side (from
+// the DB product/variant, not the client) so a tampered request can't set
+// an arbitrary total.
+const CURRENCIES = ["USD", "UGX", "RWF"];
+const PRICE_FIELD = { USD: "price", UGX: "priceUGX", RWF: "priceRWF" };
+const DISCOUNT_FIELD = { USD: "discountUSD", UGX: "discountUGX", RWF: "discountRWF" };
+const FLAT_SHIPPING = { USD: 10, UGX: 38000, RWF: 13000 };
 
-  const shippingPrice = itemsPrice > 100 ? 0 : 10;
-  const taxRate = 0.15;
-  const taxPrice = (itemsPrice * taxRate).toFixed(2);
+const resolveCurrency = (value) => (CURRENCIES.includes(value) ? value : "USD");
 
-  const totalPrice = (
-    itemsPrice +
-    shippingPrice +
-    parseFloat(taxPrice)
-  ).toFixed(2);
+const getUnitPrice = (entity, currency) => Number(entity?.[PRICE_FIELD[currency]]) || 0;
+const getUnitDiscount = (product, currency) => Number(product?.[DISCOUNT_FIELD[currency]]) || 0;
+
+function calcLineTotal({ unitPrice, qty, discountQtyThreshold, discountType, unitDiscount }) {
+  let total = unitPrice * qty;
+  if (discountQtyThreshold > 0 && qty >= discountQtyThreshold) {
+    total -= discountType === "per_item" ? unitDiscount * qty : unitDiscount;
+  }
+  return Math.max(0, total);
+}
+
+function calcPrices(itemsPrice, currency) {
+  const shippingPrice = itemsPrice > 100 ? 0 : FLAT_SHIPPING[currency];
+  const taxPrice = Number((itemsPrice * 0.15).toFixed(2));
+  const totalPrice = Number((itemsPrice + shippingPrice + taxPrice).toFixed(2));
 
   return {
-    itemsPrice: itemsPrice.toFixed(2),
-    shippingPrice: shippingPrice.toFixed(2),
+    itemsPrice: Number(itemsPrice.toFixed(2)),
+    shippingPrice: Number(shippingPrice.toFixed(2)),
     taxPrice,
     totalPrice,
   };
 }
 
+const isOwnerOrAdmin = (order, user) => {
+  if (user.isAdmin) return true;
+  // order.user may be a populated user doc (findOrderById) or a bare ObjectId
+  const orderUserId = order.user?._id ? order.user._id.toString() : order.user.toString();
+  return orderUserId === user._id.toString();
+};
+
 const createOrder = async (req, res) => {
   try {
-    const { orderItems, shippingAddress, paymentMethod, itemsPrice: clientItemsPrice, shippingPrice: clientShippingPrice, taxPrice: clientTaxPrice, totalPrice: clientTotalPrice, currency } = req.body;
+    const { orderItems, shippingAddress, paymentMethod } = req.body;
+    const currency = resolveCurrency(req.body.currency);
 
-    if (orderItems && orderItems.length === 0) {
+    if (!orderItems || orderItems.length === 0) {
       res.status(400);
       throw new Error("No order items");
     }
@@ -39,6 +58,8 @@ const createOrder = async (req, res) => {
     const itemsFromDB = await Product.find({
       _id: { $in: orderItems.map((x) => x._id) },
     });
+
+    let itemsPrice = 0;
 
     const dbOrderItems = orderItems.map((itemFromClient) => {
       const matchingItemFromDB = itemsFromDB.find(
@@ -63,10 +84,24 @@ const createOrder = async (req, res) => {
         }
       }
 
+      const qty = Math.max(1, Math.floor(Number(itemFromClient.qty)) || 1);
+      const unitPrice = matchingVariant
+        ? getUnitPrice(matchingVariant, currency) || getUnitPrice(matchingItemFromDB, currency)
+        : getUnitPrice(matchingItemFromDB, currency);
+
+      itemsPrice += calcLineTotal({
+        unitPrice,
+        qty,
+        discountQtyThreshold: matchingItemFromDB.discountQtyThreshold || 0,
+        discountType: matchingItemFromDB.discountType,
+        unitDiscount: getUnitDiscount(matchingItemFromDB, currency),
+      });
+
       return {
         ...itemFromClient,
+        qty,
         product: itemFromClient._id,
-        price: matchingVariant?.price ?? matchingItemFromDB.price,
+        price: unitPrice,
         variant: matchingVariant
           ? { value: matchingVariant.value, sku: matchingVariant.sku }
           : undefined,
@@ -74,19 +109,18 @@ const createOrder = async (req, res) => {
       };
     });
 
-    const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
-      calcPrices(dbOrderItems);
+    const { taxPrice, shippingPrice, totalPrice } = calcPrices(itemsPrice, currency);
 
     const order = new Order({
       orderItems: dbOrderItems,
       user: req.user._id,
       shippingAddress,
       paymentMethod,
-      itemsPrice: clientItemsPrice || itemsPrice,
-      taxPrice: clientTaxPrice || taxPrice,
-      shippingPrice: clientShippingPrice || shippingPrice,
-      totalPrice: clientTotalPrice || totalPrice,
-      currency: currency || "USD",
+      itemsPrice: Number(itemsPrice.toFixed(2)),
+      taxPrice,
+      shippingPrice,
+      totalPrice,
+      currency,
     });
 
     const createdOrder = await order.save();
@@ -205,12 +239,16 @@ const findOrderById = async (req, res) => {
       "username email"
     );
 
-    if (order) {
-      res.json(order);
-    } else {
+    if (!order) {
       res.status(404);
       throw new Error("Order not found");
     }
+
+    if (!isOwnerOrAdmin(order, req.user)) {
+      return res.status(403).json({ error: "Not authorized to view this order" });
+    }
+
+    res.json(order);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -264,6 +302,10 @@ const uploadPaymentProof = async (req, res) => {
   try {
     const { paymentProof } = req.body;
     const order = await Order.findById(req.params.id);
+
+    if (order && !isOwnerOrAdmin(order, req.user)) {
+      return res.status(403).json({ error: "Not authorized to update this order" });
+    }
 
     if (order) {
       order.paymentProof = paymentProof;
@@ -417,6 +459,10 @@ const appealPaymentProof = async (req, res) => {
   try {
     const { appealText } = req.body;
     const order = await Order.findById(req.params.id);
+
+    if (order && !isOwnerOrAdmin(order, req.user)) {
+      return res.status(403).json({ error: "Not authorized to update this order" });
+    }
 
     if (order) {
       order.paymentProofStatus = "appealed";
