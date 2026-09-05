@@ -17,6 +17,15 @@ const reviewSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+const variantSchema = mongoose.Schema({
+  value: { type: String, required: true, trim: true },
+  sku: { type: String, trim: true },
+  price: { type: Number },
+  priceUGX: { type: Number },
+  priceRWF: { type: Number },
+  countInStock: { type: Number, default: 0 },
+});
+
 const productSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -50,6 +59,8 @@ const productSchema = mongoose.Schema(
     availableIn: { type: String, enum: ['Uganda', 'Rwanda', 'Both'], default: 'Both' },
     isPinned: { type: Boolean, default: false },
     condition: { type: String, enum: ['Brand New', 'Used', 'Refurbished'], default: 'Brand New' },
+    variantLabel: { type: String, trim: true },
+    variants: [variantSchema],
   },
   { timestamps: true }
 );

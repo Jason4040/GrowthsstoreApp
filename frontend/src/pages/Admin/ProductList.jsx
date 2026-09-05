@@ -40,7 +40,21 @@ const ProductList = () => {
   const [brand, setBrand] = useState("");
   const [stock, setStock] = useState(0);
   const [imageUrl, setImageUrl] = useState(null);
+  const [variantLabel, setVariantLabel] = useState("");
+  const [variants, setVariants] = useState([]);
   const navigate = useNavigate();
+
+  const addVariantRow = () => {
+    setVariants([...variants, { value: "", sku: "", price: "", priceUGX: "", priceRWF: "", countInStock: 0 }]);
+  };
+
+  const updateVariantRow = (idx, field, value) => {
+    setVariants(variants.map((v, i) => (i === idx ? { ...v, [field]: value } : v)));
+  };
+
+  const removeVariantRow = (idx) => {
+    setVariants(variants.filter((_, i) => i !== idx));
+  };
 
   const [uploadProductImage] = useUploadProductImageMutation();
   const [createProduct] = useCreateProductMutation();
@@ -89,6 +103,11 @@ const ProductList = () => {
       productData.append("condition", condition);
       productData.append("images", JSON.stringify(images));
       if (finalVideoValue) productData.append("video", finalVideoValue);
+      productData.append("variantLabel", variantLabel);
+      productData.append(
+        "variants",
+        JSON.stringify(variants.filter((v) => v.value.trim()))
+      );
 
       const data = await createProduct(productData).unwrap();
 
@@ -464,6 +483,97 @@ const ProductList = () => {
                 </div>
               </div>
             )}
+
+            <div className="bg-white dark:bg-[#1A1A1A] p-6 rounded-xl border border-gray-200 dark:border-gray-800">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">
+                Variants (Optional)
+              </label>
+              <div className="mb-4">
+                <label htmlFor="variantLabel" className="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                  Variant Label
+                </label>
+                <input
+                  type="text"
+                  id="variantLabel"
+                  className="w-full p-4 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-xl text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition-all"
+                  value={variantLabel}
+                  onChange={(e) => setVariantLabel(e.target.value)}
+                  placeholder="e.g. Color, Storage, Bundle"
+                />
+              </div>
+
+              {variants.length > 0 && (
+                <div className="space-y-4 mb-4">
+                  {variants.map((v, idx) => (
+                    <div key={idx} className="relative bg-gray-50 dark:bg-[#101010] p-4 rounded-xl border border-gray-200 dark:border-gray-800 grid grid-cols-2 md:grid-cols-3 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => removeVariantRow(idx)}
+                        className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 transition-all shadow-lg z-10"
+                        title="Remove variant"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                      </button>
+                      <div className="col-span-2 md:col-span-3">
+                        <input
+                          type="text"
+                          className="w-full p-3 bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-gray-800 rounded-lg text-gray-900 dark:text-white outline-none text-sm"
+                          value={v.value}
+                          onChange={(e) => updateVariantRow(idx, "value", e.target.value)}
+                          placeholder="Value, e.g. Black"
+                        />
+                      </div>
+                      <input
+                        type="text"
+                        className="w-full p-3 bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-gray-800 rounded-lg text-gray-900 dark:text-white outline-none text-sm"
+                        value={v.sku}
+                        onChange={(e) => updateVariantRow(idx, "sku", e.target.value)}
+                        placeholder="SKU (optional)"
+                      />
+                      <input
+                        type="number"
+                        className="w-full p-3 bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-gray-800 rounded-lg text-gray-900 dark:text-white outline-none text-sm"
+                        value={v.countInStock}
+                        onChange={(e) => updateVariantRow(idx, "countInStock", e.target.value)}
+                        placeholder="Stock"
+                      />
+                      <div className="col-span-2 md:col-span-1 flex gap-2">
+                        <input
+                          type="number"
+                          className="w-full p-3 bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-gray-800 rounded-lg text-gray-900 dark:text-white outline-none text-sm"
+                          value={v.price}
+                          onChange={(e) => updateVariantRow(idx, "price", e.target.value)}
+                          placeholder="USD price"
+                        />
+                      </div>
+                      <input
+                        type="number"
+                        className="w-full p-3 bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-gray-800 rounded-lg text-gray-900 dark:text-white outline-none text-sm"
+                        value={v.priceUGX}
+                        onChange={(e) => updateVariantRow(idx, "priceUGX", e.target.value)}
+                        placeholder="UGX price"
+                      />
+                      <input
+                        type="number"
+                        className="w-full p-3 bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-gray-800 rounded-lg text-gray-900 dark:text-white outline-none text-sm"
+                        value={v.priceRWF}
+                        onChange={(e) => updateVariantRow(idx, "priceRWF", e.target.value)}
+                        placeholder="RWF price"
+                      />
+                      <p className="col-span-2 md:col-span-3 text-xs text-gray-500">Leave price fields blank to use the base product price.</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={addVariantRow}
+                className="text-sm font-semibold text-orange-500 hover:text-orange-400 transition-colors"
+              >
+                + Add Variant
+              </button>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>

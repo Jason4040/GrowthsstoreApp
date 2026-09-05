@@ -29,8 +29,8 @@ const Cart = () => {
     dispatch(addToCart({ ...product, qty }));
   };
 
-  const removeFromCartHandler = (id) => {
-    dispatch(removeFromCart(id));
+  const removeFromCartHandler = (item) => {
+    dispatch(removeFromCart({ _id: item._id, variantId: item.variant?._id }));
   };
 
   const checkoutHandler = () => {
@@ -59,8 +59,12 @@ const Cart = () => {
               <h1 className="text-3xl font-medium mb-8 text-gray-900 dark:text-white">Shopping Cart</h1>
 
               <div className="space-y-4">
-                {cartItems.map((item) => (
-                  <div key={item._id} className="bg-white dark:bg-[#1A1A1A] p-4 rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center gap-4 hover:border-orange-500 transition-all">
+                {cartItems.map((item) => {
+                  const maxQty = item.variant
+                    ? item.variant.countInStock
+                    : item.stockStatus === 'requires_shipping' ? 100 : item.countInStock;
+                  return (
+                  <div key={`${item._id}-${item.variant?._id || 'base'}`} className="bg-white dark:bg-[#1A1A1A] p-4 rounded-xl border border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center gap-4 hover:border-orange-500 transition-all">
                     <div className="w-full sm:w-24 h-24 shrink-0">
                       <img
                         src={item.image}
@@ -74,6 +78,9 @@ const Cart = () => {
                         {item.name}
                       </Link>
                       <div className="text-sm text-gray-600 dark:text-gray-600 dark:text-gray-400 mt-1">{item.brand}</div>
+                      {item.variant && (
+                        <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">{item.variant.value}</div>
+                      )}
                       <div className="text-lg font-medium text-gray-900 dark:text-white mt-1">
                         {formatPrice(getPriceValue(item))}
                         {item.discountQtyThreshold > 0 && item.qty >= item.discountQtyThreshold && (
@@ -85,42 +92,38 @@ const Cart = () => {
                     </div>
 
                     <div className="flex items-center gap-4 w-full sm:w-auto justify-between">
-                      {(() => {
-                        const maxQty = item.stockStatus === 'requires_shipping' ? 100 : item.countInStock;
-                        return (
-                          <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
-                            <button
-                              type="button"
-                              onClick={() => addToCartHandler(item, Math.max(1, item.qty - 1))}
-                              disabled={item.qty <= 1}
-                              className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                              aria-label="Decrease quantity"
-                            >
-                              <Minus size={16} />
-                            </button>
-                            <span className="w-8 text-center text-sm text-gray-900 dark:text-white select-none">{item.qty}</span>
-                            <button
-                              type="button"
-                              onClick={() => addToCartHandler(item, Math.min(maxQty, item.qty + 1))}
-                              disabled={item.qty >= maxQty}
-                              className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                              aria-label="Increase quantity"
-                            >
-                              <Plus size={16} />
-                            </button>
-                          </div>
-                        );
-                      })()}
+                      <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
+                        <button
+                          type="button"
+                          onClick={() => addToCartHandler(item, Math.max(1, item.qty - 1))}
+                          disabled={item.qty <= 1}
+                          className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                          aria-label="Decrease quantity"
+                        >
+                          <Minus size={16} />
+                        </button>
+                        <span className="w-8 text-center text-sm text-gray-900 dark:text-white select-none">{item.qty}</span>
+                        <button
+                          type="button"
+                          onClick={() => addToCartHandler(item, Math.min(maxQty, item.qty + 1))}
+                          disabled={item.qty >= maxQty}
+                          className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                          aria-label="Increase quantity"
+                        >
+                          <Plus size={16} />
+                        </button>
+                      </div>
 
                       <button
                         className="p-2 text-gray-500 dark:text-gray-400 hover:text-white hover:bg-red-500 dark:hover:bg-red-500 border border-gray-300 dark:border-gray-700 hover:border-red-500 transition-colors rounded-lg"
-                        onClick={() => removeFromCartHandler(item._id)}
+                        onClick={() => removeFromCartHandler(item)}
                       >
                         <Trash2 size={18} />
                       </button>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 

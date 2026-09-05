@@ -166,6 +166,9 @@ const Order = () => {
                       >
                         {item.name}
                       </Link>
+                      {item.variant && (
+                        <span className="text-gray-600 text-xs block">{item.variant.value}</span>
+                      )}
                       <span className="text-gray-600 text-xs mt-0.5 block">
                         Qty: {item.qty}
                       </span>
