@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Trash2, Frown } from "lucide-react";
+import { Trash2, Frown, Plus, Minus } from "lucide-react";
 import { addToCart, removeFromCart } from "../redux/features/cart/cartSlice";
 import { useCurrency } from "../hooks/useCurrency";
 
@@ -85,22 +85,35 @@ const Cart = () => {
                     </div>
 
                     <div className="flex items-center gap-4 w-full sm:w-auto justify-between">
-                      <div className="w-20">
-                        <select
-                          className="w-full bg-white dark:bg-black border border-gray-300 dark:border-gray-700 rounded-lg p-2 text-gray-900 dark:text-white focus:border-orange-500 outline-none"
-                          value={item.qty}
-                          onChange={(e) => addToCartHandler(item, Number(e.target.value))}
-                        >
-                          {[...Array(item.stockStatus === 'requires_shipping' ? 100 : item.countInStock).keys()].map((x) => (
-                            <option key={x + 1} value={x + 1}>
-                              {x + 1}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                      {(() => {
+                        const maxQty = item.stockStatus === 'requires_shipping' ? 100 : item.countInStock;
+                        return (
+                          <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
+                            <button
+                              type="button"
+                              onClick={() => addToCartHandler(item, Math.max(1, item.qty - 1))}
+                              disabled={item.qty <= 1}
+                              className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                              aria-label="Decrease quantity"
+                            >
+                              <Minus size={16} />
+                            </button>
+                            <span className="w-8 text-center text-sm text-gray-900 dark:text-white select-none">{item.qty}</span>
+                            <button
+                              type="button"
+                              onClick={() => addToCartHandler(item, Math.min(maxQty, item.qty + 1))}
+                              disabled={item.qty >= maxQty}
+                              className="p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                              aria-label="Increase quantity"
+                            >
+                              <Plus size={16} />
+                            </button>
+                          </div>
+                        );
+                      })()}
 
                       <button
-                        className="p-2 text-gray-600 dark:text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors bg-gray-900 rounded-lg"
+                        className="p-2 text-gray-500 dark:text-gray-400 hover:text-white hover:bg-red-500 dark:hover:bg-red-500 border border-gray-300 dark:border-gray-700 hover:border-red-500 transition-colors rounded-lg"
                         onClick={() => removeFromCartHandler(item._id)}
                       >
                         <Trash2 size={18} />

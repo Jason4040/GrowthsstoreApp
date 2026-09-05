@@ -31,23 +31,6 @@ const Home = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    responsive: [
-      { breakpoint: 1536, settings: { slidesToShow: 4 } },
-      { breakpoint: 1280, settings: { slidesToShow: 4 } },
-      { breakpoint: 1024, settings: { slidesToShow: 3 } },
-      { breakpoint: 768, settings: { slidesToShow: 2 } },
-      { breakpoint: 640, settings: { slidesToShow: 2 } }
-    ]
-  };
-
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
     setTheme(next);
@@ -99,6 +82,28 @@ const Home = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   const { data, isLoading, isError, error } = useGetProductsQuery({ keyword });
+
+  // Cap slidesToShow at the number of products so react-slick never has to clone
+  // slides to fill the row, which was visually duplicating products (e.g. a single
+  // search result repeating itself on laptop-width screens).
+  const productCount = data?.products?.length || 0;
+  const capSlides = (n) => Math.max(1, Math.min(n, productCount || n));
+  const sliderSettings = {
+    dots: true,
+    infinite: productCount > 5,
+    speed: 500,
+    slidesToShow: capSlides(5),
+    slidesToScroll: 1,
+    autoplay: productCount > 5,
+    autoplaySpeed: 3000,
+    responsive: [
+      { breakpoint: 1536, settings: { slidesToShow: capSlides(4) } },
+      { breakpoint: 1280, settings: { slidesToShow: capSlides(4) } },
+      { breakpoint: 1024, settings: { slidesToShow: capSlides(3) } },
+      { breakpoint: 768, settings: { slidesToShow: capSlides(2) } },
+      { breakpoint: 640, settings: { slidesToShow: capSlides(2) } }
+    ]
+  };
 
   useEffect(() => {
     if (isError) {

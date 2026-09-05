@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -23,6 +23,8 @@ import {
   Repeat,
   Heart,
   Flame,
+  Plus,
+  Minus,
 } from "lucide-react";
 import moment from "moment";
 import HeartIcon from "./HeartIcon";
@@ -112,6 +114,11 @@ const ProductDetails = () => {
     refetch,
     error,
   } = useGetProductDetailsQuery(productId);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setQty(1);
+  }, [productId]);
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -363,19 +370,32 @@ const ProductDetails = () => {
                     {(product.stockStatus === 'requires_shipping' || product.countInStock > 0) && (
                       <div className="flex items-center gap-4">
                         <span className="text-[11px] text-gray-500 dark:text-gray-400 uppercase tracking-widest">QTY</span>
-                        <div className="relative border border-gray-200 dark:border-gray-800 py-2 px-4 rounded-full w-20 flex justify-center">
-                          <select
-                            value={qty}
-                            onChange={(e) => setQty(Number(e.target.value))}
-                            className="w-full bg-transparent text-gray-900 dark:text-white outline-none text-sm appearance-none cursor-pointer text-center"
-                          >
-                            {[...Array(product.stockStatus === 'requires_shipping' ? 100 : product.countInStock).keys()].map((x) => (
-                              <option key={x + 1} value={x + 1} className="bg-white dark:bg-black text-gray-900 dark:text-white">
-                                {x + 1}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                        {(() => {
+                          const maxQty = product.stockStatus === 'requires_shipping' ? 100 : product.countInStock;
+                          return (
+                            <div className="flex items-center border border-gray-200 dark:border-gray-800 rounded-full overflow-hidden">
+                              <button
+                                type="button"
+                                onClick={() => setQty((q) => Math.max(1, q - 1))}
+                                disabled={qty <= 1}
+                                className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                aria-label="Decrease quantity"
+                              >
+                                <Minus className="w-3.5 h-3.5" />
+                              </button>
+                              <span className="w-8 text-center text-sm text-gray-900 dark:text-white select-none">{qty}</span>
+                              <button
+                                type="button"
+                                onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
+                                disabled={qty >= maxQty}
+                                className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                aria-label="Increase quantity"
+                              >
+                                <Plus className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          );
+                        })()}
                       </div>
                     )}
                     
@@ -405,6 +425,7 @@ const ProductDetails = () => {
 
             <div className="mt-20 border-t border-gray-200 dark:border-gray-800 pt-16">
               <ProductTabs
+                key={productId}
                 loadingProductReview={loadingProductReview}
                 userInfo={userInfo}
                 submitHandler={submitHandler}
