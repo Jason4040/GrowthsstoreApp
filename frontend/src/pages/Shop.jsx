@@ -11,8 +11,8 @@ import {
   setChecked,
 } from "../redux/features/shop/shopSlice";
 import { setBackendDown } from "../redux/features/system/serverStatusSlice";
-import Loader from "../components/Loader";
 import ProductCard from "./Products/ProductCard";
+import ProductCardSkeleton from "./Products/ProductCardSkeleton";
 
 const Shop = () => {
   const dispatch = useDispatch();
@@ -197,9 +197,11 @@ const Shop = () => {
 
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-6 justify-items-center">
               {filteredProductsQuery.isLoading ? (
-                <div className="col-span-full py-20 flex justify-center w-full">
-                  <Loader />
-                </div>
+                Array.from({ length: 10 }).map((_, i) => (
+                  <div className="w-full h-full" key={`skeleton-${i}`}>
+                    <ProductCardSkeleton />
+                  </div>
+                ))
               ) : products.length === 0 ? (
                 <div className="col-span-full w-full flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none shadow-none">
                   <Frown size={80} className="text-gray-700 mb-6" />

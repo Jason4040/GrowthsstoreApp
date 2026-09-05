@@ -4,10 +4,11 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { Frown, ShoppingCart, Search, Sun, Moon } from "lucide-react";
 import { useGetProductsQuery } from "../redux/api/productApiSlice";
 import { useGetAnnouncementsQuery } from "../redux/api/announcementApiSlice";
-import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Header from "../components/Header";
 import Product from "./Products/Product";
+import ProductCardSkeleton from "./Products/ProductCardSkeleton";
+import Skeleton from "../components/Skeleton";
 import { useCurrency } from "../hooks/useCurrency";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrency } from "../redux/features/currency/currencySlice";
@@ -363,7 +364,17 @@ const Home = () => {
         </div>
       ) : null}
       {isLoading ? (
-        <Loader />
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8 mt-[2rem] md:mt-[8rem]">
+          <div className="flex flex-col items-center justify-center mb-14 gap-3">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-6 w-48" />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6 px-2 md:px-6">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <ProductCardSkeleton key={`skeleton-${i}`} imgClassName="h-64" />
+            ))}
+          </div>
+        </div>
       ) : isError ? (
         <Message variant="danger">
           {error?.data?.message || error?.error || "An error occurred while fetching products"}

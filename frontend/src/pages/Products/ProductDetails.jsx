@@ -6,7 +6,7 @@ import {
   useGetProductDetailsQuery,
   useCreateReviewMutation,
 } from "../../redux/api/productApiSlice";
-import Loader from "../../components/Loader";
+import Skeleton from "../../components/Skeleton";
 import Message from "../../components/Message";
 import {
   Box,
@@ -286,7 +286,26 @@ const ProductDetails = () => {
         </Link>
 
         {isLoading ? (
-          <Loader />
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col lg:flex-row gap-12 items-start">
+              <div className="w-full lg:w-1/2 px-2 pt-6">
+                <Skeleton className="w-full h-[30rem] lg:h-[40rem]" />
+                <div className="flex gap-4 mt-6 px-2 justify-center">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <Skeleton key={i} className="w-20 h-20 shrink-0" />
+                  ))}
+                </div>
+              </div>
+              <div className="w-full lg:w-1/2 flex flex-col gap-4 pt-6">
+                <Skeleton className="h-8 w-3/4" />
+                <Skeleton className="h-6 w-1/3" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-12 w-48 mt-6" />
+              </div>
+            </div>
+          </div>
         ) : error ? (
           <Message variant="danger">
             {error?.data?.message || error.message}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useGetNewProductsQuery } from "../redux/api/productApiSlice";
-import Loader from "./Loader";
+import Skeleton from "./Skeleton";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import { useCurrency } from "../hooks/useCurrency";
@@ -22,7 +22,18 @@ const Header = () => {
   }, [products]);
 
   if (isLoading) {
-    return <Loader />;
+    return (
+      <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mt-4 md:mt-12 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:auto-rows-[450px]">
+          <Skeleton className="min-h-[400px]" />
+          <div className="flex flex-col gap-6">
+            <Skeleton className="min-h-[213px]" />
+            <Skeleton className="min-h-[213px]" />
+          </div>
+          <Skeleton className="min-h-[400px]" />
+        </div>
+      </div>
+    );
   }
 
   if (error) {
