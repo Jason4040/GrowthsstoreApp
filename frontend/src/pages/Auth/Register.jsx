@@ -6,6 +6,7 @@ import { useRegisterMutation, useVerifyOTPMutation, useResendOTPMutation } from 
 import { setCredentials } from "../../redux/features/auth/authSlice";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../redux/constants";
+import { ArrowLeft } from "lucide-react";
 
 const Register = () => {
   const [username, setName] = useState("");
@@ -117,7 +118,7 @@ const Register = () => {
 
   return (
     <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-white dark:bg-black/95 backdrop-blur-md p-4 overflow-y-auto">
-      <div className="w-full max-w-md bg-[#111] border border-gray-200 dark:border-gray-800 p-8 md:p-10 relative shadow-2xl animate-fade-in-up my-auto">
+      <div className="w-full max-w-md bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 p-8 md:p-10 relative shadow-2xl animate-fade-in-up my-auto">
         {/* Close Button */}
         <Link
           to="/"
@@ -175,9 +176,9 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={() => setOtpSent(false)}
-                  className="text-xs text-gray-500 hover:text-orange-500 transition-colors font-medium"
+                  className="text-xs text-gray-500 hover:text-orange-500 transition-colors font-medium inline-flex items-center gap-1"
                 >
-                  ← Change email or go back
+                  <ArrowLeft className="w-3.5 h-3.5" /> Change email or go back
                 </button>
               </div>
             </form>
@@ -277,7 +278,7 @@ const Register = () => {
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
               </div>
-              <span className="relative bg-[#111] px-4 text-xs text-gray-500 uppercase">Or continue with</span>
+              <span className="relative bg-white dark:bg-[#111] px-4 text-xs text-gray-500 uppercase">Or continue with</span>
             </div>
 
             <button

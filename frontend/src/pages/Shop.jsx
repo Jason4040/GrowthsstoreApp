@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SEO from "../components/SEO";
-import { Frown } from "lucide-react";
+import { Frown, X, ChevronDown } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetFilteredProductsQuery } from "../redux/api/productApiSlice";
 import { useFetchCategoriesQuery } from "../redux/api/categoryApiSlice";
@@ -106,7 +106,7 @@ const Shop = () => {
               className="w-full bg-gray-50 dark:bg-[#101010] hover:bg-gray-100 dark:hover:bg-[#151515] border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white font-medium py-4 px-6 flex justify-between items-center transition-colors"
             >
               <span className="text-gray-700 dark:text-gray-300 tracking-wide uppercase text-sm">Filters & Sorting</span>
-              <span className="text-orange-500">{showFilters ? "✕" : "▼"}</span>
+              <span className="text-orange-500">{showFilters ? <X className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}</span>
             </button>
           </div>
 

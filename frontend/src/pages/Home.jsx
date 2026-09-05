@@ -284,7 +284,7 @@ const Home = () => {
                 </p>
                 <Link
                   to="/shop"
-                  className="inline-block bg-orange-600 hover:bg-orange-700 text-white font-bold py-4 px-10 text-lg transition-all shadow-none transform active:scale-95 border border-orange-500 hover:border-orange-400"
+                  className="inline-block bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2.5 px-6 text-sm md:text-base transition-all shadow-none transform active:scale-95 border border-orange-500 hover:border-orange-400"
                 >
                   Start Shopping
                 </Link>

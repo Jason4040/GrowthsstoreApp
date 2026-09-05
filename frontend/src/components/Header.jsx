@@ -94,7 +94,7 @@ const Header = () => {
                 </div>
               </div>
               <Link to={`/product/${p2._id}`} className="w-1/2 flex justify-end h-full items-center">
-                <img src={p2.image} alt={p2.name} className="max-h-[140px] max-w-[160px] object-contain drop-shadow-2xl transform transition-transform duration-700 group-hover:scale-105" />
+                <img src={p2.image} alt={p2.name} className="max-h-[150px] max-w-[180px] object-contain drop-shadow-2xl transform transition-transform duration-700 group-hover:scale-105" />
               </Link>
             </div>
           ) : (
@@ -130,7 +130,7 @@ const Header = () => {
         {p4 && (
           <div className="bg-white shadow-sm dark:shadow-none dark:bg-[#151515] p-6 md:p-10 flex flex-col relative min-h-[400px] overflow-hidden group">
             <div className="relative z-20">
-              <h2 className="text-2xl md:text-3xl font-light text-gray-900 dark:text-white uppercase tracking-widest max-w-[200px] leading-snug mb-1">
+              <h2 className="text-2xl md:text-3xl lg:text-[2rem] font-light text-gray-900 dark:text-white uppercase tracking-widest max-w-[200px] leading-snug mb-1">
                 {p4.name}
               </h2>
               {p4.description && (
@@ -150,7 +150,7 @@ const Header = () => {
             </div>
             <div className="mt-8 flex justify-end items-end flex-grow w-full relative z-0">
               <Link to={`/product/${p4._id}`} className="block w-full flex justify-end">
-                <img src={p4.image} alt={p4.name} className="w-[90%] md:w-[85%] max-w-[280px] object-contain object-bottom drop-shadow-2xl transform transition-transform duration-700 group-hover:scale-105 rounded-tl-lg" />
+                <img src={p4.image} alt={p4.name} className="w-[85%] md:w-[75%] max-w-[350px] object-contain object-bottom drop-shadow-2xl transform transition-transform duration-700 group-hover:scale-105 rounded-tl-lg" />
               </Link>
             </div>
           </div>

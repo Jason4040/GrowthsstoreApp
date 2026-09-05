@@ -118,10 +118,10 @@ const Navigation = () => {
       {/* Desktop Sidebar */}
       {/* Desktop Sidebar */}
       <div
-        className={`hidden md:flex flex-col justify-between py-3 text-gray-900 dark:text-white bg-white dark:bg-black h-[100vh] fixed border-r border-gray-200 dark:border-gray-800 rounded-none`}
+        className={`hidden md:flex flex-col py-3 text-gray-900 dark:text-white bg-white dark:bg-black h-[100vh] fixed border-r border-gray-200 dark:border-gray-800 rounded-none`}
         id="sidebar-menu"
       >
-        <div className="flex flex-col space-y-1.5 mt-2">
+        <div className="flex flex-col space-y-1.5 mt-2 flex-1 min-h-0 overflow-y-auto" id="sidebar-nav-scroll">
           <div className="flex justify-center mb-3 px-2 w-full h-[55px]">
             <Link to="/" className="relative w-[55px] h-full block">
               <img 
@@ -333,7 +333,7 @@ const Navigation = () => {
           )}
         </div>
 
-        <div className="relative border-t border-gray-200 dark:border-gray-800 pt-3 px-0 pb-2">
+        <div className="relative border-t border-gray-200 dark:border-gray-800 pt-3 px-0 pb-2 shrink-0">
           <button
             onClick={toggleDropdown}
             className="flex items-center text-gray-700 dark:text-gray-300 focus:outline-none transition-all hover:text-gray-900 dark:hover:text-white w-full group/btn"

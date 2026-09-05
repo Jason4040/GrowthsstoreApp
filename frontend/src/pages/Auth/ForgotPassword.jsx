@@ -6,6 +6,7 @@ import {
   useResetPasswordMutation,
 } from "../../redux/api/usersApiSlice";
 import { toast } from "react-toastify";
+import { ArrowLeft } from "lucide-react";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -144,9 +145,9 @@ const ForgotPassword = () => {
               <button
                 type="button"
                 onClick={() => setCodeSent(false)}
-                className="text-xs text-gray-500 hover:text-orange-500 transition-colors font-medium"
+                className="text-xs text-gray-500 hover:text-orange-500 transition-colors font-medium inline-flex items-center gap-1"
               >
-                ← Use a different email
+                <ArrowLeft className="w-3.5 h-3.5" /> Use a different email
               </button>
             </div>
 

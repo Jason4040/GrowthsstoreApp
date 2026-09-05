@@ -12,6 +12,7 @@ import {
   useUploadPaymentProofFileMutation,
   useAppealPaymentProofMutation,
 } from "../../redux/api/orderApiSlice";
+import { Check } from "lucide-react";
 
 const Order = () => {
   const { id: orderId } = useParams();
@@ -425,8 +426,8 @@ const Order = () => {
                   </div>
                   
                   {proofFile && (
-                    <div className="mt-2 text-xs text-green-500 font-medium">
-                      ✓ Proof file uploaded successfully! Ready to submit.
+                    <div className="mt-2 text-xs text-green-500 font-medium flex items-center gap-1">
+                      <Check className="w-3.5 h-3.5" /> Proof file uploaded successfully! Ready to submit.
                     </div>
                   )}
                 </div>

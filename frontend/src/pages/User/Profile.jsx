@@ -6,7 +6,8 @@ import {
   Settings,
   ListOrdered,
   LogOut,
-  X
+  X,
+  ChevronDown
 } from "lucide-react";
 
 import Loader from "../../components/Loader";
@@ -117,11 +118,11 @@ const Profile = () => {
           </div>
           <div className="flex justify-between items-center text-xs mb-4">
             <span className="text-gray-500 font-medium">Theme</span>
-            <span className="text-gray-700 dark:text-gray-300 flex items-center gap-2 cursor-pointer hover:text-gray-900 dark:text-white">Dark <span className="text-gray-600 text-[10px]">▼</span></span>
+            <span className="text-gray-700 dark:text-gray-300 flex items-center gap-2 cursor-pointer hover:text-gray-900 dark:text-white">Dark <ChevronDown className="w-3 h-3 text-gray-600" /></span>
           </div>
           <div className="flex justify-between items-center text-xs">
             <span className="text-gray-500 font-medium">Language</span>
-            <span className="text-gray-700 dark:text-gray-300 flex items-center gap-2 cursor-pointer hover:text-gray-900 dark:text-white">Eng <span className="text-gray-600 text-[10px]">▼</span></span>
+            <span className="text-gray-700 dark:text-gray-300 flex items-center gap-2 cursor-pointer hover:text-gray-900 dark:text-white">Eng <ChevronDown className="w-3 h-3 text-gray-600" /></span>
           </div>
         </div>
       </div>

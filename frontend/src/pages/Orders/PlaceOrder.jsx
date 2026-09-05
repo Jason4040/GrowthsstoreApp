@@ -8,6 +8,7 @@ import Loader from "../../components/Loader";
 import { useCreateOrderMutation } from "../../redux/api/orderApiSlice";
 import { clearCartItems } from "../../redux/features/cart/cartSlice";
 import { useCurrency } from "../../hooks/useCurrency";
+import { Check } from "lucide-react";
 
 const PlaceOrder = () => {
   const navigate = useNavigate();
@@ -143,7 +144,7 @@ const PlaceOrder = () => {
                     <p><strong>Method:</strong> Standard Delivery (3-5 Business Days)</p>
                     <p><strong>Cost:</strong> {shippingPrice === 0 ? "Free Shipping" : formatPrice(shippingPrice)}</p>
                     {itemsPrice > 100 && (
-                      <p className="text-green-500 font-medium text-xs mt-1">✓ You qualified for Free Shipping (Orders over $100)</p>
+                      <p className="text-green-500 font-medium text-xs mt-1 flex items-center gap-1"><Check className="w-3.5 h-3.5" /> You qualified for Free Shipping (Orders over $100)</p>
                     )}
                   </div>
                 </div>

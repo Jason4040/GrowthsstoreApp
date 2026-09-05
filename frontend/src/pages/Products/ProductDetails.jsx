@@ -22,6 +22,7 @@ import {
   Share2,
   Repeat,
   Heart,
+  Flame,
 } from "lucide-react";
 import moment from "moment";
 import HeartIcon from "./HeartIcon";
@@ -41,7 +42,7 @@ const NextArrow = (props) => {
   const { onClick } = props;
   return (
     <div
-      className="absolute right-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-white dark:bg-black/50 hover:bg-orange-500 text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
+      className="absolute right-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-white dark:bg-black/50 hover:bg-orange-500 text-gray-800 dark:text-white hover:text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
       onClick={onClick}
     >
       <ChevronRight className="w-6 h-6" />
@@ -53,7 +54,7 @@ const PrevArrow = (props) => {
   const { onClick } = props;
   return (
     <div
-      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-white dark:bg-black/50 hover:bg-orange-500 text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
+      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-white dark:bg-black/50 hover:bg-orange-500 text-gray-800 dark:text-white hover:text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
       onClick={onClick}
     >
       <ChevronLeft className="w-6 h-6" />
@@ -350,8 +351,9 @@ const ProductDetails = () => {
                 </div>
 
                 {product?.discountQtyThreshold > 0 && (
-                  <div className="bg-green-600/10 text-green-600 dark:text-green-400 border border-green-500/30 text-sm font-medium px-4 py-3 rounded-md mb-8 animate-pulse w-fit">
-                    🔥 Buy {product.discountQtyThreshold}+ items and get {formatPrice(getDiscountValue(product))} OFF!
+                  <div className="bg-green-600/10 text-green-600 dark:text-green-400 border border-green-500/30 text-sm font-medium px-4 py-3 rounded-md mb-8 animate-pulse w-fit flex items-center gap-2">
+                    <Flame className="w-4 h-4 shrink-0" />
+                    Buy {product.discountQtyThreshold}+ items and get {formatPrice(getDiscountValue(product))} OFF!
                   </div>
                 )}
 

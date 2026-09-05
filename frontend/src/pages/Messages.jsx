@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { Send, Paperclip, File, Loader2, MessageSquare, User } from "lucide-react";
+import { Send, Paperclip, File, Loader2, MessageSquare, User, ArrowLeft } from "lucide-react";
 import {
   useGetMessagesQuery,
   useSendMessageMutation,
@@ -207,9 +207,9 @@ const Messages = () => {
                     <button
                       type="button"
                       onClick={() => setShowInbox(true)}
-                      className="md:hidden mr-2 p-2 bg-gray-100 hover:bg-gray-250 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-gray-800 dark:text-white rounded-xl transition-all text-xs font-semibold shrink-0"
+                      className="md:hidden mr-2 p-2 bg-gray-100 hover:bg-gray-250 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-gray-800 dark:text-white rounded-xl transition-all text-xs font-semibold shrink-0 flex items-center gap-1"
                     >
-                      ← Back
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
                     </button>
                   )}
                   <div className="w-10 h-10 rounded-full bg-orange-600/20 text-orange-500 flex items-center justify-center font-bold text-lg shrink-0">
