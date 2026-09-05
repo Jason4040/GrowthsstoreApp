@@ -19,7 +19,8 @@ import {
   X,
   User,
   Sun,
-  Moon
+  Moon,
+  MapPin
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -326,6 +327,15 @@ const Navigation = () => {
                       <img src="/icons/email.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Announcement" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Announcement</span>
+                  </Link>
+                  <Link
+                    to="/admin/locations"
+                    className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
+                  >
+                    <div className="w-[96px] flex justify-center shrink-0">
+                      <MapPin className="w-[22px] h-[22px] transform group-hover/link:scale-110 transition-transform" />
+                    </div>
+                    <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Shipping Locations</span>
                   </Link>
                 </div>
               )}

@@ -215,10 +215,20 @@ const Order = () => {
                   Address
                 </span>
                 <span className="text-sm text-gray-900 dark:text-white">
-                  {order.shippingAddress.address},{" "}
-                  {order.shippingAddress.city}{" "}
-                  {order.shippingAddress.postalCode},{" "}
-                  {order.shippingAddress.country}
+                  {order.shippingAddress.location?.length > 0 ? (
+                    <>
+                      {order.shippingAddress.address},{" "}
+                      {order.shippingAddress.location.map((l) => l.name).join(", ")},{" "}
+                      {order.shippingAddress.country}
+                    </>
+                  ) : (
+                    <>
+                      {order.shippingAddress.address},{" "}
+                      {order.shippingAddress.city}{" "}
+                      {order.shippingAddress.postalCode},{" "}
+                      {order.shippingAddress.country}
+                    </>
+                  )}
                 </span>
               </div>
               <div>

@@ -23,9 +23,17 @@ const orderSchema = mongoose.Schema(
 
     shippingAddress: {
       address: { type: String, required: true },
-      city: { type: String, required: true },
-      postalCode: { type: String, required: true },
       country: { type: String, required: true },
+      location: [
+        {
+          level: { type: String },
+          name: { type: String },
+        },
+      ],
+      // Legacy fields kept optional for backward compatibility with orders
+      // placed before location-based addressing (Phase 4).
+      city: { type: String, required: false },
+      postalCode: { type: String, required: false },
     },
 
     paymentMethod: {

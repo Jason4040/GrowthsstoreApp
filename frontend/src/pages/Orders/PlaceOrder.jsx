@@ -133,9 +133,19 @@ const PlaceOrder = () => {
                     Shipping Address
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-                    {cart.shippingAddress.address},{" "}
-                    {cart.shippingAddress.city} {cart.shippingAddress.postalCode},{" "}
-                    {cart.shippingAddress.country}
+                    {cart.shippingAddress.location?.length > 0 ? (
+                      <>
+                        {cart.shippingAddress.address},{" "}
+                        {cart.shippingAddress.location.map((l) => l.name).join(", ")},{" "}
+                        {cart.shippingAddress.country}
+                      </>
+                    ) : (
+                      <>
+                        {cart.shippingAddress.address},{" "}
+                        {cart.shippingAddress.city} {cart.shippingAddress.postalCode},{" "}
+                        {cart.shippingAddress.country}
+                      </>
+                    )}
                   </p>
                 </div>
                 

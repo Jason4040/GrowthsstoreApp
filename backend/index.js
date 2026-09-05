@@ -17,6 +17,7 @@ import messageRoutes from "./routes/messageRoutes.js";
 import faqRoutes from "./routes/faqRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import announcementRoutes from "./routes/announcementRoutes.js";
+import locationRoutes from "./routes/locationRoutes.js";
 
 dotenv.config();
 const port = process.env.PORT || 5000;
@@ -65,6 +66,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/faq", faqRoutes);
 app.use("/api/announcements", announcementRoutes);
+app.use("/api/locations", locationRoutes);
 
 app.get("/api/config/paypal", (req, res) => {
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID });

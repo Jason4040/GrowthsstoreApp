@@ -41,6 +41,7 @@ const Messages = lazy(() => import("./pages/Messages.jsx"));
 const FAQ = lazy(() => import("./pages/FAQ.jsx"));
 const FAQAdmin = lazy(() => import("./pages/Admin/FAQAdmin.jsx"));
 const AnnouncementAdmin = lazy(() => import("./pages/Admin/AnnouncementAdmin.jsx"));
+const LocationManager = lazy(() => import("./pages/Admin/LocationManager.jsx"));
 const About = lazy(() => import("./pages/About.jsx"));
 
 const router = createBrowserRouter(
@@ -81,6 +82,7 @@ const router = createBrowserRouter(
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="faqmanager" element={<FAQAdmin />} />
         <Route path="announcement" element={<AnnouncementAdmin />} />
+        <Route path="locations" element={<LocationManager />} />
       </Route>
     </Route>
   )

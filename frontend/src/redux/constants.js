@@ -7,3 +7,4 @@ export const ORDERS_URL = "/api/orders";
 export const PAYPAL_URL = "/api/config/paypal";
 export const MESSAGES_URL = "/api/messages";
 export const FAQ_URL = "/api/faq";
+export const LOCATION_URL = "/api/locations";
