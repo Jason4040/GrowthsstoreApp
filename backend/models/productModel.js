@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import slugify from "../utils/slugify.js";
 const { ObjectId } = mongoose.Schema;
 
 const reviewSchema = mongoose.Schema(
@@ -29,6 +30,7 @@ const variantSchema = mongoose.Schema({
 const productSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
+    slug: { type: String, unique: true, index: true },
     image: {
       type: String,
       required: true,
@@ -64,6 +66,27 @@ const productSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
+
+productSchema.pre("save", async function (next) {
+  if (!this.isModified("name") && this.slug) {
+    return next();
+  }
+
+  const base = slugify(this.name);
+  let candidate = base;
+  let suffix = 1;
+  while (
+    await this.constructor.findOne({
+      slug: candidate,
+      _id: { $ne: this._id },
+    })
+  ) {
+    suffix += 1;
+    candidate = `${base}-${suffix}`;
+  }
+  this.slug = candidate;
+  next();
+});
 
 const Product = mongoose.model("Product", productSchema);
 export default Product;

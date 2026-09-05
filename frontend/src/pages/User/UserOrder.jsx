@@ -3,12 +3,15 @@ import { Frown } from "lucide-react";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
 import { useGetMyOrdersQuery } from "../../redux/api/orderApiSlice";
+import SEO from "../../components/SEO";
 
 const UserOrder = () => {
   const { data: orders, isLoading, error } = useGetMyOrdersQuery();
 
   return (
-    <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-8 max-w-[1400px]">
+    <>
+      <SEO title="My Orders | GrowthsStore" description="View your order history." noindex />
+      <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-8 max-w-[1400px]">
       <header className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
         <h1 className="text-4xl md:text-5xl font-semibold text-gray-900 dark:text-white tracking-tight">
           My Order History
@@ -112,6 +115,7 @@ const UserOrder = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

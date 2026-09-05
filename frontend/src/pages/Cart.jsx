@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Trash2, Frown, Plus, Minus } from "lucide-react";
+import SEO from "../components/SEO";
 import { addToCart, removeFromCart } from "../redux/features/cart/cartSlice";
 import { useCurrency } from "../hooks/useCurrency";
 
@@ -39,6 +40,7 @@ const Cart = () => {
 
   return (
     <>
+      <SEO title="Your Cart | GrowthsStore" description="Review the items in your shopping cart." noindex />
       <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-8 max-w-[1400px]">
         {cartItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none w-full shadow-none mt-8">
@@ -74,7 +76,7 @@ const Cart = () => {
                     </div>
 
                     <div className="flex-1 text-center sm:text-left">
-                      <Link to={`/product/${item._id}`} className="text-lg font-medium text-orange-500 hover:text-orange-400">
+                      <Link to={`/product/${item.slug || item._id}`} className="text-lg font-medium text-orange-500 hover:text-orange-400">
                         {item.name}
                       </Link>
                       <div className="text-sm text-gray-600 dark:text-gray-600 dark:text-gray-400 mt-1">{item.brand}</div>

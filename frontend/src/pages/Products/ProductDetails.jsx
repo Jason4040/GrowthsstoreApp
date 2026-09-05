@@ -32,6 +32,7 @@ import Ratings from "./Ratings";
 import ProductTabs from "./ProductTabs";
 import ImagePreviewModal from "../../components/ImagePreviewModal";
 import SEO from "../../components/SEO";
+import { Helmet } from "react-helmet-async";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -121,6 +122,14 @@ const ProductDetails = () => {
     setSelectedVariant(null);
     setQty(1);
   }, [productId]);
+
+  // Old ObjectId links keep working (resolved server-side), but once loaded,
+  // silently upgrade the address bar to the canonical slug URL.
+  useEffect(() => {
+    if (product?.slug && product.slug !== productId) {
+      navigate(`/product/${product.slug}`, { replace: true });
+    }
+  }, [product, productId, navigate]);
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -218,13 +227,52 @@ const ProductDetails = () => {
     });
   }
 
+  const availability = !product
+    ? undefined
+    : product.stockStatus === 'coming_soon'
+      ? 'https://schema.org/PreOrder'
+      : product.stockStatus === 'requires_shipping'
+        ? 'https://schema.org/BackOrder'
+        : product.countInStock > 0
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock';
+
+  const productJsonLd = product && {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    image: product.images?.length > 0 ? product.images : [product.image],
+    description: product.description,
+    ...(product.brand && { brand: { "@type": "Brand", name: product.brand } }),
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "USD",
+      price: product.price,
+      availability,
+      url: `https://growthsstore.com/product/${product.slug || product._id}`,
+    },
+    ...(product.numReviews > 0 && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: product.rating,
+        reviewCount: product.numReviews,
+      },
+    }),
+  };
+
   return (
     <>
       {product && (
-        <SEO 
-          title={`${product.name} | GrowthsStore`} 
-          description={product.description?.substring(0, 160) || "Buy premium products at GrowthsStore."} 
-        />
+        <>
+          <SEO
+            title={`${product.name} | GrowthsStore`}
+            description={product.description?.substring(0, 160) || "Buy premium products at GrowthsStore."}
+            image={product.image}
+          />
+          <Helmet>
+            <script type="application/ld+json">{JSON.stringify(productJsonLd)}</script>
+          </Helmet>
+        </>
       )}
       <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-0">
         <Link

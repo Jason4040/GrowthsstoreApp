@@ -9,6 +9,7 @@ import {
 } from "../redux/api/messageApiSlice";
 import { useUploadPaymentProofFileMutation } from "../redux/api/orderApiSlice";
 import Loader from "../components/Loader";
+import SEO from "../components/SEO";
 
 const Messages = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -134,7 +135,9 @@ const Messages = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-8 max-w-[1200px]">
+    <>
+      <SEO title="Messages | GrowthsStore" description="Chat with GrowthsStore support." noindex />
+      <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-8 max-w-[1200px]">
       <div className="mb-6">
         <h1 className="text-3xl font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
           <MessageSquare className="text-orange-500" /> Messages
@@ -366,6 +369,7 @@ const Messages = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

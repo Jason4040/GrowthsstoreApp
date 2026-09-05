@@ -6,6 +6,7 @@ import { useLoginMutation } from "../../redux/api/usersApiSlice";
 import { setCredentials } from "../../redux/features/auth/authSlice";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../redux/constants";
+import SEO from "../../components/SEO";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -77,7 +78,9 @@ const Login = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 dark:bg-black/95 backdrop-blur-md p-4">
+    <>
+      <SEO title="Login | GrowthsStore" description="Sign in to your GrowthsStore account." noindex />
+      <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 dark:bg-black/95 backdrop-blur-md p-4">
       <div className="w-full max-w-md bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 p-8 md:p-10 relative shadow-2xl animate-fade-in-up">
         {/* Close Button back to previous/home */}
         <Link
@@ -196,6 +199,7 @@ const Login = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

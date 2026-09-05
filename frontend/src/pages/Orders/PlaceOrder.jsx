@@ -9,6 +9,7 @@ import { useCreateOrderMutation } from "../../redux/api/orderApiSlice";
 import { clearCartItems } from "../../redux/features/cart/cartSlice";
 import { useCurrency } from "../../hooks/useCurrency";
 import { Check } from "lucide-react";
+import SEO from "../../components/SEO";
 
 const PlaceOrder = () => {
   const navigate = useNavigate();
@@ -63,7 +64,9 @@ const PlaceOrder = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 mt-6 pb-[10rem] md:pb-8 max-w-[1200px]">
+    <>
+      <SEO title="Review Your Order | GrowthsStore" description="Review your order before checkout." noindex />
+      <div className="container mx-auto px-4 mt-6 pb-[10rem] md:pb-8 max-w-[1200px]">
       <ProgressSteps step1 step2 step3 />
 
       <div className="mt-10">
@@ -227,7 +230,8 @@ const PlaceOrder = () => {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

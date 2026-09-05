@@ -76,7 +76,7 @@ const SmallProduct = ({ product }) => {
       </div>
 
       <div className="p-3">
-        <Link to={`/product/${product._id}`}>
+        <Link to={`/product/${product.slug || product._id}`}>
           <div className="flex flex-col gap-2">
             <div className="text-xs font-semibold truncate text-gray-800 dark:text-gray-200 text-center hover:text-orange-500 transition-colors">
               {product.name}

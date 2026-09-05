@@ -8,6 +8,7 @@ import {
 import { useGetLocationsQuery } from "../../redux/api/locationApiSlice";
 import { LOCATION_LEVELS, SHIPPING_COUNTRIES } from "../../Utils/locationLevels";
 import ProgressSteps from "../../components/ProgressSteps";
+import SEO from "../../components/SEO";
 
 const selectClasses =
   "w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 focus:border-orange-500 outline-none transition-colors disabled:opacity-40 disabled:cursor-not-allowed";
@@ -73,7 +74,9 @@ const Shipping = () => {
   }, [navigate, shippingAddress]);
 
   return (
-    <div className="container mx-auto px-4 mt-6 pb-[10rem] md:pb-8 max-w-[700px]">
+    <>
+      <SEO title="Shipping Address | GrowthsStore" description="Enter your shipping address." noindex />
+      <div className="container mx-auto px-4 mt-6 pb-[10rem] md:pb-8 max-w-[700px]">
       <ProgressSteps step1 step2 />
 
       <div className="mt-10">
@@ -207,7 +210,8 @@ const Shipping = () => {
           </form>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

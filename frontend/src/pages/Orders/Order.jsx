@@ -13,6 +13,7 @@ import {
   useAppealPaymentProofMutation,
 } from "../../redux/api/orderApiSlice";
 import { Check } from "lucide-react";
+import SEO from "../../components/SEO";
 
 const Order = () => {
   const { id: orderId } = useParams();
@@ -114,7 +115,10 @@ const Order = () => {
     order.shippingAddress?.country?.toLowerCase() === "rw"
   );
 
-  return isLoading ? (
+  return (
+    <>
+      <SEO title="Order Details | GrowthsStore" description="View your order details." noindex />
+      {isLoading ? (
     <Loader />
   ) : error ? (
     <Messsage variant="danger">{error.data.message}</Messsage>
@@ -483,6 +487,8 @@ const Order = () => {
         </div>
       </div>
     </div>
+  )}
+    </>
   );
 };
 

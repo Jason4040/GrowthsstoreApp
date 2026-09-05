@@ -14,6 +14,7 @@ import Loader from "../../components/Loader";
 import { useProfileMutation, useLogoutMutation } from "../../redux/api/usersApiSlice";
 import { setCredentials, logout } from "../../redux/features/auth/authSlice";
 import { Link, useNavigate } from "react-router-dom";
+import SEO from "../../components/SEO";
 
 const Profile = () => {
   const [username, setUserName] = useState("");
@@ -67,8 +68,10 @@ const Profile = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 mt-8 lg:mt-16 pb-[10rem] md:pb-0 flex flex-col lg:flex-row items-start justify-center min-h-[80vh] gap-6 max-w-[1000px]">
-      
+    <>
+      <SEO title="My Profile | GrowthsStore" description="Manage your account details." noindex />
+      <div className="container mx-auto px-4 mt-8 lg:mt-16 pb-[10rem] md:pb-0 flex flex-col lg:flex-row items-start justify-center min-h-[80vh] gap-6 max-w-[1000px]">
+
       {/* Left Sidebar Layout */}
       <div className="w-full lg:w-[320px] flex flex-col gap-6 shrink-0">
         {/* Navigation Card */}
@@ -211,6 +214,7 @@ const Profile = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

@@ -18,6 +18,7 @@ import faqRoutes from "./routes/faqRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import announcementRoutes from "./routes/announcementRoutes.js";
 import locationRoutes from "./routes/locationRoutes.js";
+import Product from "./models/productModel.js";
 
 dotenv.config();
 const port = process.env.PORT || 5000;
@@ -70,6 +71,44 @@ app.use("/api/locations", locationRoutes);
 
 app.get("/api/config/paypal", (req, res) => {
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID });
+});
+
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://growthsstore.com";
+
+app.get("/sitemap.xml", async (req, res) => {
+  try {
+    const products = await Product.find({}, "slug updatedAt").lean();
+
+    const staticUrls = [
+      { loc: "/", changefreq: "daily", priority: "1.0" },
+      { loc: "/shop", changefreq: "daily", priority: "0.9" },
+      { loc: "/about", changefreq: "monthly", priority: "0.5" },
+      { loc: "/faq", changefreq: "monthly", priority: "0.5" },
+    ];
+
+    const urlEntries = [
+      ...staticUrls.map(
+        (u) =>
+          `<url><loc>${FRONTEND_URL}${u.loc}</loc><changefreq>${u.changefreq}</changefreq><priority>${u.priority}</priority></url>`
+      ),
+      ...products
+        .filter((p) => p.slug)
+        .map(
+          (p) =>
+            `<url><loc>${FRONTEND_URL}/product/${p.slug}</loc><lastmod>${new Date(
+              p.updatedAt
+            ).toISOString()}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>`
+        ),
+    ].join("");
+
+    res.set("Content-Type", "application/xml");
+    res.send(
+      `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urlEntries}</urlset>`
+    );
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error generating sitemap");
+  }
 });
 
 const __dirname = path.resolve();

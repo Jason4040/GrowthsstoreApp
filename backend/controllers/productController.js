@@ -1,5 +1,11 @@
+import mongoose from "mongoose";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import Product from "../models/productModel.js";
+
+// Products are addressable by either their ObjectId (legacy links) or their
+// slug (new SEO-friendly URLs) — resolve whichever was passed.
+const resolveProductQuery = (idOrSlug) =>
+  mongoose.isValidObjectId(idOrSlug) ? { _id: idOrSlug } : { slug: idOrSlug };
 
 const addProduct = asyncHandler(async (req, res) => {
   try {
@@ -106,32 +112,34 @@ const updateProductDetails = asyncHandler(async (req, res) => {
         return res.json({ error: "Category is required" });
     }
 
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      { 
-        ...req.fields, 
-        priceUGX: priceUGX || 0, 
-        priceRWF: priceRWF || 0,
-        discountQtyThreshold: discountQtyThreshold || 0,
-        discountType: discountType || 'per_item',
-        discountUSD: discountUSD || 0,
-        discountUGX: discountUGX || 0,
-        discountRWF: discountRWF || 0,
-        stockStatus: stockStatus || 'in_stock',
-        availabilityStartDate: availabilityStartDate || null,
-        availabilityEndDate: availabilityEndDate || null,
-        negotiable: negotiable === 'true' || negotiable === true,
-        ...(availableIn !== undefined && { availableIn }),
-        ...(isPinned !== undefined && { isPinned: isPinned === 'true' || isPinned === true }),
-        ...(condition !== undefined && { condition }),
-        ...(req.fields.countInStock !== undefined && { countInStock: req.fields.countInStock }),
-        ...(images !== undefined && { images }),
-        ...(video !== undefined && { video: video || null }),
-        ...(variantLabel !== undefined && { variantLabel: variantLabel || undefined }),
-        ...(variants !== undefined && { variants }),
-      },
-      { new: true }
-    );
+    const product = await Product.findOne(resolveProductQuery(req.params.id));
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // Assigned (not findOneAndUpdate) so the pre('save') slug hook actually
+    // fires and picks up name changes — findOneAndUpdate bypasses save middleware.
+    Object.assign(product, req.fields, {
+      priceUGX: priceUGX || 0,
+      priceRWF: priceRWF || 0,
+      discountQtyThreshold: discountQtyThreshold || 0,
+      discountType: discountType || 'per_item',
+      discountUSD: discountUSD || 0,
+      discountUGX: discountUGX || 0,
+      discountRWF: discountRWF || 0,
+      stockStatus: stockStatus || 'in_stock',
+      availabilityStartDate: availabilityStartDate || null,
+      availabilityEndDate: availabilityEndDate || null,
+      negotiable: negotiable === 'true' || negotiable === true,
+      ...(availableIn !== undefined && { availableIn }),
+      ...(isPinned !== undefined && { isPinned: isPinned === 'true' || isPinned === true }),
+      ...(condition !== undefined && { condition }),
+      ...(req.fields.countInStock !== undefined && { countInStock: req.fields.countInStock }),
+      ...(images !== undefined && { images }),
+      ...(video !== undefined && { video: video || null }),
+      ...(variantLabel !== undefined && { variantLabel: variantLabel || undefined }),
+      ...(variants !== undefined && { variants }),
+    });
 
     await product.save();
 
@@ -144,7 +152,7 @@ const updateProductDetails = asyncHandler(async (req, res) => {
 
 const removeProduct = asyncHandler(async (req, res) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
+    const product = await Product.findOneAndDelete(resolveProductQuery(req.params.id));
     res.json(product);
   } catch (error) {
     console.error(error);
@@ -185,7 +193,7 @@ const fetchProducts = asyncHandler(async (req, res) => {
 
 const fetchProductById = asyncHandler(async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id).populate("category");
+    const product = await Product.findOne(resolveProductQuery(req.params.id)).populate("category");
     if (product) {
       return res.json(product);
     } else {
@@ -215,7 +223,7 @@ const fetchAllProducts = asyncHandler(async (req, res) => {
 const addProductReview = asyncHandler(async (req, res) => {
   try {
     const { rating, comment, image } = req.body;
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne(resolveProductQuery(req.params.id));
 
     if (product) {
       const alreadyReviewed = product.reviews.find(
@@ -296,7 +304,7 @@ const filterProducts = asyncHandler(async (req, res) => {
 
 const deleteReview = asyncHandler(async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne(resolveProductQuery(req.params.id));
 
     if (product) {
       const reviewIndex = product.reviews.findIndex(
@@ -333,7 +341,7 @@ const deleteReview = asyncHandler(async (req, res) => {
 
 const toggleHideReview = asyncHandler(async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne(resolveProductQuery(req.params.id));
 
     if (product) {
       const review = product.reviews.find(
@@ -360,7 +368,7 @@ const toggleHideReview = asyncHandler(async (req, res) => {
 
 const toggleProductPin = asyncHandler(async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne(resolveProductQuery(req.params.id));
 
     if (product) {
       product.isPinned = !product.isPinned;
