@@ -81,6 +81,7 @@ const ProductCard = ({ p }) => {
               className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
               src={p.image}
               alt={p.name}
+              loading="lazy"
             />
           )}
         </Link>

@@ -64,6 +64,7 @@ const OrderList = () => {
                       <img
                         src={order.orderItems[0].image}
                         alt={order._id}
+                        loading="lazy"
                         className="w-16 h-16 object-cover rounded-lg border border-gray-300 dark:border-gray-700"
                       />
                     </td>

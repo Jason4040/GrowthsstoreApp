@@ -153,6 +153,7 @@ const OrderProofs = () => {
                         <img
                           src={order.paymentProof}
                           alt="proof thumb"
+                          loading="lazy"
                           className="w-12 h-12 object-cover rounded-lg border border-gray-300 dark:border-gray-700 cursor-pointer hover:border-orange-500"
                           onClick={() => handleReview(order)}
                         />
@@ -223,6 +224,7 @@ const OrderProofs = () => {
                       <img
                         src={order.paymentProof}
                         alt="proof thumb"
+                        loading="lazy"
                         className="w-12 h-12 object-cover rounded-xl border border-gray-300 dark:border-gray-700 cursor-pointer"
                         onClick={() => handleReview(order)}
                       />

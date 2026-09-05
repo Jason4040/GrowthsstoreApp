@@ -67,6 +67,13 @@ const productSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+// Matches fetchNewProducts' sort({ isPinned: -1, _id: -1 })
+productSchema.index({ isPinned: -1, _id: -1 });
+// Matches fetchTopProducts' sort({ rating: -1 })
+productSchema.index({ rating: -1 });
+// Matches filterProducts' find({ category })
+productSchema.index({ category: 1 });
+
 productSchema.pre("save", async function (next) {
   if (!this.isModified("name") && this.slug) {
     return next();

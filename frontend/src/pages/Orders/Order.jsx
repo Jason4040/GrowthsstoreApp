@@ -160,6 +160,7 @@ const Order = () => {
                       <img
                         src={item.image}
                         alt={item.name}
+                        loading="lazy"
                         className="w-full h-full object-cover border border-gray-200 dark:border-gray-800"
                       />
                     </div>

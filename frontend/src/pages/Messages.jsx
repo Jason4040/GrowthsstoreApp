@@ -261,6 +261,7 @@ const Messages = () => {
                                   <img
                                     src={msg.fileUrl}
                                     alt="attachment"
+                                    loading="lazy"
                                     className="max-w-full max-h-[220px] object-contain mx-auto"
                                   />
                                 </a>

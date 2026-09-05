@@ -335,7 +335,7 @@ const ProductDetails = () => {
                           {media.type === 'video' ? (
                             <video src={media.url} className="w-full h-full object-contain p-2" />
                           ) : (
-                            <img src={media.url} className="w-full h-full object-contain p-2" />
+                            <img src={media.url} loading="lazy" className="w-full h-full object-contain p-2" />
                           )}
                         </button>
                       ))}

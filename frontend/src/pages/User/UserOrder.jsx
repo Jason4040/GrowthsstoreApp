@@ -61,6 +61,7 @@ const UserOrder = () => {
                     <img
                       src={order.orderItems[0].image}
                       alt={order._id}
+                      loading="lazy"
                       className="w-20 h-20 object-cover border border-gray-200 dark:border-gray-800 rounded-none group-hover:border-orange-500/50 transition-colors"
                     />
                   </td>

@@ -23,8 +23,6 @@ import Product from "./models/productModel.js";
 dotenv.config();
 const port = process.env.PORT || 5000;
 
-connectDB();
-
 const app = express();
 
 app.set("trust proxy", 1);
@@ -114,8 +112,13 @@ app.get("/sitemap.xml", async (req, res) => {
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
 
-if (!process.env.VERCEL) {
-  app.listen(port, () => console.log(`Server running on port: ${port}`));
-}
+const startServer = async () => {
+  await connectDB();
+  if (!process.env.VERCEL) {
+    app.listen(port, () => console.log(`Server running on port: ${port}`));
+  }
+};
+
+startServer();
 
 export default app;
