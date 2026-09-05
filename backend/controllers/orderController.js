@@ -50,10 +50,26 @@ const createOrder = async (req, res) => {
         throw new Error(`Product not found: ${itemFromClient._id}`);
       }
 
+      let matchingVariant = undefined;
+      if (matchingItemFromDB.variants?.length > 0) {
+        matchingVariant = itemFromClient.variant?._id
+          ? matchingItemFromDB.variants.id(itemFromClient.variant._id)
+          : undefined;
+        if (!matchingVariant) {
+          res.status(400);
+          throw new Error(
+            `Please select ${matchingItemFromDB.variantLabel || "an option"} for ${matchingItemFromDB.name}`
+          );
+        }
+      }
+
       return {
         ...itemFromClient,
         product: itemFromClient._id,
-        price: matchingItemFromDB.price,
+        price: matchingVariant?.price ?? matchingItemFromDB.price,
+        variant: matchingVariant
+          ? { value: matchingVariant.value, sku: matchingVariant.sku }
+          : undefined,
         _id: undefined,
       };
     });

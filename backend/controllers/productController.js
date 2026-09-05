@@ -3,14 +3,23 @@ import Product from "../models/productModel.js";
 
 const addProduct = asyncHandler(async (req, res) => {
   try {
-    const { name, description, price, priceUGX, priceRWF, category, quantity, brand, discountQtyThreshold, discountType, discountUSD, discountUGX, discountRWF, stockStatus, availabilityStartDate, availabilityEndDate, negotiable, availableIn, isPinned, condition, images: imagesStr, video } = req.fields;
-    
+    const { name, description, price, priceUGX, priceRWF, category, quantity, brand, discountQtyThreshold, discountType, discountUSD, discountUGX, discountRWF, stockStatus, availabilityStartDate, availabilityEndDate, negotiable, availableIn, isPinned, condition, images: imagesStr, video, variantLabel, variants: variantsStr } = req.fields;
+
     let images = [];
     if (imagesStr) {
       try {
         images = JSON.parse(imagesStr);
       } catch (e) {
         images = [imagesStr];
+      }
+    }
+
+    let variants = [];
+    if (variantsStr) {
+      try {
+        variants = JSON.parse(variantsStr);
+      } catch (e) {
+        variants = [];
       }
     }
 
@@ -26,9 +35,9 @@ const addProduct = asyncHandler(async (req, res) => {
         return res.json({ error: "Category is required" });
     }
 
-    const product = new Product({ 
-      ...req.fields, 
-      priceUGX: priceUGX || 0, 
+    const product = new Product({
+      ...req.fields,
+      priceUGX: priceUGX || 0,
       priceRWF: priceRWF || 0,
       discountQtyThreshold: discountQtyThreshold || 0,
       discountType: discountType || 'per_item',
@@ -44,6 +53,8 @@ const addProduct = asyncHandler(async (req, res) => {
       condition: condition || 'Brand New',
       images,
       video: video || null,
+      variantLabel: variantLabel || undefined,
+      variants,
     });
     await product.save();
     res.json(product);
@@ -55,7 +66,7 @@ const addProduct = asyncHandler(async (req, res) => {
 
 const updateProductDetails = asyncHandler(async (req, res) => {
   try {
-    const { name, description, price, priceUGX, priceRWF, category, quantity, brand, discountQtyThreshold, discountType, discountUSD, discountUGX, discountRWF, stockStatus, availabilityStartDate, availabilityEndDate, negotiable, availableIn, isPinned, condition, images: imagesStr, video } = req.fields;
+    const { name, description, price, priceUGX, priceRWF, category, quantity, brand, discountQtyThreshold, discountType, discountUSD, discountUGX, discountRWF, stockStatus, availabilityStartDate, availabilityEndDate, negotiable, availableIn, isPinned, condition, images: imagesStr, video, variantLabel, variants: variantsStr } = req.fields;
 
     let images = undefined;
     if (imagesStr !== undefined) {
@@ -67,6 +78,19 @@ const updateProductDetails = asyncHandler(async (req, res) => {
         }
       } else {
         images = [];
+      }
+    }
+
+    let variants = undefined;
+    if (variantsStr !== undefined) {
+      if (variantsStr) {
+        try {
+          variants = JSON.parse(variantsStr);
+        } catch (e) {
+          variants = [];
+        }
+      } else {
+        variants = [];
       }
     }
 
@@ -103,6 +127,8 @@ const updateProductDetails = asyncHandler(async (req, res) => {
         ...(req.fields.countInStock !== undefined && { countInStock: req.fields.countInStock }),
         ...(images !== undefined && { images }),
         ...(video !== undefined && { video: video || null }),
+        ...(variantLabel !== undefined && { variantLabel: variantLabel || undefined }),
+        ...(variants !== undefined && { variants }),
       },
       { new: true }
     );

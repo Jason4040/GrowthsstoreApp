@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -97,6 +97,7 @@ const ProductDetails = () => {
   const { formatPrice, currentCurrency, getDiscountValue } = useCurrency();
 
   const [qty, setQty] = useState(1);
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [reviewImage, setReviewImage] = useState("");
@@ -111,6 +112,11 @@ const ProductDetails = () => {
     refetch,
     error,
   } = useGetProductDetailsQuery(productId);
+
+  useEffect(() => {
+    setSelectedVariant(null);
+    setQty(1);
+  }, [productId]);
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -139,8 +145,34 @@ const ProductDetails = () => {
     }
   };
 
+  const hasVariants = product?.variants?.length > 0;
+  const displayProduct = selectedVariant
+    ? {
+        ...product,
+        price: selectedVariant.price ?? product.price,
+        priceUGX: selectedVariant.priceUGX ?? product.priceUGX,
+        priceRWF: selectedVariant.priceRWF ?? product.priceRWF,
+      }
+    : product;
+  const maxQty = selectedVariant
+    ? selectedVariant.countInStock
+    : product?.stockStatus === 'requires_shipping' ? 100 : product?.countInStock;
+
   const addToCartHandler = () => {
-    dispatch(addToCart({ ...product, qty }));
+    dispatch(
+      addToCart({
+        ...displayProduct,
+        qty,
+        variant: selectedVariant
+          ? {
+              _id: selectedVariant._id,
+              value: selectedVariant.value,
+              sku: selectedVariant.sku,
+              countInStock: selectedVariant.countInStock,
+            }
+          : undefined,
+      })
+    );
     navigate("/cart");
   };
 
@@ -151,7 +183,8 @@ const ProductDetails = () => {
 
   const handleWhatsAppOrder = () => {
     const number = getWhatsAppNumber();
-    const message = `Hello, I would like to order:\n\n*${product.name}*\nQuantity: ${qty}\nPrice: ${formatPrice(product)}`;
+    const variantLine = selectedVariant ? `\n${product.variantLabel || "Option"}: ${selectedVariant.value}` : "";
+    const message = `Hello, I would like to order:\n\n*${product.name}*${variantLine}\nQuantity: ${qty}\nPrice: ${formatPrice(displayProduct)}`;
     window.open(`https://wa.me/${number}?text=${encodeURIComponent(message)}`, "_blank");
   };
 
@@ -341,7 +374,7 @@ const ProductDetails = () => {
                 </div>
 
                 <div className="flex items-end gap-3 mb-8 border-b border-gray-200 dark:border-gray-800 pb-8">
-                  <div className="text-2xl font-light text-gray-900 dark:text-white tracking-wide">{formatPrice(product)}</div>
+                  <div className="text-2xl font-light text-gray-900 dark:text-white tracking-wide">{formatPrice(displayProduct)}</div>
                   {product?.negotiable && (
                     <div className="text-sm font-light text-gray-400 dark:text-gray-500 tracking-wide mb-1">
                       (Negotiable)
@@ -357,8 +390,33 @@ const ProductDetails = () => {
 
                 {/* Action Area */}
                 <div className="flex flex-col gap-4 max-w-md">
+                  {hasVariants && (
+                    <div className="mb-2">
+                      <span className="text-[11px] text-gray-500 dark:text-gray-400 uppercase tracking-widest block mb-3">
+                        {product.variantLabel || "Options"} <span className="text-red-500">*</span>
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {product.variants.map((v) => (
+                          <button
+                            key={v._id}
+                            type="button"
+                            onClick={() => { setSelectedVariant(v); setQty(1); }}
+                            disabled={v.countInStock <= 0}
+                            className={`px-4 py-2 text-sm border rounded-full transition-all disabled:opacity-30 disabled:cursor-not-allowed ${
+                              selectedVariant?._id === v._id
+                                ? "border-gray-900 dark:border-white bg-gray-900 dark:bg-white text-white dark:text-gray-900"
+                                : "border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-gray-500"
+                            }`}
+                          >
+                            {v.value}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   <div className="flex items-center gap-6">
-                    {(product.stockStatus === 'requires_shipping' || product.countInStock > 0) && (
+                    {(hasVariants ? selectedVariant : true) && (product.stockStatus === 'requires_shipping' || maxQty > 0) && (
                       <div className="flex items-center gap-4">
                         <span className="text-[11px] text-gray-500 dark:text-gray-400 uppercase tracking-widest">QTY</span>
                         <div className="relative border border-gray-200 dark:border-gray-800 py-2 px-4 rounded-full w-20 flex justify-center">
@@ -367,7 +425,7 @@ const ProductDetails = () => {
                             onChange={(e) => setQty(Number(e.target.value))}
                             className="w-full bg-transparent text-gray-900 dark:text-white outline-none text-sm appearance-none cursor-pointer text-center"
                           >
-                            {[...Array(product.stockStatus === 'requires_shipping' ? 100 : product.countInStock).keys()].map((x) => (
+                            {[...Array(maxQty).keys()].map((x) => (
                               <option key={x + 1} value={x + 1} className="bg-white dark:bg-black text-gray-900 dark:text-white">
                                 {x + 1}
                               </option>
@@ -376,23 +434,29 @@ const ProductDetails = () => {
                         </div>
                       </div>
                     )}
-                    
+
                     <button
                       onClick={addToCartHandler}
-                      disabled={product.stockStatus !== 'requires_shipping' && product.countInStock === 0}
+                      disabled={
+                        (hasVariants && !selectedVariant) ||
+                        (product.stockStatus !== 'requires_shipping' && (maxQty ?? 0) === 0)
+                      }
                       className="bg-[#ff6b6b] hover:bg-[#ff5252] text-white font-bold text-[11px] uppercase tracking-widest py-3 px-8 rounded-full transition-all disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
                     >
-                      {product.stockStatus === 'requires_shipping' 
-                        ? "REQUEST ITEM" 
-                        : product.countInStock > 0 
-                          ? "ADD TO CART" 
-                          : "OUT OF STOCK"}
+                      {hasVariants && !selectedVariant
+                        ? `SELECT ${(product.variantLabel || "AN OPTION").toUpperCase()}`
+                        : product.stockStatus === 'requires_shipping'
+                          ? "REQUEST ITEM"
+                          : maxQty > 0
+                            ? "ADD TO CART"
+                            : "OUT OF STOCK"}
                     </button>
                   </div>
-                  
+
                   <button
                     onClick={handleWhatsAppOrder}
-                    className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] uppercase tracking-widest py-3 px-8 rounded-full transition-all mt-4 max-w-[300px]"
+                    disabled={hasVariants && !selectedVariant}
+                    className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] uppercase tracking-widest py-3 px-8 rounded-full transition-all mt-4 max-w-[300px] disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <img src="/icons/whatsapp.png" className="w-[16px] h-[16px] object-contain" alt="WhatsApp" />
                     ORDER VIA WHATSAPP

@@ -23,11 +23,13 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const { user, rating, numReviews, reviews, ...item } = action.payload;
-      const existItem = state.cartItems.find((x) => x._id === item._id);
+      const existItem = state.cartItems.find(
+        (x) => x._id === item._id && (x.variant?._id || null) === (item.variant?._id || null)
+      );
 
       if (existItem) {
         state.cartItems = state.cartItems.map((x) =>
-          x._id === existItem._id ? item : x
+          x === existItem ? item : x
         );
       } else {
         state.cartItems = [...state.cartItems, item];
@@ -36,7 +38,10 @@ const cartSlice = createSlice({
     },
 
     removeFromCart: (state, action) => {
-      state.cartItems = state.cartItems.filter((x) => x._id !== action.payload);
+      const { _id, variantId } = action.payload;
+      state.cartItems = state.cartItems.filter(
+        (x) => !(x._id === _id && (x.variant?._id || null) === (variantId || null))
+      );
       return updateCart(state);
     },
 
