@@ -33,11 +33,11 @@ const Header = () => {
     return null;
   }
 
-  // Pick 4 products for the grid, wrapping around if necessary
-  const p1 = products[startIndex % products.length];
-  const p2 = products[(startIndex + 1) % products.length] || null;
-  const p3 = products[(startIndex + 2) % products.length] || null;
-  const p4 = products[(startIndex + 3) % products.length] || null;
+  // Pick up to 4 distinct products for the grid, rotating through the list without
+  // repeating a product when fewer than 4 are available.
+  const rotation = startIndex % products.length;
+  const rotatedProducts = [...products.slice(rotation), ...products.slice(0, rotation)];
+  const [p1, p2 = null, p3 = null, p4 = null] = rotatedProducts;
 
   return (
     <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mt-4 md:mt-12 mb-16">

@@ -28,7 +28,7 @@ const ProductTabs = ({
   const [deleteReview] = useDeleteReviewMutation();
   const [hideReview] = useHideReviewMutation();
 
-  const [activeTab, setActiveTab] = useState(2);
+  const [activeTab, setActiveTab] = useState(3);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [reviewToDelete, setReviewToDelete] = useState(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
