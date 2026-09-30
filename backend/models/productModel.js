@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import slugify from "../utils/slugify.js";
 const { ObjectId } = mongoose.Schema;
 
 const reviewSchema = mongoose.Schema(
@@ -17,9 +18,19 @@ const reviewSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+const variantSchema = mongoose.Schema({
+  value: { type: String, required: true, trim: true },
+  sku: { type: String, trim: true },
+  price: { type: Number },
+  priceUGX: { type: Number },
+  priceRWF: { type: Number },
+  countInStock: { type: Number, default: 0 },
+});
+
 const productSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
+    slug: { type: String, unique: true, index: true },
     image: {
       type: String,
       required: true,
@@ -50,9 +61,39 @@ const productSchema = mongoose.Schema(
     availableIn: { type: String, enum: ['Uganda', 'Rwanda', 'Both'], default: 'Both' },
     isPinned: { type: Boolean, default: false },
     condition: { type: String, enum: ['Brand New', 'Used', 'Refurbished'], default: 'Brand New' },
+    variantLabel: { type: String, trim: true },
+    variants: [variantSchema],
   },
   { timestamps: true }
 );
+
+// Matches fetchNewProducts' sort({ isPinned: -1, _id: -1 })
+productSchema.index({ isPinned: -1, _id: -1 });
+// Matches fetchTopProducts' sort({ rating: -1 })
+productSchema.index({ rating: -1 });
+// Matches filterProducts' find({ category })
+productSchema.index({ category: 1 });
+
+productSchema.pre("save", async function (next) {
+  if (!this.isModified("name") && this.slug) {
+    return next();
+  }
+
+  const base = slugify(this.name);
+  let candidate = base;
+  let suffix = 1;
+  while (
+    await this.constructor.findOne({
+      slug: candidate,
+      _id: { $ne: this._id },
+    })
+  ) {
+    suffix += 1;
+    candidate = `${base}-${suffix}`;
+  }
+  this.slug = candidate;
+  next();
+});
 
 const Product = mongoose.model("Product", productSchema);
 export default Product;

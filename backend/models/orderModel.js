@@ -9,6 +9,10 @@ const orderSchema = mongoose.Schema(
         qty: { type: Number, required: true },
         image: { type: String, required: true },
         price: { type: Number, required: true },
+        variant: {
+          value: { type: String },
+          sku: { type: String },
+        },
         product: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
@@ -19,9 +23,17 @@ const orderSchema = mongoose.Schema(
 
     shippingAddress: {
       address: { type: String, required: true },
-      city: { type: String, required: true },
-      postalCode: { type: String, required: true },
       country: { type: String, required: true },
+      location: [
+        {
+          level: { type: String },
+          name: { type: String },
+        },
+      ],
+      // Legacy fields kept optional for backward compatibility with orders
+      // placed before location-based addressing (Phase 4).
+      city: { type: String, required: false },
+      postalCode: { type: String, required: false },
     },
 
     paymentMethod: {
@@ -104,6 +116,9 @@ const orderSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Matches getMyOrders' find({ user })
+orderSchema.index({ user: 1, createdAt: -1 });
 
 const Order = mongoose.model("Order", orderSchema);
 export default Order;

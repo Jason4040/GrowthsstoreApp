@@ -5,7 +5,13 @@ import {
   saveShippingAddress,
   savePaymentMethod,
 } from "../../redux/features/cart/cartSlice";
+import { useGetLocationsQuery } from "../../redux/api/locationApiSlice";
+import { LOCATION_LEVELS, SHIPPING_COUNTRIES } from "../../Utils/locationLevels";
 import ProgressSteps from "../../components/ProgressSteps";
+import SEO from "../../components/SEO";
+
+const selectClasses =
+  "w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 focus:border-orange-500 outline-none transition-colors disabled:opacity-40 disabled:cursor-not-allowed";
 
 const Shipping = () => {
   const cart = useSelector((state) => state.cart);
@@ -13,18 +19,50 @@ const Shipping = () => {
 
   const [paymentMethod, setPaymentMethod] = useState("Mobile Money");
   const [address, setAddress] = useState(shippingAddress.address || "");
-  const [city, setCity] = useState(shippingAddress.city || "");
-  const [postalCode, setPostalCode] = useState(
-    shippingAddress.postalCode || ""
+  const [country, setCountry] = useState(
+    SHIPPING_COUNTRIES.includes(shippingAddress.country) ? shippingAddress.country : SHIPPING_COUNTRIES[0]
   );
-  const [country, setCountry] = useState(shippingAddress.country || "");
+  const [selectedL1, setSelectedL1] = useState(null);
+  const [selectedL2, setSelectedL2] = useState(null);
+  const [selectedL3, setSelectedL3] = useState(null);
+
+  const levels = LOCATION_LEVELS[country];
+
+  const { data: level1Options } = useGetLocationsQuery({ country, level: 0 });
+  const { data: level2Options } = useGetLocationsQuery(
+    { country, level: 1, parent: selectedL1?._id },
+    { skip: !selectedL1 }
+  );
+  const { data: level3Options } = useGetLocationsQuery(
+    { country, level: 2, parent: selectedL2?._id },
+    { skip: !selectedL2 }
+  );
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const handleCountryChange = (e) => {
+    setCountry(e.target.value);
+    setSelectedL1(null);
+    setSelectedL2(null);
+    setSelectedL3(null);
+  };
+
+  const pickFrom = (options, id) => options?.find((o) => o._id === id) || null;
+
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(saveShippingAddress({ address, city, postalCode, country }));
+    dispatch(
+      saveShippingAddress({
+        country,
+        location: [
+          { level: levels[0], name: selectedL1.name },
+          { level: levels[1], name: selectedL2.name },
+          { level: levels[2], name: selectedL3.name },
+        ],
+        address,
+      })
+    );
     dispatch(savePaymentMethod(paymentMethod));
     navigate("/placeorder");
   };
@@ -36,7 +74,9 @@ const Shipping = () => {
   }, [navigate, shippingAddress]);
 
   return (
-    <div className="container mx-auto px-4 mt-6 pb-[10rem] md:pb-8 max-w-[700px]">
+    <>
+      <SEO title="Shipping Address | GrowthsStore" description="Enter your shipping address." noindex />
+      <div className="container mx-auto px-4 mt-6 pb-[10rem] md:pb-8 max-w-[700px]">
       <ProgressSteps step1 step2 />
 
       <div className="mt-10">
@@ -53,58 +93,91 @@ const Shipping = () => {
           <form onSubmit={submitHandler} className="space-y-5">
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide">
-                Street Address
+                Country
               </label>
-              <input
-                type="text"
-                className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
-                placeholder="Enter your street address"
-                value={address}
+              <select
+                className={selectClasses}
+                value={country}
                 required
-                onChange={(e) => setAddress(e.target.value)}
-              />
+                onChange={handleCountryChange}
+              >
+                {SHIPPING_COUNTRIES.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               <div>
                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide">
-                  City
+                  {levels[0]}
                 </label>
-                <input
-                  type="text"
-                  className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
-                  placeholder="Enter your city"
-                  value={city}
+                <select
+                  className={selectClasses}
+                  value={selectedL1?._id || ""}
                   required
-                  onChange={(e) => setCity(e.target.value)}
-                />
+                  onChange={(e) => {
+                    setSelectedL1(pickFrom(level1Options, e.target.value));
+                    setSelectedL2(null);
+                    setSelectedL3(null);
+                  }}
+                >
+                  <option value="">Select {levels[0]}</option>
+                  {level1Options?.map((o) => (
+                    <option key={o._id} value={o._id}>{o.name}</option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide">
-                  Postal Code
+                  {levels[1]}
                 </label>
-                <input
-                  type="text"
-                  className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
-                  placeholder="Enter postal code"
-                  value={postalCode}
+                <select
+                  className={selectClasses}
+                  value={selectedL2?._id || ""}
                   required
-                  onChange={(e) => setPostalCode(e.target.value)}
-                />
+                  disabled={!selectedL1}
+                  onChange={(e) => {
+                    setSelectedL2(pickFrom(level2Options, e.target.value));
+                    setSelectedL3(null);
+                  }}
+                >
+                  <option value="">Select {levels[1]}</option>
+                  {level2Options?.map((o) => (
+                    <option key={o._id} value={o._id}>{o.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide">
+                  {levels[2]}
+                </label>
+                <select
+                  className={selectClasses}
+                  value={selectedL3?._id || ""}
+                  required
+                  disabled={!selectedL2}
+                  onChange={(e) => setSelectedL3(pickFrom(level3Options, e.target.value))}
+                >
+                  <option value="">Select {levels[2]}</option>
+                  {level3Options?.map((o) => (
+                    <option key={o._id} value={o._id}>{o.name}</option>
+                  ))}
+                </select>
               </div>
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase tracking-wide">
-                Country
+                Address Details
               </label>
               <input
                 type="text"
-                className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
-                placeholder="Enter your country"
-                value={country}
+                className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
+                placeholder="Street, plot number, or landmark for the courier"
+                value={address}
                 required
-                onChange={(e) => setCountry(e.target.value)}
+                onChange={(e) => setAddress(e.target.value)}
               />
             </div>
 
@@ -137,7 +210,8 @@ const Shipping = () => {
           </form>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

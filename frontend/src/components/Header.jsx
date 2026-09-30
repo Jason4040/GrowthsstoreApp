@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useGetNewProductsQuery } from "../redux/api/productApiSlice";
-import Loader from "./Loader";
+import Skeleton from "./Skeleton";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import { useCurrency } from "../hooks/useCurrency";
@@ -22,7 +22,18 @@ const Header = () => {
   }, [products]);
 
   if (isLoading) {
-    return <Loader />;
+    return (
+      <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mt-4 md:mt-12 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:auto-rows-[450px]">
+          <Skeleton className="min-h-[400px]" />
+          <div className="flex flex-col gap-6">
+            <Skeleton className="min-h-[213px]" />
+            <Skeleton className="min-h-[213px]" />
+          </div>
+          <Skeleton className="min-h-[400px]" />
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -33,11 +44,11 @@ const Header = () => {
     return null;
   }
 
-  // Pick 4 products for the grid, wrapping around if necessary
-  const p1 = products[startIndex % products.length];
-  const p2 = products[(startIndex + 1) % products.length] || null;
-  const p3 = products[(startIndex + 2) % products.length] || null;
-  const p4 = products[(startIndex + 3) % products.length] || null;
+  // Pick up to 4 distinct products for the grid, rotating through the list without
+  // repeating a product when fewer than 4 are available.
+  const rotation = startIndex % products.length;
+  const rotatedProducts = [...products.slice(rotation), ...products.slice(0, rotation)];
+  const [p1, p2 = null, p3 = null, p4 = null] = rotatedProducts;
 
   return (
     <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mt-4 md:mt-12 mb-16">
@@ -60,7 +71,7 @@ const Header = () => {
                   {p1.description.substring(0, 80)}...
                 </p>
               )}
-              <Link to={`/product/${p1._id}`} className="inline-flex items-center gap-3 mt-6 text-[11px] font-bold text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors tracking-widest uppercase">
+              <Link to={`/product/${p1.slug || p1._id}`} className="inline-flex items-center gap-3 mt-6 text-[11px] font-bold text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors tracking-widest uppercase">
                 SHOP NOW 
                 <div className="p-1 border border-gray-300 dark:border-gray-700 rounded-full group-hover:border-gray-900 dark:group-hover:border-white transition-colors">
                   <ChevronRight className="w-3 h-3" />
@@ -68,7 +79,7 @@ const Header = () => {
               </Link>
             </div>
             <div className="mt-8 flex justify-start items-end flex-grow w-full relative z-0">
-              <Link to={`/product/${p1._id}`} className="block w-full">
+              <Link to={`/product/${p1.slug || p1._id}`} className="block w-full">
                 <img src={p1.image} alt={p1.name} className="w-[85%] md:w-[75%] max-w-[350px] object-contain object-bottom drop-shadow-2xl mx-auto md:mx-0 transform transition-transform duration-700 group-hover:scale-105" />
               </Link>
             </div>
@@ -93,8 +104,8 @@ const Header = () => {
                   {formatPrice(p2)}
                 </div>
               </div>
-              <Link to={`/product/${p2._id}`} className="w-1/2 flex justify-end h-full items-center">
-                <img src={p2.image} alt={p2.name} className="max-h-[140px] max-w-[160px] object-contain drop-shadow-2xl transform transition-transform duration-700 group-hover:scale-105" />
+              <Link to={`/product/${p2.slug || p2._id}`} className="w-1/2 flex justify-end h-full items-center">
+                <img src={p2.image} alt={p2.name} className="max-h-[150px] max-w-[180px] object-contain drop-shadow-2xl transform transition-transform duration-700 group-hover:scale-105" />
               </Link>
             </div>
           ) : (
@@ -104,7 +115,7 @@ const Header = () => {
           {/* Bottom block (p3) */}
           {p3 ? (
             <div className="bg-white shadow-sm dark:shadow-none dark:bg-[#151515] p-6 md:p-8 flex flex-row items-center justify-between h-full min-h-[213px] overflow-hidden group">
-              <Link to={`/product/${p3._id}`} className="w-1/2 flex justify-start h-full items-center -ml-4 md:-ml-8">
+              <Link to={`/product/${p3.slug || p3._id}`} className="w-1/2 flex justify-start h-full items-center -ml-4 md:-ml-8">
                 <img src={p3.image} alt={p3.name} className="max-h-[150px] max-w-[180px] object-contain drop-shadow-2xl transform transition-transform duration-700 group-hover:scale-105" />
               </Link>
               <div className="flex flex-col items-end text-right max-w-[160px] z-10">
@@ -116,7 +127,7 @@ const Header = () => {
                     {p3.description.substring(0, 60)}...
                   </p>
                 )}
-                <Link to={`/product/${p3._id}`} className="inline-flex items-center gap-2 text-[11px] font-bold text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors tracking-widest uppercase">
+                <Link to={`/product/${p3.slug || p3._id}`} className="inline-flex items-center gap-2 text-[11px] font-bold text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors tracking-widest uppercase">
                   SHOP NOW
                 </Link>
               </div>
@@ -130,7 +141,7 @@ const Header = () => {
         {p4 && (
           <div className="bg-white shadow-sm dark:shadow-none dark:bg-[#151515] p-6 md:p-10 flex flex-col relative min-h-[400px] overflow-hidden group">
             <div className="relative z-20">
-              <h2 className="text-2xl md:text-3xl font-light text-gray-900 dark:text-white uppercase tracking-widest max-w-[200px] leading-snug mb-1">
+              <h2 className="text-2xl md:text-3xl lg:text-[2rem] font-light text-gray-900 dark:text-white uppercase tracking-widest max-w-[200px] leading-snug mb-1">
                 {p4.name}
               </h2>
               {p4.description && (
@@ -141,7 +152,7 @@ const Header = () => {
               <div className="text-sm font-light text-gray-500 dark:text-gray-400 mb-8">
                 {formatPrice(p4)}
               </div>
-              <Link to={`/product/${p4._id}`} className="inline-flex items-center gap-3 text-[11px] font-bold text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors tracking-widest uppercase">
+              <Link to={`/product/${p4.slug || p4._id}`} className="inline-flex items-center gap-3 text-[11px] font-bold text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors tracking-widest uppercase">
                 SHOP NOW 
                 <div className="p-1 border border-gray-300 dark:border-gray-700 rounded-full group-hover:border-gray-900 dark:group-hover:border-white transition-colors">
                   <ChevronRight className="w-3 h-3" />
@@ -149,8 +160,8 @@ const Header = () => {
               </Link>
             </div>
             <div className="mt-8 flex justify-end items-end flex-grow w-full relative z-0">
-              <Link to={`/product/${p4._id}`} className="block w-full flex justify-end">
-                <img src={p4.image} alt={p4.name} className="w-[90%] md:w-[85%] max-w-[280px] object-contain object-bottom drop-shadow-2xl transform transition-transform duration-700 group-hover:scale-105 rounded-tl-lg" />
+              <Link to={`/product/${p4.slug || p4._id}`} className="block w-full flex justify-end">
+                <img src={p4.image} alt={p4.name} className="w-[85%] md:w-[75%] max-w-[350px] object-contain object-bottom drop-shadow-2xl transform transition-transform duration-700 group-hover:scale-105 rounded-tl-lg" />
               </Link>
             </div>
           </div>

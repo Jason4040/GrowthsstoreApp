@@ -49,6 +49,7 @@ const SmallProduct = ({ product }) => {
           <img
             src={product.image}
             alt={product.name}
+            loading="lazy"
             className="w-full h-48 object-cover rounded-none"
           />
         )}
@@ -76,7 +77,7 @@ const SmallProduct = ({ product }) => {
       </div>
 
       <div className="p-3">
-        <Link to={`/product/${product._id}`}>
+        <Link to={`/product/${product.slug || product._id}`}>
           <div className="flex flex-col gap-2">
             <div className="text-xs font-semibold truncate text-gray-800 dark:text-gray-200 text-center hover:text-orange-500 transition-colors">
               {product.name}
@@ -93,14 +94,14 @@ const SmallProduct = ({ product }) => {
                   onClick={handleWhatsAppOrder}
                   title="Order via WhatsApp"
                 >
-                  <img src="/icons/whatsapp.png" className="w-[14px] h-[14px] object-contain" alt="WhatsApp" />
+                  <MessageCircle className="w-[14px] h-[14px]" />
                 </button>
                 <button
                   className="p-1.5 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full text-gray-900 dark:text-white transition-colors flex items-center justify-center border border-gray-300 dark:border-gray-700 hover:border-gray-900 dark:hover:border-white"
                   onClick={addToCartHandler}
                   title="Add to Cart"
                 >
-                  <img src="/icons/cart.png" className="w-[14px] h-[14px] object-contain dark:invert" alt="Cart" />
+                  <ShoppingCart className="w-[14px] h-[14px]" />
                 </button>
               </div>
             </div>

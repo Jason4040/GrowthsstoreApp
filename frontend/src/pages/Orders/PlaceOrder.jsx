@@ -8,6 +8,8 @@ import Loader from "../../components/Loader";
 import { useCreateOrderMutation } from "../../redux/api/orderApiSlice";
 import { clearCartItems } from "../../redux/features/cart/cartSlice";
 import { useCurrency } from "../../hooks/useCurrency";
+import { Check } from "lucide-react";
+import SEO from "../../components/SEO";
 
 const PlaceOrder = () => {
   const navigate = useNavigate();
@@ -62,7 +64,9 @@ const PlaceOrder = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 mt-6 pb-[10rem] md:pb-8 max-w-[1200px]">
+    <>
+      <SEO title="Review Your Order | GrowthsStore" description="Review your order before checkout." noindex />
+      <div className="container mx-auto px-4 mt-6 pb-[10rem] md:pb-8 max-w-[1200px]">
       <ProgressSteps step1 step2 step3 />
 
       <div className="mt-10">
@@ -89,6 +93,7 @@ const PlaceOrder = () => {
                         <img
                           src={item.image}
                           alt={item.name}
+                          loading="lazy"
                           className="w-full h-full object-cover border border-gray-200 dark:border-gray-800"
                         />
                       </div>
@@ -99,6 +104,9 @@ const PlaceOrder = () => {
                         >
                           {item.name}
                         </Link>
+                        {item.variant && (
+                          <span className="text-gray-600 text-xs block">{item.variant.value}</span>
+                        )}
                         <span className="text-gray-600 text-xs mt-0.5 block">
                           Qty: {item.qty}
                         </span>
@@ -129,9 +137,19 @@ const PlaceOrder = () => {
                     Shipping Address
                   </h3>
                   <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-                    {cart.shippingAddress.address},{" "}
-                    {cart.shippingAddress.city} {cart.shippingAddress.postalCode},{" "}
-                    {cart.shippingAddress.country}
+                    {cart.shippingAddress.location?.length > 0 ? (
+                      <>
+                        {cart.shippingAddress.address},{" "}
+                        {cart.shippingAddress.location.map((l) => l.name).join(", ")},{" "}
+                        {cart.shippingAddress.country}
+                      </>
+                    ) : (
+                      <>
+                        {cart.shippingAddress.address},{" "}
+                        {cart.shippingAddress.city} {cart.shippingAddress.postalCode},{" "}
+                        {cart.shippingAddress.country}
+                      </>
+                    )}
                   </p>
                 </div>
                 
@@ -143,7 +161,7 @@ const PlaceOrder = () => {
                     <p><strong>Method:</strong> Standard Delivery (3-5 Business Days)</p>
                     <p><strong>Cost:</strong> {shippingPrice === 0 ? "Free Shipping" : formatPrice(shippingPrice)}</p>
                     {itemsPrice > 100 && (
-                      <p className="text-green-500 font-medium text-xs mt-1">✓ You qualified for Free Shipping (Orders over $100)</p>
+                      <p className="text-green-500 font-medium text-xs mt-1 flex items-center gap-1"><Check className="w-3.5 h-3.5" /> You qualified for Free Shipping (Orders over $100)</p>
                     )}
                   </div>
                 </div>
@@ -213,7 +231,8 @@ const PlaceOrder = () => {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

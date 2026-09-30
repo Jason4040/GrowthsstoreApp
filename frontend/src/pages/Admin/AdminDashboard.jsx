@@ -1,4 +1,5 @@
 import Chart from "react-apexcharts";
+import { DollarSign, Users, ListOrdered, Activity } from "lucide-react";
 import { useGetUsersQuery, useGetActiveUsersQuery, useDeleteAllCustomersMutation } from "../../redux/api/usersApiSlice";
 import {
   useGetTotalOrdersQuery,
@@ -138,7 +139,7 @@ const AdminDashboard = () => {
               <div className="flex items-center justify-between mb-4 relative z-10">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-orange-600 flex items-center justify-center shadow-lg">
-                    <img src="/icons/currency.png" className="w-6 h-6 object-contain dark:invert" alt="Total Sales" />
+                    <DollarSign className="w-6 h-6 text-white" />
                   </div>
                   <p className="text-gray-600 dark:text-gray-400 font-medium tracking-wide uppercase text-sm">Total Sales</p>
                 </div>
@@ -161,7 +162,7 @@ const AdminDashboard = () => {
               <div className="flex items-center justify-between mb-4 relative z-10">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg">
-                    <img src="/icons/customers.png" className="w-7 h-7 object-contain dark:invert" alt="Customers" />
+                    <Users className="w-7 h-7 text-white" />
                   </div>
                   <p className="text-gray-600 dark:text-gray-400 font-medium tracking-wide uppercase text-sm">Customers</p>
                 </div>
@@ -183,7 +184,7 @@ const AdminDashboard = () => {
             <div>
               <div className="flex items-center gap-4 mb-4 relative z-10">
                 <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center shadow-lg">
-                  <img src="/icons/orders.png" className="w-6 h-6 object-contain dark:invert" alt="All Orders" />
+                  <ListOrdered className="w-6 h-6 text-white" />
                 </div>
                 <p className="text-gray-600 dark:text-gray-400 font-medium tracking-wide uppercase text-sm">All Orders</p>
               </div>
@@ -203,7 +204,7 @@ const AdminDashboard = () => {
             <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
             <div className="flex items-center gap-4 mb-4 relative z-10">
               <div className="w-12 h-12 rounded-xl bg-purple-600 flex items-center justify-center shadow-lg">
-                <img src="/icons/active.png" className="w-6 h-6 object-contain dark:invert" alt="Active Now" />
+                <Activity className="w-6 h-6 text-white" />
               </div>
               <p className="text-gray-600 dark:text-gray-400 font-medium tracking-wide uppercase text-sm">Active Now</p>
             </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { Send, Paperclip, File, Loader2, MessageSquare, User } from "lucide-react";
+import { Send, Paperclip, File, Loader2, MessageSquare, User, ArrowLeft } from "lucide-react";
 import {
   useGetMessagesQuery,
   useSendMessageMutation,
@@ -9,6 +9,7 @@ import {
 } from "../redux/api/messageApiSlice";
 import { useUploadPaymentProofFileMutation } from "../redux/api/orderApiSlice";
 import Loader from "../components/Loader";
+import SEO from "../components/SEO";
 
 const Messages = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -134,7 +135,9 @@ const Messages = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-8 max-w-[1200px]">
+    <>
+      <SEO title="Messages | GrowthsStore" description="Chat with GrowthsStore support." noindex />
+      <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-8 max-w-[1200px]">
       <div className="mb-6">
         <h1 className="text-3xl font-semibold text-gray-900 dark:text-white tracking-tight flex items-center gap-2">
           <MessageSquare className="text-orange-500" /> Messages
@@ -207,9 +210,9 @@ const Messages = () => {
                     <button
                       type="button"
                       onClick={() => setShowInbox(true)}
-                      className="md:hidden mr-2 p-2 bg-gray-100 hover:bg-gray-250 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-gray-800 dark:text-white rounded-xl transition-all text-xs font-semibold shrink-0"
+                      className="md:hidden mr-2 p-2 bg-gray-100 hover:bg-gray-250 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-gray-800 dark:text-white rounded-xl transition-all text-xs font-semibold shrink-0 flex items-center gap-1"
                     >
-                      ← Back
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
                     </button>
                   )}
                   <div className="w-10 h-10 rounded-full bg-orange-600/20 text-orange-500 flex items-center justify-center font-bold text-lg shrink-0">
@@ -258,6 +261,7 @@ const Messages = () => {
                                   <img
                                     src={msg.fileUrl}
                                     alt="attachment"
+                                    loading="lazy"
                                     className="max-w-full max-h-[220px] object-contain mx-auto"
                                   />
                                 </a>
@@ -366,6 +370,7 @@ const Messages = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

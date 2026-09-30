@@ -128,15 +128,7 @@ const UserList = () => {
                           </button>
                         </div>
                       ) : (
-                        <div className="flex items-center justify-between group">
-                          <span className="text-gray-900 dark:text-white font-medium">{user.username}</span>
-                          <button
-                            onClick={() => toggleEdit(user._id, user.username, user.email, user.isAdmin)}
-                            className="text-gray-500 hover:text-orange-500 opacity-0 group-hover:opacity-100 transition-all"
-                          >
-                            <Edit size={16} />
-                          </button>
-                        </div>
+                        <span className="text-gray-900 dark:text-white font-medium">{user.username}</span>
                       )}
                     </td>
                     <td className="px-6 py-4">
@@ -156,15 +148,7 @@ const UserList = () => {
                           </button>
                         </div>
                       ) : (
-                        <div className="flex items-center justify-between group">
-                          <a href={`mailto:${user.email}`} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:text-white transition-colors">{user.email}</a>
-                          <button
-                            onClick={() => toggleEdit(user._id, user.username, user.email, user.isAdmin)}
-                            className="text-gray-500 hover:text-orange-500 opacity-0 group-hover:opacity-100 transition-all"
-                          >
-                            <Edit size={16} />
-                          </button>
-                        </div>
+                        <a href={`mailto:${user.email}`} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:text-white transition-colors">{user.email}</a>
                       )}
                     </td>
                     <td className="px-6 py-4 text-center">
@@ -188,17 +172,31 @@ const UserList = () => {
                       )}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      {!user.isAdmin && (
-                        <button
-                          onClick={() => {
-                            setUserToDelete(user._id);
-                            setIsConfirmOpen(true);
-                          }}
-                          className="bg-red-900/30 hover:bg-red-800/50 text-red-500 p-2.5 rounded-lg transition-colors border border-red-900/50 hover:border-red-700 inline-flex items-center justify-center"
-                          title="Delete User"
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                      {editableUserId !== user._id && (
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => toggleEdit(user._id, user.username, user.email, user.isAdmin)}
+                            className="bg-orange-500/10 hover:bg-orange-500/20 text-orange-500 p-2.5 rounded-lg transition-colors border border-orange-500/30 hover:border-orange-500 inline-flex items-center justify-center"
+                            title="Edit User"
+                          >
+                            <Edit size={16} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              setUserToDelete(user._id);
+                              setIsConfirmOpen(true);
+                            }}
+                            disabled={user.isAdmin}
+                            className={`p-2.5 rounded-lg transition-colors border inline-flex items-center justify-center ${
+                              user.isAdmin
+                                ? "invisible pointer-events-none"
+                                : "bg-red-900/30 hover:bg-red-800/50 text-red-500 border-red-900/50 hover:border-red-700"
+                            }`}
+                            title="Delete User"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
                       )}
                     </td>
                   </tr>

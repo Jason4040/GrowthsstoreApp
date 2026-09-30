@@ -37,12 +37,12 @@ const ProductCard = ({ p }) => {
 
   return (
     <div 
-      onClick={() => navigate(`/product/${p._id}`)}
+      onClick={() => navigate(`/product/${p.slug || p._id}`)}
       className="cursor-pointer w-full bg-white dark:bg-[#121212] rounded-sm transition-all duration-300 relative group overflow-hidden flex flex-col h-full"
     >
       <section className="relative aspect-[4/3] overflow-hidden">
         <AdminProductControls product={p} />
-        <Link to={`/product/${p._id}`}>
+        <Link to={`/product/${p.slug || p._id}`}>
           <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             {p?.availableIn && (
               <span className="bg-white/60 dark:bg-black/50 backdrop-blur-md text-gray-900 dark:text-white border border-white/40 dark:border-gray-700/50 text-[9px] font-bold px-2 py-1 shadow-none flex items-center gap-1.5 w-fit uppercase tracking-wider rounded-full transition-transform group-hover:scale-105">
@@ -81,6 +81,7 @@ const ProductCard = ({ p }) => {
               className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
               src={p.image}
               alt={p.name}
+              loading="lazy"
             />
           )}
         </Link>
@@ -120,11 +121,11 @@ const ProductCard = ({ p }) => {
             onClick={handleWhatsAppOrder}
             title="Order via WhatsApp"
           >
-            <img src="/icons/whatsapp.png" className="w-[16px] h-[16px] md:w-[18px] md:h-[18px] object-contain" alt="WhatsApp" />
+            <MessageCircle className="w-[16px] h-[16px] md:w-[18px] md:h-[18px]" />
           </button>
           
           <Link
-            to={`/product/${p._id}`}
+            to={`/product/${p.slug || p._id}`}
             onClick={(e) => e.stopPropagation()}
             className="flex-1 text-center bg-transparent hover:bg-orange-600 text-gray-900 dark:text-white hover:text-white text-[10px] md:text-xs font-bold uppercase tracking-widest py-2 rounded-full transition-colors border border-gray-300 dark:border-gray-700 hover:border-orange-600"
           >
@@ -136,7 +137,7 @@ const ProductCard = ({ p }) => {
             onClick={() => addToCartHandler(p, 1)}
             title="Add to Cart"
           >
-            <img src="/icons/cart.png" className="w-[16px] h-[16px] md:w-[18px] md:h-[18px] object-contain dark:invert" alt="Cart" />
+            <ShoppingCart className="w-[16px] h-[16px] md:w-[18px] md:h-[18px]" />
           </button>
         </section>
       </div>

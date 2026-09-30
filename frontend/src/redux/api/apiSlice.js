@@ -30,6 +30,6 @@ const baseQueryWithServerCheck = async (args, api, extraOptions) => {
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithServerCheck,
-  tagTypes: ["Product", "Order", "User", "Category"],
+  tagTypes: ["Product", "Order", "User", "Category", "Location"],
   endpoints: () => ({}),
 });

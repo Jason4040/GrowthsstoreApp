@@ -19,6 +19,7 @@ import {
 } from "../controllers/userController.js";
 
 import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
+import { authLimiter } from "../middlewares/rateLimiter.js";
 
 const router = express.Router();
 
@@ -27,17 +28,17 @@ router
   .post(createUser)
   .get(authenticate, authorizeAdmin, getAllUsers);
 
-router.post("/auth", loginUser);
+router.post("/auth", authLimiter, loginUser);
 router.post("/logout", logoutCurrentUser);
 
 router.post("/heartbeat", authenticate, userHeartbeat);
 router.get("/active", authenticate, authorizeAdmin, getActiveUsers);
 router.delete("/reset/customers", authenticate, authorizeAdmin, deleteAllCustomers);
 
-router.post("/verify-otp", verifyOTP);
-router.post("/resend-otp", resendOTP);
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password", resetPassword);
+router.post("/verify-otp", authLimiter, verifyOTP);
+router.post("/resend-otp", authLimiter, resendOTP);
+router.post("/forgot-password", authLimiter, forgotPassword);
+router.post("/reset-password", authLimiter, resetPassword);
 
 router
   .route("/profile")

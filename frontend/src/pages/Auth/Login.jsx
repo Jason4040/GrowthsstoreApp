@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Eye, EyeOff } from "lucide-react";
 import Loader from "../../components/Loader";
 import { useLoginMutation } from "../../redux/api/usersApiSlice";
 import { setCredentials } from "../../redux/features/auth/authSlice";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../redux/constants";
+import SEO from "../../components/SEO";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -77,7 +80,9 @@ const Login = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 dark:bg-black/95 backdrop-blur-md p-4">
+    <>
+      <SEO title="Login | GrowthsStore" description="Sign in to your GrowthsStore account." noindex />
+      <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 dark:bg-black/95 backdrop-blur-md p-4">
       <div className="w-full max-w-md bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 p-8 md:p-10 relative shadow-2xl animate-fade-in-up">
         {/* Close Button back to previous/home */}
         <Link
@@ -128,15 +133,26 @@ const Login = () => {
                 Forgot password?
               </Link>
             </div>
-            <input
-              type="password"
-              id="password"
-              className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 pr-11 focus:border-orange-500 outline-none transition-colors"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+                title={showPassword ? "Hide password" : "Show password"}
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff className="w-[18px] h-[18px]" /> : <Eye className="w-[18px] h-[18px]" />}
+              </button>
+            </div>
           </div>
 
           <button
@@ -196,6 +212,7 @@ const Login = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

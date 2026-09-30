@@ -12,6 +12,8 @@ import {
   useUploadPaymentProofFileMutation,
   useAppealPaymentProofMutation,
 } from "../../redux/api/orderApiSlice";
+import { Check } from "lucide-react";
+import SEO from "../../components/SEO";
 
 const Order = () => {
   const { id: orderId } = useParams();
@@ -113,7 +115,10 @@ const Order = () => {
     order.shippingAddress?.country?.toLowerCase() === "rw"
   );
 
-  return isLoading ? (
+  return (
+    <>
+      <SEO title="Order Details | GrowthsStore" description="View your order details." noindex />
+      {isLoading ? (
     <Loader />
   ) : error ? (
     <Messsage variant="danger">{error.data.message}</Messsage>
@@ -155,6 +160,7 @@ const Order = () => {
                       <img
                         src={item.image}
                         alt={item.name}
+                        loading="lazy"
                         className="w-full h-full object-cover border border-gray-200 dark:border-gray-800"
                       />
                     </div>
@@ -165,6 +171,9 @@ const Order = () => {
                       >
                         {item.name}
                       </Link>
+                      {item.variant && (
+                        <span className="text-gray-600 text-xs block">{item.variant.value}</span>
+                      )}
                       <span className="text-gray-600 text-xs mt-0.5 block">
                         Qty: {item.qty}
                       </span>
@@ -211,10 +220,20 @@ const Order = () => {
                   Address
                 </span>
                 <span className="text-sm text-gray-900 dark:text-white">
-                  {order.shippingAddress.address},{" "}
-                  {order.shippingAddress.city}{" "}
-                  {order.shippingAddress.postalCode},{" "}
-                  {order.shippingAddress.country}
+                  {order.shippingAddress.location?.length > 0 ? (
+                    <>
+                      {order.shippingAddress.address},{" "}
+                      {order.shippingAddress.location.map((l) => l.name).join(", ")},{" "}
+                      {order.shippingAddress.country}
+                    </>
+                  ) : (
+                    <>
+                      {order.shippingAddress.address},{" "}
+                      {order.shippingAddress.city}{" "}
+                      {order.shippingAddress.postalCode},{" "}
+                      {order.shippingAddress.country}
+                    </>
+                  )}
                 </span>
               </div>
               <div>
@@ -425,8 +444,8 @@ const Order = () => {
                   </div>
                   
                   {proofFile && (
-                    <div className="mt-2 text-xs text-green-500 font-medium">
-                      ✓ Proof file uploaded successfully! Ready to submit.
+                    <div className="mt-2 text-xs text-green-500 font-medium flex items-center gap-1">
+                      <Check className="w-3.5 h-3.5" /> Proof file uploaded successfully! Ready to submit.
                     </div>
                   )}
                 </div>
@@ -469,6 +488,8 @@ const Order = () => {
         </div>
       </div>
     </div>
+  )}
+    </>
   );
 };
 

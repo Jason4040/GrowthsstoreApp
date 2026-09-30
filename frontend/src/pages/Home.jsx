@@ -4,10 +4,11 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { Frown, ShoppingCart, Search, Sun, Moon } from "lucide-react";
 import { useGetProductsQuery } from "../redux/api/productApiSlice";
 import { useGetAnnouncementsQuery } from "../redux/api/announcementApiSlice";
-import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Header from "../components/Header";
 import Product from "./Products/Product";
+import ProductCardSkeleton from "./Products/ProductCardSkeleton";
+import Skeleton from "../components/Skeleton";
 import { useCurrency } from "../hooks/useCurrency";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrency } from "../redux/features/currency/currencySlice";
@@ -30,23 +31,6 @@ const Home = () => {
   const { formatPrice, currentCurrency } = useCurrency();
   const { cartItems } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    responsive: [
-      { breakpoint: 1536, settings: { slidesToShow: 4 } },
-      { breakpoint: 1280, settings: { slidesToShow: 4 } },
-      { breakpoint: 1024, settings: { slidesToShow: 3 } },
-      { breakpoint: 768, settings: { slidesToShow: 2 } },
-      { breakpoint: 640, settings: { slidesToShow: 2 } }
-    ]
-  };
 
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
@@ -100,6 +84,28 @@ const Home = () => {
   }, []);
   const { data, isLoading, isError, error } = useGetProductsQuery({ keyword });
 
+  // Cap slidesToShow at the number of products so react-slick never has to clone
+  // slides to fill the row, which was visually duplicating products (e.g. a single
+  // search result repeating itself on laptop-width screens).
+  const productCount = data?.products?.length || 0;
+  const capSlides = (n) => Math.max(1, Math.min(n, productCount || n));
+  const sliderSettings = {
+    dots: true,
+    infinite: productCount > 5,
+    speed: 500,
+    slidesToShow: capSlides(5),
+    slidesToScroll: 1,
+    autoplay: productCount > 5,
+    autoplaySpeed: 3000,
+    responsive: [
+      { breakpoint: 1536, settings: { slidesToShow: capSlides(4) } },
+      { breakpoint: 1280, settings: { slidesToShow: capSlides(4) } },
+      { breakpoint: 1024, settings: { slidesToShow: capSlides(3) } },
+      { breakpoint: 768, settings: { slidesToShow: capSlides(2) } },
+      { breakpoint: 640, settings: { slidesToShow: capSlides(2) } }
+    ]
+  };
+
   useEffect(() => {
     if (isError) {
       dispatch(setBackendDown(true));
@@ -138,8 +144,8 @@ const Home = () => {
                     className="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 border border-gray-300 dark:border-white/20 transition-all"
                   >
                     {theme === 'dark'
-                      ? <img src="/icons/them mode.png" className="w-[14px] h-[14px] object-contain dark:invert" alt="Light Mode" />
-                      : <img src="/icons/them mode.png" className="w-[14px] h-[14px] object-contain dark:invert" alt="Dark Mode" />}
+                      ? <Sun className="w-[14px] h-[14px] text-gray-700 dark:text-gray-300" />
+                      : <Moon className="w-[14px] h-[14px] text-gray-700 dark:text-gray-300" />}
                   </button>
 
                   {/* Language Switcher */}
@@ -186,12 +192,12 @@ const Home = () => {
                     onClick={() => setShowMobileSearch(!showMobileSearch)}
                     className="md:hidden text-gray-700 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
                   >
-                    <img src="/icons/search.png" className="w-[20px] h-[20px] object-contain" alt="Search" />
+                    <Search className="w-[20px] h-[20px]" />
                   </button>
 
                   {/* Cart Icon */}
                   <Link to="/cart" className="relative flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors group">
-                    <img src="/icons/cart.png" className={`object-contain transition-all dark:invert ${scrolled ? 'w-[22px] h-[22px]' : 'w-[26px] h-[26px]'}`} alt="Cart" />
+                    <ShoppingCart className={`transition-all ${scrolled ? 'w-[22px] h-[22px]' : 'w-[26px] h-[26px]'}`} />
                     {cartItems.length > 0 && (
                       <span className={`absolute bg-orange-600 text-white font-bold rounded-full shadow-lg border border-orange-800 animate-pulse ${scrolled ? '-top-1.5 -right-1.5 text-[9px] px-1 py-0.5' : '-top-1.5 -right-2 text-[11px] px-1.5 py-0.5'}`}>
                         {cartItems.reduce((a, c) => a + c.qty, 0)}
@@ -229,7 +235,7 @@ const Home = () => {
                         type="submit"
                         className="absolute right-1 top-1 bottom-1 bg-orange-600 hover:bg-orange-500 text-white px-4 rounded-md transition-all flex items-center justify-center shadow-sm"
                       >
-                        <img src="/icons/search.png" className="w-[18px] h-[18px] object-contain" alt="Search" />
+                        <Search className="w-[18px] h-[18px] text-white" />
                       </button>
                     </div>
 
@@ -284,7 +290,7 @@ const Home = () => {
                 </p>
                 <Link
                   to="/shop"
-                  className="inline-block bg-orange-600 hover:bg-orange-700 text-white font-bold py-4 px-10 text-lg transition-all shadow-none transform active:scale-95 border border-orange-500 hover:border-orange-400"
+                  className="inline-block bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2.5 px-6 text-sm md:text-base transition-all shadow-none transform active:scale-95 border border-orange-500 hover:border-orange-400"
                 >
                   Start Shopping
                 </Link>
@@ -311,7 +317,7 @@ const Home = () => {
                     type="submit"
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-orange-600 hover:bg-orange-500 text-white p-3 md:p-4 rounded-full transition-all shadow-md"
                   >
-                    <img src="/icons/search.png" className="w-[24px] h-[24px] object-contain" alt="Search" />
+                    <Search className="w-[24px] h-[24px] text-white" />
                   </button>
                 </div>
 
@@ -358,7 +364,17 @@ const Home = () => {
         </div>
       ) : null}
       {isLoading ? (
-        <Loader />
+        <div className="max-w-[1400px] mx-auto px-4 md:px-8 mt-[2rem] md:mt-[8rem]">
+          <div className="flex flex-col items-center justify-center mb-14 gap-3">
+            <Skeleton className="h-8 w-64" />
+            <Skeleton className="h-6 w-48" />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6 px-2 md:px-6">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <ProductCardSkeleton key={`skeleton-${i}`} imgClassName="h-64" />
+            ))}
+          </div>
+        </div>
       ) : isError ? (
         <Message variant="danger">
           {error?.data?.message || error?.error || "An error occurred while fetching products"}
@@ -368,12 +384,12 @@ const Home = () => {
           <div className="max-w-[1400px] mx-auto px-4 md:px-8 mt-[2rem] md:mt-[8rem]">
             <div className="flex flex-col items-center justify-center mb-14 gap-2">
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white text-center tracking-[0.15em] uppercase">
-                Special Products
+                {keyword ? "Search Results" : "Special Products"}
               </h1>
               <p className="text-gray-500 dark:text-gray-400 text-2xl satisfy-regular mb-4">
-                Discover our curated selection
+                {keyword ? `Showing results for "${keyword}"` : "Discover our curated selection"}
               </p>
-              
+
               <Link
                 to="/shop"
                 className="text-xs font-bold uppercase tracking-widest text-orange-600 dark:text-orange-500 hover:text-gray-900 dark:hover:text-white transition-colors border-b-2 border-transparent hover:border-gray-900 dark:hover:border-white pb-1"
@@ -383,16 +399,43 @@ const Home = () => {
             </div>
 
             {data.products.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none w-full shadow-none mt-8">
-                <Frown size={80} className="text-gray-700 mb-6" />
-                <h2 className="text-2xl font-medium text-gray-900 dark:text-white mb-2 uppercase tracking-widest">No Products Found</h2>
-                <p className="text-gray-500 mb-8 italic">Check back later for new arrivals.</p>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium py-3 px-10 rounded-none transition-all shadow-none border border-gray-300 dark:border-gray-700 active:scale-95"
-                >
-                  Refresh Page
-                </button>
+              keyword ? (
+                <div className="flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none w-full shadow-none mt-8">
+                  <Frown size={80} className="text-gray-700 mb-6" />
+                  <h2 className="text-2xl font-medium text-gray-900 dark:text-white mb-2 uppercase tracking-widest">No Results Found</h2>
+                  <p className="text-gray-500 mb-8 italic">
+                    We couldn&apos;t find any products matching &quot;{keyword}&quot;. Try a different search term.
+                  </p>
+                  <Link
+                    to="/shop"
+                    className="bg-orange-600 hover:bg-orange-700 text-white font-medium py-3 px-10 rounded-none transition-all shadow-none border border-orange-500 active:scale-95"
+                  >
+                    Browse All Products
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none w-full shadow-none mt-8">
+                  <Frown size={80} className="text-gray-700 mb-6" />
+                  <h2 className="text-2xl font-medium text-gray-900 dark:text-white mb-2 uppercase tracking-widest">No Products Found</h2>
+                  <p className="text-gray-500 mb-8 italic">Check back later for new arrivals.</p>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium py-3 px-10 rounded-none transition-all shadow-none border border-gray-300 dark:border-gray-700 active:scale-95"
+                  >
+                    Refresh Page
+                  </button>
+                </div>
+              )
+            ) : productCount <= 5 ? (
+              // Few enough results to fit in one row — a static grid so a single
+              // (or handful of) result renders at normal card width instead of
+              // react-slick stretching it to fill the whole slider track.
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6 justify-items-center px-2 md:px-6">
+                {data.products.map((product) => (
+                  <div key={product._id} className="w-full">
+                    <Product product={product} />
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="w-full px-2 md:px-6 slider-container">

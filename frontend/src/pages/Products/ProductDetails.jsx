@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -6,7 +6,7 @@ import {
   useGetProductDetailsQuery,
   useCreateReviewMutation,
 } from "../../redux/api/productApiSlice";
-import Loader from "../../components/Loader";
+import Skeleton from "../../components/Skeleton";
 import Message from "../../components/Message";
 import {
   Box,
@@ -22,6 +22,9 @@ import {
   Share2,
   Repeat,
   Heart,
+  Flame,
+  Plus,
+  Minus,
 } from "lucide-react";
 import moment from "moment";
 import HeartIcon from "./HeartIcon";
@@ -29,6 +32,7 @@ import Ratings from "./Ratings";
 import ProductTabs from "./ProductTabs";
 import ImagePreviewModal from "../../components/ImagePreviewModal";
 import SEO from "../../components/SEO";
+import { Helmet } from "react-helmet-async";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -41,7 +45,7 @@ const NextArrow = (props) => {
   const { onClick } = props;
   return (
     <div
-      className="absolute right-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-white dark:bg-black/50 hover:bg-orange-500 text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
+      className="absolute right-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-white dark:bg-black/50 hover:bg-orange-500 text-gray-800 dark:text-white hover:text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
       onClick={onClick}
     >
       <ChevronRight className="w-6 h-6" />
@@ -53,7 +57,7 @@ const PrevArrow = (props) => {
   const { onClick } = props;
   return (
     <div
-      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-white dark:bg-black/50 hover:bg-orange-500 text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
+      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer bg-white dark:bg-black/50 hover:bg-orange-500 text-gray-800 dark:text-white hover:text-white p-2 md:p-3 flex items-center justify-center transition-colors shadow-lg"
       onClick={onClick}
     >
       <ChevronLeft className="w-6 h-6" />
@@ -97,6 +101,7 @@ const ProductDetails = () => {
   const { formatPrice, currentCurrency, getDiscountValue } = useCurrency();
 
   const [qty, setQty] = useState(1);
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [reviewImage, setReviewImage] = useState("");
@@ -111,6 +116,20 @@ const ProductDetails = () => {
     refetch,
     error,
   } = useGetProductDetailsQuery(productId);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setSelectedVariant(null);
+    setQty(1);
+  }, [productId]);
+
+  // Old ObjectId links keep working (resolved server-side), but once loaded,
+  // silently upgrade the address bar to the canonical slug URL.
+  useEffect(() => {
+    if (product?.slug && product.slug !== productId) {
+      navigate(`/product/${product.slug}`, { replace: true });
+    }
+  }, [product, productId, navigate]);
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -139,8 +158,34 @@ const ProductDetails = () => {
     }
   };
 
+  const hasVariants = product?.variants?.length > 0;
+  const displayProduct = selectedVariant
+    ? {
+        ...product,
+        price: selectedVariant.price ?? product.price,
+        priceUGX: selectedVariant.priceUGX ?? product.priceUGX,
+        priceRWF: selectedVariant.priceRWF ?? product.priceRWF,
+      }
+    : product;
+  const maxQty = selectedVariant
+    ? selectedVariant.countInStock
+    : product?.stockStatus === 'requires_shipping' ? 100 : product?.countInStock;
+
   const addToCartHandler = () => {
-    dispatch(addToCart({ ...product, qty }));
+    dispatch(
+      addToCart({
+        ...displayProduct,
+        qty,
+        variant: selectedVariant
+          ? {
+              _id: selectedVariant._id,
+              value: selectedVariant.value,
+              sku: selectedVariant.sku,
+              countInStock: selectedVariant.countInStock,
+            }
+          : undefined,
+      })
+    );
     navigate("/cart");
   };
 
@@ -151,7 +196,8 @@ const ProductDetails = () => {
 
   const handleWhatsAppOrder = () => {
     const number = getWhatsAppNumber();
-    const message = `Hello, I would like to order:\n\n*${product.name}*\nQuantity: ${qty}\nPrice: ${formatPrice(product)}`;
+    const variantLine = selectedVariant ? `\n${product.variantLabel || "Option"}: ${selectedVariant.value}` : "";
+    const message = `Hello, I would like to order:\n\n*${product.name}*${variantLine}\nQuantity: ${qty}\nPrice: ${formatPrice(displayProduct)}`;
     window.open(`https://wa.me/${number}?text=${encodeURIComponent(message)}`, "_blank");
   };
 
@@ -181,13 +227,52 @@ const ProductDetails = () => {
     });
   }
 
+  const availability = !product
+    ? undefined
+    : product.stockStatus === 'coming_soon'
+      ? 'https://schema.org/PreOrder'
+      : product.stockStatus === 'requires_shipping'
+        ? 'https://schema.org/BackOrder'
+        : product.countInStock > 0
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/OutOfStock';
+
+  const productJsonLd = product && {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    image: product.images?.length > 0 ? product.images : [product.image],
+    description: product.description,
+    ...(product.brand && { brand: { "@type": "Brand", name: product.brand } }),
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "USD",
+      price: product.price,
+      availability,
+      url: `https://growthsstore.com/product/${product.slug || product._id}`,
+    },
+    ...(product.numReviews > 0 && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: product.rating,
+        reviewCount: product.numReviews,
+      },
+    }),
+  };
+
   return (
     <>
       {product && (
-        <SEO 
-          title={`${product.name} | GrowthsStore`} 
-          description={product.description?.substring(0, 160) || "Buy premium products at GrowthsStore."} 
-        />
+        <>
+          <SEO
+            title={`${product.name} | GrowthsStore`}
+            description={product.description?.substring(0, 160) || "Buy premium products at GrowthsStore."}
+            image={product.image}
+          />
+          <Helmet>
+            <script type="application/ld+json">{JSON.stringify(productJsonLd)}</script>
+          </Helmet>
+        </>
       )}
       <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-0">
         <Link
@@ -201,7 +286,26 @@ const ProductDetails = () => {
         </Link>
 
         {isLoading ? (
-          <Loader />
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col lg:flex-row gap-12 items-start">
+              <div className="w-full lg:w-1/2 px-2 pt-6">
+                <Skeleton className="w-full h-[30rem] lg:h-[40rem]" />
+                <div className="flex gap-4 mt-6 px-2 justify-center">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <Skeleton key={i} className="w-20 h-20 shrink-0" />
+                  ))}
+                </div>
+              </div>
+              <div className="w-full lg:w-1/2 flex flex-col gap-4 pt-6">
+                <Skeleton className="h-8 w-3/4" />
+                <Skeleton className="h-6 w-1/3" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-12 w-48 mt-6" />
+              </div>
+            </div>
+          </div>
         ) : error ? (
           <Message variant="danger">
             {error?.data?.message || error.message}
@@ -250,7 +354,7 @@ const ProductDetails = () => {
                           {media.type === 'video' ? (
                             <video src={media.url} className="w-full h-full object-contain p-2" />
                           ) : (
-                            <img src={media.url} className="w-full h-full object-contain p-2" />
+                            <img src={media.url} loading="lazy" className="w-full h-full object-contain p-2" />
                           )}
                         </button>
                       ))}
@@ -297,7 +401,7 @@ const ProductDetails = () => {
 
                 <div className="flex items-center gap-6 mb-8 text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
                   <div className="flex items-center gap-2 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer relative">
-                     <img src="/icons/savedProducts.png" className="w-[16px] h-[16px] object-contain dark:invert" alt="Saved" />
+                     <Heart className="w-[16px] h-[16px]" />
                      <div className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer">
                         <HeartIcon product={product} />
                      </div>
@@ -341,7 +445,7 @@ const ProductDetails = () => {
                 </div>
 
                 <div className="flex items-end gap-3 mb-8 border-b border-gray-200 dark:border-gray-800 pb-8">
-                  <div className="text-2xl font-light text-gray-900 dark:text-white tracking-wide">{formatPrice(product)}</div>
+                  <div className="text-2xl font-light text-gray-900 dark:text-white tracking-wide">{formatPrice(displayProduct)}</div>
                   {product?.negotiable && (
                     <div className="text-sm font-light text-gray-400 dark:text-gray-500 tracking-wide mb-1">
                       (Negotiable)
@@ -350,51 +454,91 @@ const ProductDetails = () => {
                 </div>
 
                 {product?.discountQtyThreshold > 0 && (
-                  <div className="bg-green-600/10 text-green-600 dark:text-green-400 border border-green-500/30 text-sm font-medium px-4 py-3 rounded-md mb-8 animate-pulse w-fit">
-                    🔥 Buy {product.discountQtyThreshold}+ items and get {formatPrice(getDiscountValue(product))} OFF!
+                  <div className="bg-green-600/10 text-green-600 dark:text-green-400 border border-green-500/30 text-sm font-medium px-4 py-3 rounded-md mb-8 animate-pulse w-fit flex items-center gap-2">
+                    <Flame className="w-4 h-4 shrink-0" />
+                    Buy {product.discountQtyThreshold}+ items and get {formatPrice(getDiscountValue(product))} OFF!
                   </div>
                 )}
 
                 {/* Action Area */}
                 <div className="flex flex-col gap-4 max-w-md">
+                  {hasVariants && (
+                    <div className="mb-2">
+                      <span className="text-[11px] text-gray-500 dark:text-gray-400 uppercase tracking-widest block mb-3">
+                        {product.variantLabel || "Options"} <span className="text-red-500">*</span>
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {product.variants.map((v) => (
+                          <button
+                            key={v._id}
+                            type="button"
+                            onClick={() => { setSelectedVariant(v); setQty(1); }}
+                            disabled={v.countInStock <= 0}
+                            className={`px-4 py-2 text-sm border rounded-full transition-all disabled:opacity-30 disabled:cursor-not-allowed ${
+                              selectedVariant?._id === v._id
+                                ? "border-gray-900 dark:border-white bg-gray-900 dark:bg-white text-white dark:text-gray-900"
+                                : "border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-gray-500"
+                            }`}
+                          >
+                            {v.value}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   <div className="flex items-center gap-6">
-                    {(product.stockStatus === 'requires_shipping' || product.countInStock > 0) && (
+                    {(hasVariants ? selectedVariant : true) && (product.stockStatus === 'requires_shipping' || maxQty > 0) && (
                       <div className="flex items-center gap-4">
                         <span className="text-[11px] text-gray-500 dark:text-gray-400 uppercase tracking-widest">QTY</span>
-                        <div className="relative border border-gray-200 dark:border-gray-800 py-2 px-4 rounded-full w-20 flex justify-center">
-                          <select
-                            value={qty}
-                            onChange={(e) => setQty(Number(e.target.value))}
-                            className="w-full bg-transparent text-gray-900 dark:text-white outline-none text-sm appearance-none cursor-pointer text-center"
+                        <div className="flex items-center border border-gray-200 dark:border-gray-800 rounded-full overflow-hidden">
+                          <button
+                            type="button"
+                            onClick={() => setQty((q) => Math.max(1, q - 1))}
+                            disabled={qty <= 1}
+                            className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                            aria-label="Decrease quantity"
                           >
-                            {[...Array(product.stockStatus === 'requires_shipping' ? 100 : product.countInStock).keys()].map((x) => (
-                              <option key={x + 1} value={x + 1} className="bg-white dark:bg-black text-gray-900 dark:text-white">
-                                {x + 1}
-                              </option>
-                            ))}
-                          </select>
+                            <Minus className="w-3.5 h-3.5" />
+                          </button>
+                          <span className="w-8 text-center text-sm text-gray-900 dark:text-white select-none">{qty}</span>
+                          <button
+                            type="button"
+                            onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
+                            disabled={qty >= maxQty}
+                            className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                            aria-label="Increase quantity"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                          </button>
                         </div>
                       </div>
                     )}
-                    
+
                     <button
                       onClick={addToCartHandler}
-                      disabled={product.stockStatus !== 'requires_shipping' && product.countInStock === 0}
+                      disabled={
+                        (hasVariants && !selectedVariant) ||
+                        (product.stockStatus !== 'requires_shipping' && (maxQty ?? 0) === 0)
+                      }
                       className="bg-[#ff6b6b] hover:bg-[#ff5252] text-white font-bold text-[11px] uppercase tracking-widest py-3 px-8 rounded-full transition-all disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed"
                     >
-                      {product.stockStatus === 'requires_shipping' 
-                        ? "REQUEST ITEM" 
-                        : product.countInStock > 0 
-                          ? "ADD TO CART" 
-                          : "OUT OF STOCK"}
+                      {hasVariants && !selectedVariant
+                        ? `SELECT ${(product.variantLabel || "AN OPTION").toUpperCase()}`
+                        : product.stockStatus === 'requires_shipping'
+                          ? "REQUEST ITEM"
+                          : maxQty > 0
+                            ? "ADD TO CART"
+                            : "OUT OF STOCK"}
                     </button>
                   </div>
-                  
+
                   <button
                     onClick={handleWhatsAppOrder}
-                    className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] uppercase tracking-widest py-3 px-8 rounded-full transition-all mt-4 max-w-[300px]"
+                    disabled={hasVariants && !selectedVariant}
+                    className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] uppercase tracking-widest py-3 px-8 rounded-full transition-all mt-4 max-w-[300px] disabled:opacity-40 disabled:cursor-not-allowed"
                   >
-                    <img src="/icons/whatsapp.png" className="w-[16px] h-[16px] object-contain" alt="WhatsApp" />
+                    <MessageCircle className="w-[16px] h-[16px]" />
                     ORDER VIA WHATSAPP
                   </button>
                 </div>
@@ -403,6 +547,7 @@ const ProductDetails = () => {
 
             <div className="mt-20 border-t border-gray-200 dark:border-gray-800 pt-16">
               <ProductTabs
+                key={productId}
                 loadingProductReview={loadingProductReview}
                 userInfo={userInfo}
                 submitHandler={submitHandler}

@@ -1,5 +1,9 @@
-  {
+{
   "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://app.growthsstore.com/sitemap.xml"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"

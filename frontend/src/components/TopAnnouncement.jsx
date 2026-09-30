@@ -29,7 +29,7 @@ const TopAnnouncement = () => {
   };
 
   return (
-    <div className="bg-[#2B429F] text-[#D8E2DC] w-full z-[100] relative h-[50px] md:h-[44px] flex items-center justify-center overflow-hidden">
+    <div className="bg-orange-600 text-white w-full z-[100] relative h-[50px] md:h-[44px] flex items-center justify-center overflow-hidden">
       <div className="w-full max-w-4xl mx-auto px-4 h-full flex items-center">
         {activeAnnouncements.length === 1 ? (
           <div className="py-1 flex items-center justify-center w-full">

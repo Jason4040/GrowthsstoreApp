@@ -4,6 +4,7 @@ import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import dotenv from "dotenv";
+import { authenticate } from "../middlewares/authMiddleware.js";
 
 dotenv.config();
 
@@ -38,10 +39,14 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const upload = multer({ storage, fileFilter });
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
 const uploadSingleImage = upload.single("image");
 
-router.post("/", (req, res) => {
+router.post("/", authenticate, (req, res) => {
   uploadSingleImage(req, res, (err) => {
     if (err) {
       res.status(400).send({ message: err.message });
@@ -64,10 +69,28 @@ const proofStorage = new CloudinaryStorage({
   },
 });
 
-const uploadProof = multer({ storage: proofStorage });
+const proofFileFilter = (req, file, cb) => {
+  const filetypes = /jpe?g|png|webp|pdf|docx?/;
+  const mimetypes = /image\/jpe?g|image\/png|image\/webp|application\/pdf|application\/msword|application\/vnd\.openxmlformats-officedocument\.wordprocessingml\.document/;
+
+  const extname = path.extname(file.originalname).toLowerCase();
+  const mimetype = file.mimetype;
+
+  if (filetypes.test(extname) && mimetypes.test(mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only images, PDFs, or Word documents are allowed"), false);
+  }
+};
+
+const uploadProof = multer({
+  storage: proofStorage,
+  fileFilter: proofFileFilter,
+  limits: { fileSize: 8 * 1024 * 1024 },
+});
 const uploadSingleProof = uploadProof.single("image");
 
-router.post("/proof", (req, res) => {
+router.post("/proof", authenticate, (req, res) => {
   uploadSingleProof(req, res, (err) => {
     if (err) {
       res.status(400).send({ message: err.message });

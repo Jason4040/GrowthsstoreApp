@@ -3,12 +3,15 @@ import { Link } from "react-router-dom";
 import { Frown } from "lucide-react";
 import { selectFavoriteProduct } from "../../redux/features/favorites/favoriteSlice";
 import Product from "./Product";
+import SEO from "../../components/SEO";
 
 const Favorites = () => {
   const favorites = useSelector(selectFavoriteProduct);
 
   return (
-    <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-8 max-w-[1400px]">
+    <>
+      <SEO title="Saved Products | GrowthsStore" description="Your saved/favorite products." noindex />
+      <div className="container mx-auto px-4 mt-8 pb-[10rem] md:pb-8 max-w-[1400px]">
       <header className="flex justify-between items-center mb-12">
         <h1 className="text-4xl md:text-5xl font-semibold text-gray-900 dark:text-white tracking-tight">
           Favorite Products
@@ -40,6 +43,7 @@ const Favorites = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

@@ -6,6 +6,8 @@ import { useRegisterMutation, useVerifyOTPMutation, useResendOTPMutation } from 
 import { setCredentials } from "../../redux/features/auth/authSlice";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../redux/constants";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import SEO from "../../components/SEO";
 
 const Register = () => {
   const [username, setName] = useState("");
@@ -14,6 +16,8 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -116,8 +120,10 @@ const Register = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-white dark:bg-black/95 backdrop-blur-md p-4 overflow-y-auto">
-      <div className="w-full max-w-md bg-[#111] border border-gray-200 dark:border-gray-800 p-8 md:p-10 relative shadow-2xl animate-fade-in-up my-auto">
+    <>
+      <SEO title="Create Account | GrowthsStore" description="Create your GrowthsStore account." noindex />
+      <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-white dark:bg-black/95 backdrop-blur-md p-4 overflow-y-auto">
+      <div className="w-full max-w-md bg-white dark:bg-[#111] border border-gray-200 dark:border-gray-800 p-8 md:p-10 relative shadow-2xl animate-fade-in-up my-auto">
         {/* Close Button */}
         <Link
           to="/"
@@ -175,9 +181,9 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={() => setOtpSent(false)}
-                  className="text-xs text-gray-500 hover:text-orange-500 transition-colors font-medium"
+                  className="text-xs text-gray-500 hover:text-orange-500 transition-colors font-medium inline-flex items-center gap-1"
                 >
-                  ← Change email or go back
+                  <ArrowLeft className="w-3.5 h-3.5" /> Change email or go back
                 </button>
               </div>
             </form>
@@ -233,15 +239,26 @@ const Register = () => {
                 >
                   Password
                 </label>
-                <input
-                  type="password"
-                  id="password"
-                  className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 pr-11 focus:border-orange-500 outline-none transition-colors"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+                    title={showPassword ? "Hide password" : "Show password"}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <EyeOff className="w-[18px] h-[18px]" /> : <Eye className="w-[18px] h-[18px]" />}
+                  </button>
+                </div>
               </div>
 
               <div>
@@ -251,15 +268,26 @@ const Register = () => {
                 >
                   Confirm Password
                 </label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 focus:border-orange-500 outline-none transition-colors"
-                  placeholder="••••••••"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    id="confirmPassword"
+                    className="w-full bg-white dark:bg-black border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white p-3.5 pr-11 focus:border-orange-500 outline-none transition-colors"
+                    placeholder="••••••••"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+                    title={showConfirmPassword ? "Hide password" : "Show password"}
+                    tabIndex={-1}
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-[18px] h-[18px]" /> : <Eye className="w-[18px] h-[18px]" />}
+                  </button>
+                </div>
               </div>
 
               <button
@@ -277,7 +305,7 @@ const Register = () => {
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
               </div>
-              <span className="relative bg-[#111] px-4 text-xs text-gray-500 uppercase">Or continue with</span>
+              <span className="relative bg-white dark:bg-[#111] px-4 text-xs text-gray-500 uppercase">Or continue with</span>
             </div>
 
             <button
@@ -321,6 +349,7 @@ const Register = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

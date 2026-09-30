@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Heart } from "lucide-react";
 
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -42,16 +43,14 @@ const HeartIcon = ({ product }) => {
       title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
     >
       {isFavorite ? (
-        <img 
-          src="/icons/favourites.png" 
-          className="w-7 h-7 md:w-8 md:h-8 object-contain drop-shadow-lg scale-110" 
-          alt="Favorited" 
+        <Heart
+          className="w-7 h-7 md:w-8 md:h-8 text-red-500 drop-shadow-lg scale-110"
+          fill="currentColor"
         />
       ) : (
-        <img 
-          src="/icons/favourites.png" 
-          className="w-7 h-7 md:w-8 md:h-8 object-contain dark:invert opacity-60 hover:opacity-100 transition-opacity drop-shadow-md" 
-          alt="Favorite" 
+        <Heart
+          className="w-7 h-7 md:w-8 md:h-8 text-gray-900 dark:text-white opacity-60 hover:opacity-100 transition-opacity drop-shadow-md"
+          fill="none"
         />
       )}
     </div>

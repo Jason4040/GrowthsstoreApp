@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SEO from "../components/SEO";
-import { Frown } from "lucide-react";
+import { Frown, X, ChevronDown } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetFilteredProductsQuery } from "../redux/api/productApiSlice";
 import { useFetchCategoriesQuery } from "../redux/api/categoryApiSlice";
@@ -11,8 +11,8 @@ import {
   setChecked,
 } from "../redux/features/shop/shopSlice";
 import { setBackendDown } from "../redux/features/system/serverStatusSlice";
-import Loader from "../components/Loader";
 import ProductCard from "./Products/ProductCard";
+import ProductCardSkeleton from "./Products/ProductCardSkeleton";
 
 const Shop = () => {
   const dispatch = useDispatch();
@@ -106,7 +106,7 @@ const Shop = () => {
               className="w-full bg-gray-50 dark:bg-[#101010] hover:bg-gray-100 dark:hover:bg-[#151515] border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white font-medium py-4 px-6 flex justify-between items-center transition-colors"
             >
               <span className="text-gray-700 dark:text-gray-300 tracking-wide uppercase text-sm">Filters & Sorting</span>
-              <span className="text-orange-500">{showFilters ? "✕" : "▼"}</span>
+              <span className="text-orange-500">{showFilters ? <X className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}</span>
             </button>
           </div>
 
@@ -197,9 +197,11 @@ const Shop = () => {
 
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-6 justify-items-center">
               {filteredProductsQuery.isLoading ? (
-                <div className="col-span-full py-20 flex justify-center w-full">
-                  <Loader />
-                </div>
+                Array.from({ length: 10 }).map((_, i) => (
+                  <div className="w-full h-full" key={`skeleton-${i}`}>
+                    <ProductCardSkeleton />
+                  </div>
+                ))
               ) : products.length === 0 ? (
                 <div className="col-span-full w-full flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none shadow-none">
                   <Frown size={80} className="text-gray-700 mb-6" />

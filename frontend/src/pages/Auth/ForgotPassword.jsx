@@ -6,6 +6,8 @@ import {
   useResetPasswordMutation,
 } from "../../redux/api/usersApiSlice";
 import { toast } from "react-toastify";
+import { ArrowLeft } from "lucide-react";
+import SEO from "../../components/SEO";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -53,7 +55,9 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-white dark:bg-black/95 backdrop-blur-md p-4">
+    <>
+      <SEO title="Forgot Password | GrowthsStore" description="Reset your GrowthsStore account password." noindex />
+      <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-white dark:bg-black/95 backdrop-blur-md p-4">
       <div className="w-full max-w-md bg-[#111] border border-gray-200 dark:border-gray-800 p-8 md:p-10 relative shadow-2xl animate-fade-in-up">
         <Link
           to="/login"
@@ -144,9 +148,9 @@ const ForgotPassword = () => {
               <button
                 type="button"
                 onClick={() => setCodeSent(false)}
-                className="text-xs text-gray-500 hover:text-orange-500 transition-colors font-medium"
+                className="text-xs text-gray-500 hover:text-orange-500 transition-colors font-medium inline-flex items-center gap-1"
               >
-                ← Use a different email
+                <ArrowLeft className="w-3.5 h-3.5" /> Use a different email
               </button>
             </div>
 
@@ -197,6 +201,7 @@ const ForgotPassword = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

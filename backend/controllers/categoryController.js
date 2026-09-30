@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Category from "../models/categoryModel.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
 
@@ -66,7 +67,10 @@ const listCategory = asyncHandler(async (req, res) => {
 
 const readCategory = asyncHandler(async (req, res) => {
   try {
-    const category = await Category.findOne({ _id: req.params.id });
+    const query = mongoose.isValidObjectId(req.params.id)
+      ? { _id: req.params.id }
+      : { slug: req.params.id };
+    const category = await Category.findOne(query);
     res.json(category);
   } catch (error) {
     console.log(error);

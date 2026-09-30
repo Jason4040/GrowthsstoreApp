@@ -13,6 +13,7 @@ initTranslation();
 
 import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./pages/Admin/AdminRoute";
+import RouteError from "./components/RouteError";
 
 // Lazy-loaded components
 const Login = lazy(() => import("./pages/Auth/Login"));
@@ -41,11 +42,12 @@ const Messages = lazy(() => import("./pages/Messages.jsx"));
 const FAQ = lazy(() => import("./pages/FAQ.jsx"));
 const FAQAdmin = lazy(() => import("./pages/Admin/FAQAdmin.jsx"));
 const AnnouncementAdmin = lazy(() => import("./pages/Admin/AnnouncementAdmin.jsx"));
+const LocationManager = lazy(() => import("./pages/Admin/LocationManager.jsx"));
 const About = lazy(() => import("./pages/About.jsx"));
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<App />}>
+    <Route path="/" element={<App />} errorElement={<RouteError />}>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -81,6 +83,7 @@ const router = createBrowserRouter(
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="faqmanager" element={<FAQAdmin />} />
         <Route path="announcement" element={<AnnouncementAdmin />} />
+        <Route path="locations" element={<LocationManager />} />
       </Route>
     </Route>
   )
