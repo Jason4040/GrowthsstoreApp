@@ -144,8 +144,8 @@ const Home = () => {
                     className="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 border border-gray-300 dark:border-white/20 transition-all"
                   >
                     {theme === 'dark'
-                      ? <img src="/icons/them mode.png" className="w-[14px] h-[14px] object-contain dark:invert" alt="Light Mode" />
-                      : <img src="/icons/them mode.png" className="w-[14px] h-[14px] object-contain dark:invert" alt="Dark Mode" />}
+                      ? <Sun className="w-[14px] h-[14px] text-gray-700 dark:text-gray-300" />
+                      : <Moon className="w-[14px] h-[14px] text-gray-700 dark:text-gray-300" />}
                   </button>
 
                   {/* Language Switcher */}
@@ -192,12 +192,12 @@ const Home = () => {
                     onClick={() => setShowMobileSearch(!showMobileSearch)}
                     className="md:hidden text-gray-700 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors"
                   >
-                    <img src="/icons/search.png" className="w-[20px] h-[20px] object-contain" alt="Search" />
+                    <Search className="w-[20px] h-[20px]" />
                   </button>
 
                   {/* Cart Icon */}
                   <Link to="/cart" className="relative flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 transition-colors group">
-                    <img src="/icons/cart.png" className={`object-contain transition-all dark:invert ${scrolled ? 'w-[22px] h-[22px]' : 'w-[26px] h-[26px]'}`} alt="Cart" />
+                    <ShoppingCart className={`transition-all ${scrolled ? 'w-[22px] h-[22px]' : 'w-[26px] h-[26px]'}`} />
                     {cartItems.length > 0 && (
                       <span className={`absolute bg-orange-600 text-white font-bold rounded-full shadow-lg border border-orange-800 animate-pulse ${scrolled ? '-top-1.5 -right-1.5 text-[9px] px-1 py-0.5' : '-top-1.5 -right-2 text-[11px] px-1.5 py-0.5'}`}>
                         {cartItems.reduce((a, c) => a + c.qty, 0)}
@@ -235,7 +235,7 @@ const Home = () => {
                         type="submit"
                         className="absolute right-1 top-1 bottom-1 bg-orange-600 hover:bg-orange-500 text-white px-4 rounded-md transition-all flex items-center justify-center shadow-sm"
                       >
-                        <img src="/icons/search.png" className="w-[18px] h-[18px] object-contain" alt="Search" />
+                        <Search className="w-[18px] h-[18px] text-white" />
                       </button>
                     </div>
 
@@ -317,7 +317,7 @@ const Home = () => {
                     type="submit"
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-orange-600 hover:bg-orange-500 text-white p-3 md:p-4 rounded-full transition-all shadow-md"
                   >
-                    <img src="/icons/search.png" className="w-[24px] h-[24px] object-contain" alt="Search" />
+                    <Search className="w-[24px] h-[24px] text-white" />
                   </button>
                 </div>
 

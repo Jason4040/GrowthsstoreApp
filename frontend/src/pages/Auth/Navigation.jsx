@@ -2,16 +2,16 @@ import { useState, useEffect } from "react";
 import {
   Home,
   ShoppingBag,
+  Package,
   LogIn,
+  LogOut,
   UserPlus,
   ShoppingCart,
-  Database,
   ListOrdered,
   Users,
   FileText,
   MessageSquare,
   HelpCircle,
-  DollarSign,
   Heart,
   LayoutDashboard,
   Layers,
@@ -20,7 +20,8 @@ import {
   User,
   Sun,
   Moon,
-  MapPin
+  MapPin,
+  Megaphone
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -108,7 +109,7 @@ const Navigation = () => {
           onClick={toggleTheme}
           title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         >
-          {theme === 'dark' ? <img src="/icons/them mode.png" className="w-[22px] h-[22px] object-contain" alt="Light Mode" /> : <img src="/icons/them mode.png" className="w-[22px] h-[22px] object-contain" alt="Dark Mode" />}
+          {theme === 'dark' ? <Sun className="w-[22px] h-[22px]" /> : <Moon className="w-[22px] h-[22px]" />}
         </div>
 
 
@@ -165,7 +166,7 @@ const Navigation = () => {
             className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
-              <img src="/icons/home.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Home" />
+              <Home className="w-[26px] h-[26px] transform group-hover/link:scale-110 transition-transform" />
             </div>
             <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">Home</span>
           </Link>
@@ -175,7 +176,7 @@ const Navigation = () => {
             className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
-              <img src="/icons/products.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Shop" />
+              <ShoppingBag className="w-[26px] h-[26px] transform group-hover/link:scale-110 transition-transform" />
             </div>
             <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">Shop</span>
           </Link>
@@ -186,7 +187,7 @@ const Navigation = () => {
           >
             <div className="w-[96px] flex justify-center shrink-0">
               <div className="relative">
-                <img src="/icons/cart.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Cart" />
+                <ShoppingCart className="w-[26px] h-[26px] transform group-hover/link:scale-110 transition-transform" />
                 {cartItems.length > 0 && (
                   <span className="absolute top-[-8px] right-[-10px] px-1.5 py-0.5 text-[10px] font-semibold text-white bg-orange-600 rounded-none z-10 animate-pulse border border-red-800">
                     {cartItems.reduce((a, c) => a + c.qty, 0)}
@@ -203,7 +204,7 @@ const Navigation = () => {
           >
             <div className="w-[96px] flex justify-center shrink-0">
               <div className="relative">
-                <img src="/icons/savedProducts.png" className="w-[26px] h-[26px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Saved" />
+                <Heart className="w-[24px] h-[24px] transform group-hover/link:scale-110 transition-transform" />
                 <FavoritesCount />
               </div>
             </div>
@@ -215,7 +216,7 @@ const Navigation = () => {
             className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
           >
             <div className="w-[96px] flex justify-center shrink-0">
-              <img src="/icons/faq.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="FAQ" />
+              <HelpCircle className="w-[26px] h-[26px] transform group-hover/link:scale-110 transition-transform" />
             </div>
             <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">FAQ</span>
           </Link>
@@ -226,7 +227,7 @@ const Navigation = () => {
               className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
             >
               <div className="w-[96px] flex justify-center shrink-0">
-                <img src="/icons/email.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Messages" />
+                <MessageSquare className="w-[26px] h-[26px] transform group-hover/link:scale-110 transition-transform" />
               </div>
               <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">Messages</span>
             </Link>
@@ -239,7 +240,7 @@ const Navigation = () => {
                 className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative w-full focus:outline-none"
               >
                 <div className="w-[96px] flex justify-center shrink-0">
-                  <img src="/icons/menu.png" className={`w-[28px] h-[28px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert ${showAdminMenu ? 'opacity-75' : ''}`} alt="Admin Menu" />
+                  <Menu className={`w-[24px] h-[24px] transform group-hover/link:scale-110 transition-transform ${showAdminMenu ? 'opacity-75' : ''}`} />
                 </div>
                 <span className="nav-item-name font-semibold whitespace-nowrap text-sm group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">
                   Admin Menu
@@ -261,7 +262,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <img src="/icons/menu.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Dashboard" />
+                      <LayoutDashboard className="w-[22px] h-[22px] transform group-hover/link:scale-110 transition-transform" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Dashboard</span>
                   </Link>
@@ -270,7 +271,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <img src="/icons/products.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Products" />
+                      <Package className="w-[22px] h-[22px] transform group-hover/link:scale-110 transition-transform" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Products</span>
                   </Link>
@@ -279,7 +280,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <img src="/icons/categories.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Categories" />
+                      <Layers className="w-[22px] h-[22px] transform group-hover/link:scale-110 transition-transform" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Categories</span>
                   </Link>
@@ -288,7 +289,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <img src="/icons/orders.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Orders" />
+                      <ListOrdered className="w-[22px] h-[22px] transform group-hover/link:scale-110 transition-transform" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Orders</span>
                   </Link>
@@ -297,7 +298,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <img src="/icons/paymentsProof.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Payment Proofs" />
+                      <FileText className="w-[22px] h-[22px] transform group-hover/link:scale-110 transition-transform" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Payment Proofs</span>
                   </Link>
@@ -306,7 +307,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <img src="/icons/customers.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Users" />
+                      <Users className="w-[22px] h-[22px] transform group-hover/link:scale-110 transition-transform" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Users</span>
                   </Link>
@@ -315,7 +316,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <img src="/icons/faq.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="FAQ Manager" />
+                      <HelpCircle className="w-[22px] h-[22px] transform group-hover/link:scale-110 transition-transform" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">FAQ Manager</span>
                   </Link>
@@ -324,7 +325,7 @@ const Navigation = () => {
                     className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                   >
                     <div className="w-[96px] flex justify-center shrink-0">
-                      <img src="/icons/email.png" className="w-[24px] h-[24px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Announcement" />
+                      <Megaphone className="w-[22px] h-[22px] transform group-hover/link:scale-110 transition-transform" />
                     </div>
                     <span className="nav-item-name font-semibold whitespace-nowrap text-[13px] group-hover/link:text-orange-500 text-gray-700 dark:text-gray-300">Announcement</span>
                   </Link>
@@ -409,7 +410,7 @@ const Navigation = () => {
                   className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                 >
                   <div className="w-[96px] flex justify-center shrink-0">
-                    <img src="/icons/login.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Login" />
+                    <LogIn className="w-[26px] h-[26px] transform group-hover/link:scale-110 transition-transform" />
                   </div>
                   <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">Login</span>
                 </Link>
@@ -420,7 +421,7 @@ const Navigation = () => {
                   className="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors py-2 group/link relative"
                 >
                   <div className="w-[96px] flex justify-center shrink-0">
-                    <img src="/icons/register.png" className="w-[30px] h-[30px] object-contain transform group-hover/link:scale-110 transition-transform dark:invert" alt="Register" />
+                    <UserPlus className="w-[26px] h-[26px] transform group-hover/link:scale-110 transition-transform" />
                   </div>
                   <span className="nav-item-name font-medium whitespace-nowrap text-sm group-hover/link:text-orange-500">
                     Register
@@ -435,15 +436,15 @@ const Navigation = () => {
       {/* Mobile Bottom Navigation */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-black/80 backdrop-blur-lg text-gray-700 dark:text-gray-200 py-3 px-6 flex justify-between items-center z-[9999] border-t border-gray-200 dark:border-gray-800 rounded-none shadow-2xl">
         <Link to="/" onClick={() => setShowMobileMenu(false)} className="flex flex-col items-center gap-1 group">
-          <img src="/icons/home.png" className="w-[22px] h-[22px] object-contain dark:invert" alt="Home" />
+          <Home className="w-[22px] h-[22px]" />
           <span className="text-[10px] font-medium">Home</span>
         </Link>
         <Link to="/shop" onClick={() => setShowMobileMenu(false)} className="flex flex-col items-center gap-1 group">
-          <img src="/icons/products.png" className="w-[22px] h-[22px] object-contain dark:invert" alt="Shop" />
+          <ShoppingBag className="w-[22px] h-[22px]" />
           <span className="text-[10px] font-medium">Shop</span>
         </Link>
         <Link to="/cart" onClick={() => setShowMobileMenu(false)} className="flex flex-col items-center gap-1 relative group">
-          <img src="/icons/cart.png" className="w-[22px] h-[22px] object-contain dark:invert" alt="Cart" />
+          <ShoppingCart className="w-[22px] h-[22px]" />
           <span className="text-[10px] font-medium">Cart</span>
           {cartItems.length > 0 && (
             <span className="absolute -top-1 -right-2 px-1.5 py-0.5 text-[9px] font-medium text-white bg-orange-600 rounded-none animate-pulse">
@@ -457,7 +458,7 @@ const Navigation = () => {
               {userInfo.username.charAt(0).toUpperCase()}
             </div>
           ) : (
-            <img src="/icons/menu.png" className={`w-[22px] h-[22px] object-contain dark:invert ${showMobileMenu ? 'opacity-75' : ''}`} alt="Menu" />
+            <Menu className={`w-[22px] h-[22px] ${showMobileMenu ? 'opacity-75' : ''}`} />
           )}
           <span className={`text-[10px] font-medium ${showMobileMenu ? 'text-orange-500' : ''}`}>Menu</span>
         </button>
@@ -475,29 +476,29 @@ const Navigation = () => {
           
           <div className="flex flex-col space-y-2">
             <Link to="/favorite" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-colors">
-              <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><img src="/icons/savedProducts.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="Saved" /></div> <span className="font-medium">Saved Items</span>
+              <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><Heart className="w-[20px] h-[20px]" /></div> <span className="font-medium">Saved Items</span>
             </Link>
             
             <Link to="/faq" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-colors">
-              <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><img src="/icons/faq.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="FAQ" /></div> <span className="font-medium">FAQ & Help</span>
+              <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><HelpCircle className="w-[20px] h-[20px]" /></div> <span className="font-medium">FAQ & Help</span>
             </Link>
             
             {showMessagesLink && (
               <Link to="/messages" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-colors">
-                <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><img src="/icons/email.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="Messages" /></div> <span className="font-medium">Messages</span>
+                <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300"><MessageSquare className="w-[20px] h-[20px]" /></div> <span className="font-medium">Messages</span>
               </Link>
             )}
 
             {userInfo ? (
               <>
                 <Link to="/profile" onClick={() => setShowMobileMenu(false)} className="flex items-center gap-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-xl transition-colors mt-2">
-                  <div className="p-2 bg-orange-600 rounded-lg"><img src="/icons/customers.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="My Account" /></div> <span className="font-medium">My Account</span>
+                  <div className="p-2 bg-orange-600 rounded-lg"><User className="w-[20px] h-[20px] text-white" /></div> <span className="font-medium">My Account</span>
                 </Link>
 
                 {userInfo.isAdmin && (
                   <div className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl mt-6 overflow-hidden shadow-lg">
                     <div className="flex items-center gap-3 text-orange-500 p-4 border-b border-gray-200 dark:border-gray-800 bg-orange-500/5">
-                      <img src="/icons/menu.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="Admin Controls" /> <span className="font-bold tracking-wide uppercase text-sm">Admin Controls</span>
+                      <LayoutDashboard className="w-[20px] h-[20px]" /> <span className="font-bold tracking-wide uppercase text-sm">Admin Controls</span>
                     </div>
                     <div className="flex flex-col p-2 space-y-1">
                         <Link to="/admin/dashboard" onClick={() => setShowMobileMenu(false)} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 p-3 rounded-lg font-medium text-sm transition-colors">Dashboard</Link>
@@ -513,16 +514,16 @@ const Navigation = () => {
                 )}
 
                 <button onClick={() => { logoutHandler(); setShowMobileMenu(false); }} className="flex items-center gap-4 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 p-3 rounded-xl mt-6 w-full text-left transition-colors">
-                  <div className="p-2 bg-red-500/10 rounded-lg"><img src="/icons/login.png" className="w-[20px] h-[20px] object-contain rotate-180 dark:invert" alt="Logout" /></div> <span className="font-bold">Logout</span>
+                  <div className="p-2 bg-red-500/10 rounded-lg"><LogOut className="w-[20px] h-[20px]" /></div> <span className="font-bold">Logout</span>
                 </button>
               </>
             ) : (
               <div className="mt-6 flex flex-col gap-3">
                 <Link to="/login" onClick={() => setShowMobileMenu(false)} className="flex items-center justify-center gap-2 text-white bg-gray-800 hover:bg-gray-700 p-4 rounded-xl font-bold transition-colors w-full">
-                  <img src="/icons/login.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="Login" /> Login
+                  <LogIn className="w-[20px] h-[20px]" /> Login
                 </Link>
                 <Link to="/register" onClick={() => setShowMobileMenu(false)} className="flex items-center justify-center gap-2 text-white bg-orange-600 hover:bg-orange-700 p-4 rounded-xl font-bold transition-colors w-full">
-                  <img src="/icons/register.png" className="w-[20px] h-[20px] object-contain dark:invert" alt="Register" /> Create Account
+                  <UserPlus className="w-[20px] h-[20px]" /> Create Account
                 </Link>
               </div>
             )}

@@ -122,14 +122,14 @@ const Product = ({ product }) => {
             onClick={handleWhatsAppOrder}
             title="Order via WhatsApp"
           >
-            <img src="/icons/whatsapp.png" className="w-[16px] h-[16px] md:w-[18px] md:h-[18px] object-contain" alt="WhatsApp" />
+            <MessageCircle className="w-[16px] h-[16px] md:w-[18px] md:h-[18px]" />
           </button>
           <button
             className="p-1.5 md:p-2 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full text-gray-900 dark:text-white transition-colors flex items-center justify-center border border-gray-300 dark:border-gray-700 hover:border-gray-900 dark:hover:border-white"
             onClick={addToCartHandler}
             title="Add to Cart"
           >
-            <img src="/icons/cart.png" className="w-[16px] h-[16px] md:w-[18px] md:h-[18px] object-contain dark:invert" alt="Cart" />
+            <ShoppingCart className="w-[16px] h-[16px] md:w-[18px] md:h-[18px]" />
           </button>
         </div>
       </div>

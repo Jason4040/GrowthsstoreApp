@@ -401,7 +401,7 @@ const ProductDetails = () => {
 
                 <div className="flex items-center gap-6 mb-8 text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
                   <div className="flex items-center gap-2 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer relative">
-                     <img src="/icons/savedProducts.png" className="w-[16px] h-[16px] object-contain dark:invert" alt="Saved" />
+                     <Heart className="w-[16px] h-[16px]" />
                      <div className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer">
                         <HeartIcon product={product} />
                      </div>
@@ -538,7 +538,7 @@ const ProductDetails = () => {
                     disabled={hasVariants && !selectedVariant}
                     className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-[11px] uppercase tracking-widest py-3 px-8 rounded-full transition-all mt-4 max-w-[300px] disabled:opacity-40 disabled:cursor-not-allowed"
                   >
-                    <img src="/icons/whatsapp.png" className="w-[16px] h-[16px] object-contain" alt="WhatsApp" />
+                    <MessageCircle className="w-[16px] h-[16px]" />
                     ORDER VIA WHATSAPP
                   </button>
                 </div>

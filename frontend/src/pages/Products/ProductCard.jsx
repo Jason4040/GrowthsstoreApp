@@ -121,7 +121,7 @@ const ProductCard = ({ p }) => {
             onClick={handleWhatsAppOrder}
             title="Order via WhatsApp"
           >
-            <img src="/icons/whatsapp.png" className="w-[16px] h-[16px] md:w-[18px] md:h-[18px] object-contain" alt="WhatsApp" />
+            <MessageCircle className="w-[16px] h-[16px] md:w-[18px] md:h-[18px]" />
           </button>
           
           <Link
@@ -137,7 +137,7 @@ const ProductCard = ({ p }) => {
             onClick={() => addToCartHandler(p, 1)}
             title="Add to Cart"
           >
-            <img src="/icons/cart.png" className="w-[16px] h-[16px] md:w-[18px] md:h-[18px] object-contain dark:invert" alt="Cart" />
+            <ShoppingCart className="w-[16px] h-[16px] md:w-[18px] md:h-[18px]" />
           </button>
         </section>
       </div>

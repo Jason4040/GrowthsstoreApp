@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import { Mail } from "lucide-react";
+import { Mail, MessageCircle, Phone } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaTiktok } from "react-icons/fa";
 
 const socials = [
   { icon: FaFacebookF, name: "Facebook", color: "hover:bg-[#3b5998]", link: "https://www.facebook.com/profile.php?id=61574254704789" },
   { icon: FaInstagram, name: "Instagram", color: "hover:bg-[#e4405f]", link: "https://www.instagram.com/growthsstore" },
   { icon: FaTiktok, name: "TikTok", color: "hover:bg-[#010101]", link: "https://www.tiktok.com/@growthsstore?_r=1&_t=ZS-94vl9X96Py" },
-  { icon: () => <img src="/icons/whatsapp.png" className="w-3.5 h-3.5 object-contain" alt="" />, name: "WhatsApp", color: "hover:bg-[#25D366]", link: "https://wa.me/256771204748" },
-  { icon: () => <img src="/icons/rwanda tele code.png" className="w-3.5 h-3.5 object-contain" alt="" />, name: "Call us", color: "hover:bg-[#4CAF50]", link: "tel:+250793392762" },
+  { icon: MessageCircle, name: "WhatsApp", color: "hover:bg-[#25D366]", link: "https://wa.me/256771204748" },
+  { icon: Phone, name: "Call us", color: "hover:bg-[#4CAF50]", link: "tel:+250793392762" },
   { icon: Mail, name: "Email us", color: "hover:bg-[#EA4335]", link: "mailto:jaygrowth01@gmail.com" },
 ];
 
@@ -41,7 +41,7 @@ const Footer = () => {
               aria-label={social.name}
               className={`w-8 h-8 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-white ${social.color} transition-colors text-xs`}
             >
-              <social.icon />
+              <social.icon size={14} />
             </a>
           ))}
         </div>
