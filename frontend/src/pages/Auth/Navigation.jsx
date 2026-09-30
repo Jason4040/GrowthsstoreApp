@@ -119,7 +119,7 @@ const Navigation = () => {
       {/* Desktop Sidebar */}
       {/* Desktop Sidebar */}
       <div
-        className={`hidden md:flex flex-col py-3 text-gray-900 dark:text-white bg-white dark:bg-black h-[100vh] fixed border-r border-gray-200 dark:border-gray-800 rounded-none`}
+        className={`hidden md:flex flex-col py-3 text-gray-900 dark:text-white bg-white dark:bg-black h-[100vh] fixed top-0 left-0 border-r border-gray-200 dark:border-gray-800 rounded-none`}
         id="sidebar-menu"
       >
         <div className="flex flex-col space-y-1.5 mt-2 flex-1 min-h-0 overflow-y-auto" id="sidebar-nav-scroll">
