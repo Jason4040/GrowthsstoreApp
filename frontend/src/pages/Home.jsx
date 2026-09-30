@@ -384,12 +384,12 @@ const Home = () => {
           <div className="max-w-[1400px] mx-auto px-4 md:px-8 mt-[2rem] md:mt-[8rem]">
             <div className="flex flex-col items-center justify-center mb-14 gap-2">
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white text-center tracking-[0.15em] uppercase">
-                Special Products
+                {keyword ? "Search Results" : "Special Products"}
               </h1>
               <p className="text-gray-500 dark:text-gray-400 text-2xl satisfy-regular mb-4">
-                Discover our curated selection
+                {keyword ? `Showing results for "${keyword}"` : "Discover our curated selection"}
               </p>
-              
+
               <Link
                 to="/shop"
                 className="text-xs font-bold uppercase tracking-widest text-orange-600 dark:text-orange-500 hover:text-gray-900 dark:hover:text-white transition-colors border-b-2 border-transparent hover:border-gray-900 dark:hover:border-white pb-1"
@@ -399,16 +399,43 @@ const Home = () => {
             </div>
 
             {data.products.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none w-full shadow-none mt-8">
-                <Frown size={80} className="text-gray-700 mb-6" />
-                <h2 className="text-2xl font-medium text-gray-900 dark:text-white mb-2 uppercase tracking-widest">No Products Found</h2>
-                <p className="text-gray-500 mb-8 italic">Check back later for new arrivals.</p>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium py-3 px-10 rounded-none transition-all shadow-none border border-gray-300 dark:border-gray-700 active:scale-95"
-                >
-                  Refresh Page
-                </button>
+              keyword ? (
+                <div className="flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none w-full shadow-none mt-8">
+                  <Frown size={80} className="text-gray-700 mb-6" />
+                  <h2 className="text-2xl font-medium text-gray-900 dark:text-white mb-2 uppercase tracking-widest">No Results Found</h2>
+                  <p className="text-gray-500 mb-8 italic">
+                    We couldn&apos;t find any products matching &quot;{keyword}&quot;. Try a different search term.
+                  </p>
+                  <Link
+                    to="/shop"
+                    className="bg-orange-600 hover:bg-orange-700 text-white font-medium py-3 px-10 rounded-none transition-all shadow-none border border-orange-500 active:scale-95"
+                  >
+                    Browse All Products
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-24 bg-gray-50 dark:bg-[#101010] border border-gray-200 dark:border-gray-800 rounded-none w-full shadow-none mt-8">
+                  <Frown size={80} className="text-gray-700 mb-6" />
+                  <h2 className="text-2xl font-medium text-gray-900 dark:text-white mb-2 uppercase tracking-widest">No Products Found</h2>
+                  <p className="text-gray-500 mb-8 italic">Check back later for new arrivals.</p>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium py-3 px-10 rounded-none transition-all shadow-none border border-gray-300 dark:border-gray-700 active:scale-95"
+                  >
+                    Refresh Page
+                  </button>
+                </div>
+              )
+            ) : productCount <= 5 ? (
+              // Few enough results to fit in one row — a static grid so a single
+              // (or handful of) result renders at normal card width instead of
+              // react-slick stretching it to fill the whole slider track.
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6 justify-items-center px-2 md:px-6">
+                {data.products.map((product) => (
+                  <div key={product._id} className="w-full">
+                    <Product product={product} />
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="w-full px-2 md:px-6 slider-container">
