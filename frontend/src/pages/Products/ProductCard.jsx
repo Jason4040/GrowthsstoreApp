@@ -14,7 +14,9 @@ const ProductCard = ({ p }) => {
   const { formatPrice, currentCurrency, getDiscountValue } = useCurrency();
   const navigate = useNavigate();
 
-  const addToCartHandler = (product, qty) => {
+  const addToCartHandler = (e, product, qty) => {
+    e.preventDefault();
+    e.stopPropagation();
     dispatch(addToCart({ ...product, qty }));
     toast.success("Item added successfully", {
       position: toast.POSITION.TOP_RIGHT,
@@ -134,7 +136,7 @@ const ProductCard = ({ p }) => {
 
           <button
             className="p-1.5 md:p-2 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full text-gray-900 dark:text-white transition-colors flex items-center justify-center border border-gray-300 dark:border-gray-700 hover:border-gray-900 dark:hover:border-white"
-            onClick={() => addToCartHandler(p, 1)}
+            onClick={(e) => addToCartHandler(e, p, 1)}
             title="Add to Cart"
           >
             <ShoppingCart className="w-[16px] h-[16px] md:w-[18px] md:h-[18px]" />
