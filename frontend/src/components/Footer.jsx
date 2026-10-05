@@ -13,7 +13,7 @@ const socials = [
 
 const Footer = () => {
   return (
-    <footer className="bg-white dark:bg-[#0a0a0a] border-t border-gray-200 dark:border-gray-800 py-6 mt-12 w-full">
+    <footer className="bg-white dark:bg-[#0a0a0a] border-t border-gray-200 dark:border-gray-800 pt-6 pb-24 md:pb-6 mt-12 w-full">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
 
         {/* Left Side: Brand & Copyright */}
@@ -47,15 +47,27 @@ const Footer = () => {
         </div>
 
         {/* Right Side: Designed By */}
-        <div className="flex items-center">
+        <div className="flex flex-wrap items-center justify-center gap-x-1 px-10 text-center text-gray-600 dark:text-gray-400 text-[10px] tracking-wide md:tracking-widest font-medium">
+          <span>Designed by</span>
           <a
             href="https://www.irabaruta.online/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-600 hover:text-orange-500 text-[10px] tracking-widest transition-colors font-medium"
+            className="hover:text-orange-500 transition-colors"
           >
-            Designed by willynorbert
+            willynorbert
           </a>
+          <span>,</span>
+          <a
+            href="https://irumvajasonportfolio.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-orange-500 transition-colors"
+          >
+            Irumva Jason
+          </a>
+          <span>&amp;</span>
+          <span>Nsanzimfura Enock</span>
         </div>
 
       </div>
